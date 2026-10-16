@@ -54,7 +54,7 @@
       ],
     },
     {
-      id: 'u3', title: 'Intervals', blurb: 'Hear, read and sing every interval up to the octave.',
+      id: 'u3', title: 'Intervals', blurb: 'Hear, read and sing every interval, then inversions and compound intervals.',
       lessons: [
         { id: 'ear-iv-1', title: 'Hear 2nds and 3rds', engine: 'earInterval', intervals: EAR_1, dirs: ['up'] },
         { id: 'ear-iv-2', title: 'Hear 4ths, 5ths, octaves', engine: 'earInterval', intervals: EAR_2, dirs: ['up'] },
