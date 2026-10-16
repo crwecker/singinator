@@ -64,7 +64,7 @@
       var bpm = lesson.bpm || 80;
       var events = R.makeRhythm(ts, lesson.measures || 2, lesson.level || 1);
       var again = function () { E.tapRhythm.round(lesson); };
-      var running = false, taps = [], t0 = 0, raf = 0, attempts = 0;
+      var running = false, taps = [], t0 = 0, raf = 0, recorded = false;
       var draw = function (current) {
         ui.staff(null);
         var svg = document.getElementById('staff');
@@ -81,12 +81,11 @@
         var pad = document.getElementById('tap-pad');
         if (pad) { pad.classList.remove('hit'); void pad.offsetWidth; pad.classList.add('hit'); }
       }
-      function onKey(ev) { if (ev.code === 'Space' || ev.key === ' ') tap(ev); }
+      function onKey(ev) { if (A.alive(token) && (ev.code === 'Space' || ev.key === ' ')) tap(ev); }
 
       function start() {
         if (running) return;
         running = true;
-        attempts++;
         taps = [];
         var spq = secPerQuarter(ts, bpm);
         t0 = clicks(Sound.now() + 0.2, ts, bpm, 1);              // count-in
@@ -120,10 +119,12 @@
         Staff.renderMeasures(svg, { clef: 'percussion', time: ts, minWidth: 520, events: events.map(function (e, i) {
           return Object.assign({}, e, { result: result[i] });
         }) });
-        var ok = right >= Math.ceil(on.length * 0.9) && s.extras <= 1;
+        // taps are exact input, not noisy detection: every note must land
+        var ok = right === on.length && s.extras <= 1;
         var latency = Math.abs(s.offset) > 0.04 ? ' · you tap ' + Math.round(Math.abs(s.offset) * 1000) + ' ms ' + (s.offset > 0 ? 'late' : 'early') + ' (allowed for)' : '';
         ui.feedback(right + ' of ' + on.length + ' in time' + (s.extras ? ' · ' + s.extras + ' extra tap' + (s.extras > 1 ? 's' : '') : '') + latency, ok ? 'good' : 'bad');
-        if (attempts === 1 || ok) A.record(lesson.id, ok);
+        // only the first graded try counts toward mastery; retries are practice
+        if (!recorded) { recorded = true; A.record(lesson.id, ok); }
         if (ok) A.celebrate('✓', false);
         ui.actions([
           { label: 'Try again', ghost: true, fn: function () { draw(-1); start(); } },
@@ -188,6 +189,8 @@
         var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         svg.setAttribute('class', 'mini-staff');
         Staff.renderMeasures(svg, { clef: 'percussion', time: ts, minWidth: 360, events: ev });
+        // crop to the one-line staff and its stems/beams
+        svg.setAttribute('viewBox', '0 24 ' + svg.viewBox.baseVal.width + ' 84');
         return { label: svg.outerHTML, value: i };
       }), function (v) {
         var ok = Number(v) === correct;
@@ -219,7 +222,7 @@
       });
       var spq = secPerQuarter(ts, bpm);
       var again = function () { E.singRhythm.round(lesson); };
-      var running = false, t0 = 0, samples = [], raf = 0, attempts = 0;
+      var running = false, t0 = 0, samples = [], raf = 0, recorded = false;
       var tonic = A.placeTonic(k, clef, 0, 0);
 
       var draw = function (current, results) {
@@ -254,7 +257,6 @@
       function start() {
         if (running) return;
         running = true;
-        attempts++;
         samples = [];
         A.stopListening();
         Sound.playNote(midiOf(tonic), 0.8);
@@ -264,12 +266,18 @@
         var end = t0 + totalQuarters(events) * spq;
         ui.feedback('Count in… then sing');
         A.meter.reset('Get ready…');
-        var lastDraw = -2;
+        var lastDraw = -2, lastRead = 0, silent = 0;
         var follow = function () {
           if (!A.alive(token)) return;
           var now = Sound.now();
-          var r = Sound.readPitch();
+          // ~40 pitch reads a second, like the main listener
+          var r = now - lastRead >= 0.025 ? Sound.readPitch() : null;
+          if (r) {
+            silent = !r.quiet && r.level < 0.0002 ? silent + (now - lastRead) : 0;
+            lastRead = now;
+          }
           if (r && !r.quiet) A.meter.level(r.level);
+          if (silent > 3) { A.meter.hint('No sound from the microphone.', 'warn'); A.meter.update(null, A.MIC_HELP); }
           if (r && r.hz) samples.push({ t: now, midi: Pitch.hzToMidi(r.hz) });
           if (now >= t0 && now < end) {
             var idx = eventAt(events, (now - t0) / spq);
@@ -318,7 +326,7 @@
         var pass = right >= Math.ceil(notes.length * 0.8);
         ui.feedback(right + ' of ' + notes.length + ' notes in tune and in time', pass ? 'good' : 'bad');
         A.meter.hint(pass ? 'Nice!' : 'Try again', pass ? 'good' : 'warn');
-        if (attempts === 1 || pass) A.record(lesson.id, pass);
+        if (!recorded) { recorded = true; A.record(lesson.id, pass); } // first try counts
         if (pass) A.celebrate('✓', false);
         ui.actions([
           { label: 'Try again', ghost: true, fn: function () { draw(-1); start(); } },

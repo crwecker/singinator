@@ -453,6 +453,6 @@
     parseDegree: parseDegree, placeTonic: placeTonic, noteAt: noteAt, playCadence: playCadence, playVoicings: playVoicings,
     session: session, newToken: newToken, alive: alive, ui: ui,
     meter: meter, listen: listen, stopListening: stopListening, currentTarget: currentTarget,
-    withMic: withMic,
+    withMic: withMic, MIC_HELP: MIC_HELP,
   };
 })(this);

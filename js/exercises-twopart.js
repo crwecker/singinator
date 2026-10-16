@@ -36,7 +36,7 @@
       var bpm = lesson.bpm || 52;
       var beat = 60 / bpm;
       var again = function () { E.twoPart.round(lesson); };
-      var running = false, t0 = 0, samples = [], raf = 0, attempts = 0, rejected = 0;
+      var running = false, t0 = 0, samples = [], raf = 0, recorded = false, rejected = 0;
 
       function staffOpts(part, clef, current, results, isMine) {
         return { clef: clef, fifths: T.fifths(k), minWidth: 520, notes: part.map(function (nn, i) {
@@ -64,7 +64,6 @@
       function start() {
         if (running) return;
         running = true;
-        attempts++;
         samples = [];
         rejected = 0;
         Sound.playNote(midiOf(mine[0]), 0.9); // your starting pitch
@@ -78,12 +77,17 @@
         var end = t0 + n * beat;
         A.meter.reset('Get ready…');
         ui.feedback('Count in… then sing your part with the app');
-        var last = -2;
+        var last = -2, lastRead = 0, silent = 0;
         var follow = function () {
           if (!A.alive(token)) return;
           var now = Sound.now();
-          var r = Sound.readPitch();
+          var r = now - lastRead >= 0.025 ? Sound.readPitch() : null; // ~40 reads a second
+          if (r) {
+            silent = !r.quiet && r.level < 0.0002 ? silent + (now - lastRead) : 0;
+            lastRead = now;
+          }
           if (r && !r.quiet) A.meter.level(r.level);
+          if (silent > 3) { A.meter.hint('No sound from the microphone.', 'warn'); A.meter.update(null, A.MIC_HELP); }
           var idx = Math.floor((now - t0) / beat);
           if (now >= t0 && idx < n) {
             if (idx !== last) { draw(idx); last = idx; }
@@ -129,7 +133,7 @@
         var bleedNote = rejected > 20 ? ' · heard the app’s part through the mic; headphones help' : '';
         ui.feedback(right + ' of ' + n + ' notes in tune' + bleedNote, pass ? 'good' : 'bad');
         A.meter.hint(pass ? 'Nice!' : 'Try again', pass ? 'good' : 'warn');
-        if (attempts === 1 || pass) A.record(lesson.id, pass);
+        if (!recorded) { recorded = true; A.record(lesson.id, pass); } // first try counts
         if (pass) A.celebrate('✓', false);
         E.twoPart.lastScore = { results: results, rejected: rejected, samples: samples.length }; // for tests
       }

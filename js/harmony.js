@@ -190,7 +190,9 @@
   // cadential 6/4 before the dominant now and then when the pool has one.
   function makeProgression(pool, length, rnd) {
     rnd = rnd || Math.random;
+    // vii°6 works mid-phrase (vii°6-I) but not as the final cadence's dominant
     var dominants = pool.filter(function (id) { return FUNCTION[id] === 'D' && id.indexOf('vii') < 0; });
+    var midDominants = pool.filter(function (id) { return FUNCTION[id] === 'D'; });
     var follows = function (cur, id) {
       return id !== cur && NEXT[FUNCTION[cur]].indexOf(FUNCTION[id]) >= 0 && resolves(cur, id);
     };
@@ -200,7 +202,7 @@
         var cur = seq[seq.length - 1];
         var opts = pool.filter(function (id) { return id !== 'I6/4' && FUNCTION[id] !== 'D' && follows(cur, id); });
         // a dominant mid-phrase must go back to tonic, which the walk allows
-        if (seq.length < length - 3) opts = opts.concat(dominants.filter(function (id) { return follows(cur, id); }));
+        if (seq.length < length - 3) opts = opts.concat(midDominants.filter(function (id) { return follows(cur, id); }));
         if (!opts.length) break;
         seq.push(pick(opts, rnd));
       }
