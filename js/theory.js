@@ -111,6 +111,10 @@
     { semis: 7, id: 'P5', label: 'P5' }, { semis: 8, id: 'm6', label: 'm6' },
     { semis: 9, id: 'M6', label: 'M6' }, { semis: 10, id: 'm7', label: 'm7' },
     { semis: 11, id: 'M7', label: 'M7' }, { semis: 12, id: 'P8', label: 'P8' },
+    { semis: 13, id: 'm9', label: 'm9' }, { semis: 14, id: 'M9', label: 'M9' },
+    { semis: 15, id: 'm10', label: 'm10' }, { semis: 16, id: 'M10', label: 'M10' },
+    { semis: 17, id: 'P11', label: 'P11' }, { semis: 19, id: 'P12', label: 'P12' },
+    { semis: 20, id: 'm13', label: 'm13' }, { semis: 21, id: 'M13', label: 'M13' },
   ];
 
   // ---------- Keys ----------

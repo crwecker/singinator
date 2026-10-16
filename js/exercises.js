@@ -180,7 +180,7 @@
       }
 
       ui.prompt('Tap a syllable to hear it');
-      ui.sub(keyLine(k, clef) + (k.mode === 'minor' ? ' · ' + (A.settings.minor === 'la' ? 'la' : 'do') + '-based minor' : ''));
+      ui.sub(keyLine(k, clef) + (A.solfegeNote(k) ? ' \u00B7 ' + A.solfegeNote(k) : ''));
       ui.feedback('');
       draw(null);
       ui.answers(notes.map(function (n, i) {
@@ -236,7 +236,8 @@
       var clef = clefOf(lesson);
       var r = T.clefRange(clef);
       var s;
-      do { s = r.lo + 1 + Math.floor(Math.random() * (r.hi - r.lo - 1)); } while (s === E.readLetter.last);
+      var tries = 0;
+      do { s = r.lo + 1 + Math.floor(Math.random() * (r.hi - r.lo - 1)); } while (s === E.readLetter.last && ++tries < 20);
       E.readLetter.last = s;
       var n = T.fromStep(s, 0);
       n.acc = T.sigAcc(T.fifths(k), n.l);
@@ -333,10 +334,12 @@
       var dir = A.pick(lesson.dirs || ['up']);
       var spelled = id === 'TT' ? (Math.random() < 0.5 ? 'A4' : 'd5') : id;
       var a, b;
+      var tries = 0;
       do {
-        a = T.parse(A.pick(NATURALISH));
+        // compound intervals start low so the top stays singable/readable
+        a = T.parse(A.pick(T.parseInterval(spelled).size > 7 ? NATURALISH.slice(0, 8) : NATURALISH));
         b = T.transpose(a, spelled, dir !== 'down');
-      } while (Math.abs(b.acc) > 1);
+      } while (Math.abs(b.acc) > 1 && ++tries < 100);
       var midis = dir === 'harmonic' ? [[midiOf(a), midiOf(b)]] : [midiOf(a), midiOf(b)];
       var info = T.EAR_INTERVALS.filter(function (x) { return x.id === id; })[0];
       var again = function () { E.earInterval.round(lesson); };
@@ -377,10 +380,11 @@
       E.readInterval.last = id;
       var iv = T.parseInterval(id);
       var a, b;
+      var tries = 0;
       do {
         a = T.fromStep(r.lo + 2 + Math.floor(Math.random() * Math.max(1, r.hi - r.lo - 4 - iv.size)), A.pick([-1, 0, 0, 0, 1]));
         b = T.transpose(a, id, true);
-      } while (Math.abs(b.acc) > 1 || T.step(b) > r.hi);
+      } while ((Math.abs(b.acc) > 1 || T.step(b) > r.hi) && ++tries < 100);
       var down = Math.random() < 0.35;
       var first = down ? b : a, second = down ? a : b;
       var again = function () { E.readInterval.round(lesson); };
@@ -467,12 +471,13 @@
       var up = A.pick(lesson.dirs || ['up']) !== 'down';
       var iv = T.parseInterval(id);
       var a, b;
+      var tries = 0;
       do {
         var lo = up ? r.lo + 2 : r.lo + 2 + iv.size;
         var hi = up ? r.hi - 2 - iv.size : r.hi - 2;
         a = T.fromStep(lo + Math.floor(Math.random() * Math.max(1, hi - lo)), A.pick([-1, 0, 0, 0, 1]));
         b = T.transpose(a, id, up);
-      } while (Math.abs(b.acc) > 1);
+      } while (Math.abs(b.acc) > 1 && ++tries < 100);
       var again = function () { E.singInterval.round(lesson); };
       var draw = function (both) {
         ui.staff({ clef: clef, notes: [

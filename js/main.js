@@ -12,6 +12,7 @@
     earSyllable: 'Ear', earInterval: 'Ear', readInterval: 'Read',
     sing: 'Sing', singInterval: 'Sing', echo: 'Sing', sightSing: 'Sing',
     earChord: 'Ear', readChord: 'Read', readNumeral: 'Read', singChord: 'Sing', earCadence: 'Ear', dictation: 'Dictation',
+    exploreScale: 'Explore', earScale: 'Ear', readScale: 'Read', modeFinal: 'Read', singScale: 'Sing', invertInterval: 'Read',
   };
 
   function allLessons() {

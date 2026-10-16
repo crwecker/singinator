@@ -118,11 +118,29 @@
     return x;
   }
 
+  // spec: { list: ['C', 'D dorian'], mode } | { mode: 'major'|'minor'|'any'|<mode>, max }
+  //       | { modes: ['dorian', 'lydian'], max }
   function keysFor(spec) {
     spec = spec || { list: ['C'] };
-    if (spec.list) return spec.list.map(function (t) { return Theory.key(t, spec.mode === 'minor' ? 'minor' : 'major'); });
+    if (spec.list) {
+      return spec.list.map(function (t) {
+        var parts = t.split(' ');
+        return Theory.key(parts[0], parts[1] || spec.mode || 'major');
+      });
+    }
+    if (spec.modes) {
+      return spec.modes.reduce(function (all, m) { return all.concat(Theory.allKeys(m, spec.max)); }, []);
+    }
     if (spec.mode === 'any') return Theory.allKeys('major', spec.max).concat(Theory.allKeys('minor', spec.max));
     return Theory.allKeys(spec.mode || 'major', spec.max);
+  }
+
+  // How do is placed for this key under the current setting, for display.
+  function solfegeNote(k) {
+    if (k.mode === 'major' || k.mode === 'ionian') return '';
+    var d = Theory.doNote(k, settings.minor);
+    if (d === k.tonic) return 'tonic is do';
+    return 'tonic is ' + Theory.syllable(k.tonic, k, settings.minor).syl;
   }
 
   function keyLabel(k) {
@@ -422,7 +440,7 @@
     $: $, store: store, settings: settings, saveSettings: saveSettings,
     lessonScore: lessonScore, record: record, markSeen: markSeen, resetProgress: resetProgress,
     renderDots: renderDots, celebrate: celebrate, stars: function () { return stars; },
-    DEG_COLORS: DEG_COLORS, cap: cap, sylOf: sylOf, pick: pick, keysFor: keysFor, keyLabel: keyLabel,
+    DEG_COLORS: DEG_COLORS, cap: cap, sylOf: sylOf, pick: pick, keysFor: keysFor, keyLabel: keyLabel, solfegeNote: solfegeNote,
     parseDegree: parseDegree, placeTonic: placeTonic, noteAt: noteAt, playCadence: playCadence, playVoicings: playVoicings,
     session: session, newToken: newToken, alive: alive, ui: ui,
     meter: meter, listen: listen, stopListening: stopListening, currentTarget: currentTarget,
