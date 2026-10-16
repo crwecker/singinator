@@ -502,3 +502,7 @@ main {
 @keyframes tap { 50% { transform: scale(0.93); box-shadow: 0 2px 0 #1565c0; } }
 .answers.rhythms .ans-btn { padding: 6px; background: var(--staff-bg); }
 .mini-staff { width: 260px; max-width: 80vw; height: auto; display: block; }
+.staff.writable { cursor: crosshair; touch-action: none; outline: 3px dashed color-mix(in srgb, var(--sol) 50%, transparent); outline-offset: -3px; }
+.answers.tools .tool { min-width: 58px; }
+.answers.tools .tool .ans-main { font-size: 24px; }
+button.slot { cursor: pointer; font: inherit; }

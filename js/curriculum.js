@@ -207,6 +207,17 @@
         { id: 'echo-any', title: 'Dictation by ear: echo anything', engine: 'echo', keys: { mode: 'any', max: 7 }, clefs: ['treble', 'bass'], degrees: MAJOR, chromatic: true, leaps: true, length: 6 },
       ],
     },
+    {
+      id: 'u-dictation', title: 'Melodic Dictation', blurb: 'Hear a melody, write it down: the first note is given.',
+      lessons: [
+        { id: 'md-dms', title: 'Do, mi, sol patterns', engine: 'melodicDictation', keys: { list: ['C', 'G', 'F'] }, clefs: ['treble'], degrees: ['1', '3', '5', '8'], length: 4, leaps: true },
+        { id: 'md-step', title: 'Stepwise major melodies', engine: 'melodicDictation', keys: { mode: 'major', max: 3 }, clefs: ['treble', 'bass'], degrees: ['1', '2', '3', '4', '5', '6', '7', '8'], length: 5 },
+        { id: 'md-leap', title: 'Major melodies with leaps', engine: 'melodicDictation', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'], degrees: ['1', '2', '3', '4', '5', '6', '7', '8'], length: 6, leaps: true },
+        { id: 'md-minor', title: 'Minor melodies', engine: 'melodicDictation', keys: { mode: 'minor', max: 4 }, clefs: ['treble', 'bass'], degrees: ['1', '2', '3', '4', '5', '6', '+6', '7', '+7', '8'], length: 6, leaps: true },
+        { id: 'md-chrom', title: 'Chromatic melodies', engine: 'melodicDictation', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'], degrees: ['1', '2', '3', '4', '5', '6', '7', '8'], chromatic: true, length: 6, leaps: true },
+        { id: 'md-clefs', title: 'Any key, any clef', engine: 'melodicDictation', keys: { mode: 'any', max: 6 }, clefs: ['treble', 'bass', 'alto', 'tenor'], degrees: ['1', '2', '3', '4', '5', '6', '7', '8'], chromatic: true, length: 7, leaps: true },
+      ],
+    },
   ];
 
   root.Curriculum = { UNITS: UNITS };

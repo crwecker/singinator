@@ -417,5 +417,13 @@
   }
   var BEAM = 4.8;
 
-  root.Staff = { render: render, renderMeasures: renderMeasures, yFor: yFor };
+  // Staff position under a pointer event on a rendered staff svg.
+  function posAt(svg, ev) {
+    var rect = svg.getBoundingClientRect();
+    var vb = svg.viewBox.baseVal;
+    var y = (ev.clientY - rect.top) * (vb.height / rect.height);
+    return Math.round(8 - (y - TOP) / (GAP / 2));
+  }
+
+  root.Staff = { render: render, renderMeasures: renderMeasures, yFor: yFor, posAt: posAt };
 })(this);

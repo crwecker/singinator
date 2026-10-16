@@ -260,6 +260,8 @@
       });
     },
     clear: function () {
+      document.getElementById('staff').onpointerdown = null; // dictation input
+      document.getElementById('staff').classList.remove('writable');
       this.slots([]);
       this.prompt(''); this.sub(''); this.feedback('');
       this.answers([], function () {}); this.actions([]); this.meter(false);
