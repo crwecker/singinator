@@ -506,3 +506,5 @@ main {
 .answers.tools .tool { min-width: 58px; }
 .answers.tools .tool .ans-main { font-size: 24px; }
 button.slot { cursor: pointer; font: inherit; }
+.staff2 { margin-top: 10px; }
+.staff.mine { box-shadow: 0 0 0 3px var(--sol), var(--shadow); }

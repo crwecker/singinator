@@ -259,7 +259,14 @@
         box.appendChild(d);
       });
     },
+    staff2: function (opts) {
+      var svg = $('staff2');
+      svg.toggleAttribute('hidden', !opts); // SVG elements have no .hidden property
+      if (opts) Staff.render(svg, opts);
+    },
     clear: function () {
+      this.staff2(null);
+      $('staff').classList.remove('mine');
       document.getElementById('staff').onpointerdown = null; // dictation input
       document.getElementById('staff').classList.remove('writable');
       this.slots([]);

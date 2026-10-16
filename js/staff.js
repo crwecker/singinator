@@ -157,9 +157,13 @@
     }
     items.forEach(function (it) {
       var hx = x + it.dx, y = yFor(it.pos);
-      el('ellipse', {
+      var c = it.color || '#3b3355';
+      el('ellipse', it.open ? {
+        cx: hx, cy: y, rx: 8.4, ry: 5.6, transform: 'rotate(-20 ' + hx + ' ' + y + ')',
+        fill: 'var(--staff-bg)', stroke: c, 'stroke-width': 2.6, class: 'note-head',
+      } : {
         cx: hx, cy: y, rx: 8.2, ry: 5.8, transform: 'rotate(-20 ' + hx + ' ' + y + ')',
-        fill: it.color || '#3b3355', class: 'note-head',
+        fill: c, class: 'note-head',
       }, g);
     });
 

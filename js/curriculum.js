@@ -218,6 +218,15 @@
         { id: 'md-clefs', title: 'Any key, any clef', engine: 'melodicDictation', keys: { mode: 'any', max: 6 }, clefs: ['treble', 'bass', 'alto', 'tenor'], degrees: ['1', '2', '3', '4', '5', '6', '7', '8'], chromatic: true, length: 7, leaps: true },
       ],
     },
+    {
+      id: 'u-twopart', title: 'Two-Part Singing', blurb: 'First-species counterpoint: sing one voice while the app sings the other. Headphones help.',
+      lessons: [
+        { id: 'tp-cp-above', title: 'Sing a counterpoint above the cantus', engine: 'twoPart', keys: { mode: 'major', max: 2 }, part: 'upper', cantus: 'lower', length: 6, bpm: 50 },
+        { id: 'tp-cf-below', title: 'Sing the cantus under a counterpoint', engine: 'twoPart', keys: { mode: 'major', max: 2 }, part: 'lower', cantus: 'lower', length: 6, bpm: 50 },
+        { id: 'tp-cp-below', title: 'Sing a counterpoint below the cantus', engine: 'twoPart', keys: { mode: 'major', max: 3 }, part: 'lower', cantus: 'upper', length: 7, bpm: 54 },
+        { id: 'tp-either', title: 'Either part, any key', engine: 'twoPart', keys: { mode: 'major', max: 5 }, length: 8, bpm: 58 },
+      ],
+    },
   ];
 
   root.Curriculum = { UNITS: UNITS };
