@@ -34,7 +34,7 @@
       label = T.numeral(c.type, p.deg, p.inv);
     }
     return { id: id, label: label, root: c.root, type: c.type, inv: p.inv, deg: p.deg, secondary: !!p.secondary,
-      tones: T.chordTones(c.root, c.type) };
+      tones: T.chordTones(c.root, c.type), key: k };
   }
 
   // ---------- Voice leading ----------
@@ -73,7 +73,7 @@
   // (classroom rules: third present, 7th present and not doubled, no doubled
   // leading tone in dominants, double the bass of a 6/4, sensible spacing).
   function voicingsFor(k, c) {
-    var lt = leadingPc(k);
+    var lt = leadingPc(c.key || k); // chords in a modulation carry their own key
     var seventh = c.tones.length === 4;
     var basses = spellingsInRange(c.tones[c.inv], RANGES.bass[0], RANGES.bass[1]);
     var cands = [];
@@ -258,7 +258,35 @@
     return voiceLead(k, [mk(tonic), mk(color), mk(tonic)]);
   }
 
+  // ---------- Modulation ----------
+  // Where a phrase can go, and how it gets there: a pivot chord that
+  // belongs to both keys, then V7-I in the new key.
+  var MODULATIONS = {
+    V:    { name: 'Dominant (V)', newKey: function (k) { return T.key(T.transpose(k.tonic, 'P5', true), 'major'); }, pivot: ['vi', 'ii'] },
+    IV:   { name: 'Subdominant (IV)', newKey: function (k) { return T.key(T.transpose(k.tonic, 'P4', true), 'major'); }, pivot: ['ii', 'vi'] },
+    vi:   { name: 'Relative minor (vi)', newKey: function (k) { return T.key(T.transpose(k.tonic, 'M6', true), 'minor'); }, pivot: ['ii', 'IV'] },
+    none: { name: 'Stays home', newKey: function (k) { return k; }, pivot: ['ii', 'ii'] },
+  };
+
+  // Chords of a modulating phrase; each carries its key. The pivot chord's
+  // label shows both functions ("vi = ii").
+  function modulation(k, target, rnd) {
+    var m = MODULATIONS[target];
+    var k2 = m.newKey(k);
+    var opening = pick([['I', 'IV', 'V', 'I'], ['I', 'vi', 'IV', 'V', 'I'], ['I', 'V', 'I']], rnd);
+    var chords = opening.map(function (id) { return chord(k, id); });
+    var pivot = chord(k, m.pivot[0]);
+    var inNew = chord(k2, m.pivot[1]);
+    pivot.label = target === 'none' ? pivot.label : pivot.label + ' = ' + inNew.label;
+    pivot.key = k2;
+    chords.push(pivot);
+    chords.push(chord(k2, 'V7'));
+    chords.push(chord(k2, 'I'));
+    return { from: k, to: k2, chords: chords, voices: voiceLead(k, chords, { sopranoEnd: T.pc(k2.tonic) }) };
+  }
+
   var api = {
+    MODULATIONS: MODULATIONS, modulation: modulation,
     parseId: parseId, chord: chord, voiceLead: voiceLead, makeProgression: makeProgression,
     CADENCES: CADENCES, cadencePhrase: cadencePhrase, establishing: establishing,
     FUNCTION: FUNCTION, parallelPenalty: parallelPenalty, RANGES: RANGES,

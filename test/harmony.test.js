@@ -115,5 +115,28 @@ check('every mode has an establishing progression', () => {
   }
 });
 
+check('modulations voice-lead cleanly and land in the new key', () => {
+  const r = rng(11);
+  for (const k of T.allKeys('major', 4)) {
+    for (const target of Object.keys(H.MODULATIONS)) {
+      for (let t = 0; t < 3; t++) {
+        const m = H.modulation(k, target, r);
+        const where = `${T.keyName(k)} -> ${target} [${m.chords.map((c) => c.label).join(' ')}]`;
+        // chords carry their own key, so check each against its key
+        m.voices.forEach((v, i) => {
+          const c = m.chords[i];
+          if (i > 0) assert.strictEqual(H.parallelPenalty(m.voices[i - 1], v), 0, 'parallels into ' + c.label + ': ' + where);
+          v.forEach((n) => assert(c.tones.map(T.pc).includes(T.pc(n)), 'non-chord tone: ' + where));
+        });
+        const last = m.voices[m.voices.length - 1];
+        assert.strictEqual(T.pc(last[0]), T.pc(m.to.tonic), 'ends on new tonic: ' + where);
+        assert.strictEqual(T.pc(last[3]), T.pc(m.to.tonic), 'soprano ends on new do: ' + where);
+      }
+    }
+  }
+  assert.strictEqual(H.modulation(T.key('C'), 'V').chords.find((c) => c.label.includes('=')).label, 'vi = ii');
+  assert.strictEqual(T.keyName(H.modulation(T.key('C'), 'vi').to), 'A minor');
+});
+
 console.log(failures ? `\n${failures} failing` : '\nall passing');
 process.exit(failures ? 1 : 0);

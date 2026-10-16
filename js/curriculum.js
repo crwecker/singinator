@@ -137,6 +137,19 @@
       ],
     },
     {
+      id: 'u-chromatic-harmony', title: 'Secondary Dominants & Modulation', blurb: 'Borrowed dominants, tonicization, and changing key: re-solmize at the pivot.',
+      lessons: [
+        { id: 'sec-read', title: 'Read secondary dominants', engine: 'readNumeral', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'],
+          chords: ['V', 'V7', 'V/V', 'V7/V', 'V/vi', 'V7/vi', 'V7/IV', 'V/ii', 'V7/ii'] },
+        { id: 'sec-dict', title: 'Dictation with V/V and V7/IV', engine: 'dictation', keys: { mode: 'major', max: 3 }, chords: ['I', 'ii', 'IV', 'V', 'V7', 'vi', 'V/V', 'V7/V', 'V7/IV'], length: [5, 6] },
+        { id: 'sec-dict-2', title: 'Dictation: all secondary dominants', engine: 'dictation', keys: { mode: 'major', max: 4 }, chords: ['I', 'ii', 'IV', 'V', 'V7', 'vi', 'V/V', 'V7/V', 'V7/IV', 'V/vi', 'V7/vi', 'V/ii', 'V7/ii'], length: [5, 6] },
+        { id: 'sec-ss', title: 'Sing tonicizations (fi\u2013sol, te\u2013la)', engine: 'sightSing', keys: { mode: 'major', max: 3 }, clefs: ['treble', 'bass'], degrees: ['1', '2', '3', '4', '5', '6', '7', '8'], chromatic: true, length: 6 },
+        { id: 'mod-ear', title: 'Hear modulations: V, IV, relative minor', engine: 'earModulation', keys: { mode: 'major', max: 4 }, targets: ['V', 'IV', 'vi', 'none'] },
+        { id: 'mod-ss-V', title: 'Sight-sing: modulate to the dominant', engine: 'sightSingMod', keys: { mode: 'major', max: 3 }, clefs: ['treble', 'bass'], degrees: ['1', '2', '3', '4', '5', '6', '7', '8'], targets: ['V'] },
+        { id: 'mod-ss-all', title: 'Sight-sing: V, IV or relative minor', engine: 'sightSingMod', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'], degrees: ['1', '2', '3', '4', '5', '6', '7', '8'], targets: ['V', 'IV', 'vi'], leaps: true },
+      ],
+    },
+    {
       id: 'u-modes', title: 'Modes', blurb: 'The church modes: their colors, signatures and syllables.',
       lessons: [
         { id: 'mode-meet', title: 'Meet the modes', engine: 'exploreScale', tonic: 'C4', scales: ['ionian', 'dorian', 'phrygian', 'lydian', 'mixolydian', 'aeolian', 'locrian'],
