@@ -489,3 +489,16 @@ main {
 .slot.playing { transform: scale(1.08); }
 .answers.chords .ans-main { font-size: 18px; }
 .answers.dense .ans-btn { min-width: 58px; padding: 8px 8px 6px; }
+
+/* ---------- Rhythm notation ---------- */
+.time-sig { font: 900 30px Georgia, "Times New Roman", serif; fill: #3b3355; }
+.barline { stroke-width: 1.6; }
+.tap-pad {
+  width: 160px; height: 160px; border-radius: 50%; margin: 6px auto;
+  background: var(--sol); color: #fff; font-size: 30px; font-weight: 900;
+  box-shadow: 0 6px 0 #1565c0; touch-action: none; user-select: none; -webkit-user-select: none;
+}
+.tap-pad.hit { animation: tap 0.12s ease; }
+@keyframes tap { 50% { transform: scale(0.93); box-shadow: 0 2px 0 #1565c0; } }
+.answers.rhythms .ans-btn { padding: 6px; background: var(--staff-bg); }
+.mini-staff { width: 260px; max-width: 80vw; height: auto; display: block; }

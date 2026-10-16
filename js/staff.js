@@ -214,5 +214,208 @@
     });
   }
 
-  root.Staff = { render: render, yFor: yFor };
+  // ---------- Rhythmic notation ----------
+  // Base value and dot for a duration in quarters (1.5 = dotted quarter).
+  function glyphOf(dur) {
+    var dotted = [3, 1.5, 0.75].indexOf(dur) >= 0;
+    return { base: dotted ? dur / 1.5 : dur, dot: dotted };
+  }
+
+  function restGlyph(g, base, x, dotted) {
+    var y = yFor(4);
+    if (base >= 4) el('rect', { x: x - 7, y: yFor(6), width: 14, height: 6, class: INK + ' fill' }, g);
+    else if (base >= 2) el('rect', { x: x - 7, y: y - 6, width: 14, height: 6, class: INK + ' fill' }, g);
+    else if (base >= 1) {
+      stroke('M ' + (x - 3) + ' ' + (y - 15) + ' L ' + (x + 4) + ' ' + (y - 7) + ' L ' + (x - 2) + ' ' + (y) +
+        ' L ' + (x + 4) + ' ' + (y + 6) + ' C ' + (x - 4) + ' ' + (y + 2) + ', ' + (x - 5) + ' ' + (y + 10) + ', ' + x + ' ' + (y + 13), 2.6, g);
+    } else {
+      var hooks = base >= 0.5 ? 1 : 2;
+      el('line', { x1: x + 4, y1: y - 8, x2: x - 2, y2: y + 12, 'stroke-width': 1.8, class: INK }, g);
+      for (var i = 0; i < hooks; i++) el('circle', { cx: x - 2 - i * 2, cy: y - 5 + i * 8, r: 2.8, class: INK + ' fill' }, g);
+    }
+    if (dotted) el('circle', { cx: x + 11, cy: y - 3, r: 2.3, class: INK + ' fill' }, g);
+  }
+
+  // opts: { clef ('percussion' for a one-line rhythm staff), fifths,
+  //   time: '3/4', events: [{ n (null for rests / percussion), dur, rest,
+  //   tie, state, result: 'right'|'wrong', label, color }], minWidth }
+  function renderMeasures(svg, opts) {
+    var clef = opts.clef || 'treble';
+    var perc = clef === 'percussion';
+    var fifths = perc ? 0 : opts.fifths || 0;
+    var time = Rhythm.TIME[opts.time || '4/4'];
+    var events = opts.events || [];
+    var beatLen = time.beat === 2 ? 1 : time.beat; // cut time beams by the quarter
+
+    var sigW = Math.abs(fifths) * 11;
+    var timeX = 72 + sigW + 8;
+    var startX = timeX + 30;
+    var adv = function (e) { return 22 + 30 * Math.sqrt(e.dur); };
+    // x for every event, with barlines between measures
+    var xs = [], bars = [];
+    var x = startX + 14, measure = 0;
+    events.forEach(function (e, i) {
+      if (e.measure !== measure) { bars.push(x - 8); x += 14; measure = e.measure; }
+      xs[i] = x;
+      x += adv(e);
+    });
+    var natural = x + 4;
+    var width = Math.max(opts.minWidth || 480, natural);
+    var stretch = (width - startX - 14) / Math.max(1, natural - startX - 14);
+    xs = xs.map(function (v) { return startX + (v - startX) * stretch; });
+    bars = bars.map(function (v) { return startX + (v - startX) * stretch; });
+
+    svg.setAttribute('viewBox', '0 0 ' + width + ' ' + HEIGHT);
+    svg.innerHTML = '';
+    el('rect', { x: 0, y: 0, width: width, height: HEIGHT, class: 'staff-bg' }, svg);
+    if (perc) {
+      el('line', { x1: 8, x2: width - 8, y1: yFor(4), y2: yFor(4), class: 'staff-line' }, svg);
+      el('rect', { x: 22, y: yFor(6), width: 4, height: 24, class: INK + ' fill' }, svg);
+      el('rect', { x: 30, y: yFor(6), width: 4, height: 24, class: INK + ' fill' }, svg);
+    } else {
+      for (var i = 0; i < 5; i++) el('line', { x1: 8, x2: width - 8, y1: TOP + i * GAP, y2: TOP + i * GAP, class: 'staff-line' }, svg);
+      drawClef(svg, clef);
+      keySignature(svg, clef, fifths, 70);
+    }
+    [[time.top, yFor(4) - 2], [time.bottom, yFor(0) - 2]].forEach(function (p) {
+      var t = el('text', { x: timeX + 10, y: p[1], 'text-anchor': 'middle', class: 'time-sig' }, svg);
+      t.textContent = p[0];
+    });
+    var barTop = perc ? yFor(6) : yFor(8), barBot = perc ? yFor(2) : yFor(0);
+    bars.forEach(function (bx) { el('line', { x1: bx, x2: bx, y1: barTop, y2: barBot, class: 'staff-line barline' }, svg); });
+    el('line', { x1: width - 12, x2: width - 12, y1: barTop, y2: barBot, class: 'staff-line barline' }, svg);
+    el('rect', { x: width - 9, y: barTop, width: 4, height: barBot - barTop, class: INK + ' fill' }, svg);
+
+    // positions, accidentals (reset at each barline), colors
+    var inForce = {}, lastMeasure = -1;
+    var info = events.map(function (e, i) {
+      var g = glyphOf(e.dur);
+      var o = { e: e, x: xs[i], base: g.base, dot: g.dot, color: e.result === 'right' ? 'var(--fa)' : e.result === 'wrong' ? 'var(--do)' : (e.color || '#3b3355') };
+      if (e.rest) return o;
+      if (e.measure !== lastMeasure) { inForce = {}; lastMeasure = e.measure; }
+      if (perc || !e.n) { o.pos = 4; return o; }
+      o.pos = Theory.staffPos(e.n, clef);
+      var k = e.n.l + ':' + e.n.oct;
+      var current = k in inForce ? inForce[k] : Theory.sigAcc(fifths, e.n.l);
+      // a tied continuation keeps its accidental silently
+      var tiedIn = i > 0 && events[i - 1].tie;
+      o.show = e.n.acc !== current && !tiedIn ? e.n.acc : null;
+      inForce[k] = e.n.acc;
+      return o;
+    });
+
+    // beam groups: runs of eighths/sixteenths inside one beat
+    var groups = [];
+    var cur = null;
+    info.forEach(function (o, i) {
+      var beamable = !o.e.rest && o.base <= 0.5;
+      var beat = Math.floor(o.e.start / beatLen + 1e-9) + '|' + o.e.measure;
+      if (beamable && cur && cur.beat === beat) cur.items.push(i);
+      else { cur = beamable ? { beat: beat, items: [i] } : null; if (cur) groups.push(cur); }
+    });
+    var groupOf = {};
+    groups.forEach(function (gr) { if (gr.items.length > 1) gr.items.forEach(function (i) { groupOf[i] = gr; }); });
+
+    // stem direction: per beam group, else per note
+    groups.forEach(function (gr) {
+      if (gr.items.length < 2) return;
+      var avg = gr.items.reduce(function (a, i) { return a + info[i].pos; }, 0) / gr.items.length;
+      gr.up = perc || avg < 4;
+    });
+
+    info.forEach(function (o, i) {
+      var e = o.e;
+      var g = el('g', { class: 'note ' + (e.state || '') }, svg);
+      if (e.rest) { restGlyph(g, o.base, o.x, o.dot); return; }
+      var y = yFor(o.pos);
+      if (!perc) {
+        for (var p = -2; p >= o.pos; p -= 2) el('line', { x1: o.x - 14, x2: o.x + 14, y1: yFor(p), y2: yFor(p), class: 'staff-line' }, g);
+        for (p = 10; p <= o.pos; p += 2) el('line', { x1: o.x - 14, x2: o.x + 14, y1: yFor(p), y2: yFor(p), class: 'staff-line' }, g);
+      }
+      if (e.state === 'current') el('circle', { cx: o.x, cy: y, r: 17, class: 'note-halo' }, g);
+      if (o.show != null) accidental(g, o.show, o.x - 20, y, 'note-acc');
+      var open = o.base >= 2;
+      el('ellipse', {
+        cx: o.x, cy: y, rx: open ? 7.8 : 8.2, ry: open ? 5.4 : 5.8, transform: 'rotate(-20 ' + o.x + ' ' + y + ')',
+        fill: open ? 'var(--staff-bg)' : o.color, stroke: open ? o.color : 'none', 'stroke-width': open ? 2.2 : 0, class: 'note-head',
+      }, g);
+      if (o.dot) el('circle', { cx: o.x + 13, cy: o.pos % 2 === 0 ? y - 4 : y, r: 2.4, fill: o.color }, g);
+      if (o.base < 4) {
+        var gr = groupOf[i];
+        var up = gr ? gr.up : perc || o.pos < 4;
+        o.up = up;
+        o.sx = up ? o.x + 7.2 : o.x - 7.2;
+        o.y = y;
+        o.g = g;
+        if (!gr) {
+          var y2 = up ? y - 36 : y + 36;
+          el('line', { x1: o.sx, x2: o.sx, y1: y, y2: y2, class: 'stem', stroke: o.color }, g);
+          var flagsN = o.base <= 0.25 ? 2 : o.base <= 0.5 ? 1 : 0;
+          for (var f = 0; f < flagsN; f++) {
+            var fy = y2 + (up ? f * 8 : -f * 8);
+            var d = up
+              ? 'M ' + o.sx + ' ' + fy + ' c 1 7, 11 9, 9 22'
+              : 'M ' + o.sx + ' ' + fy + ' c 1 -7, 11 -9, 9 -22';
+            el('path', { d: d, fill: 'none', stroke: o.color, 'stroke-width': 2.4 }, g);
+          }
+        }
+      }
+      if (e.label) {
+        var t = el('text', { x: o.x, y: HEIGHT - 8, 'text-anchor': 'middle', class: 'note-label', fill: e.color || o.color }, g);
+        t.textContent = e.label;
+      }
+    });
+
+    // beams
+    groups.forEach(function (gr) {
+      if (gr.items.length < 2) return;
+      var its = gr.items.map(function (i) { return info[i]; });
+      var first = its[0], last = its[its.length - 1];
+      var dir = gr.up ? -1 : 1;
+      var e1 = first.y + dir * 34, e2 = last.y + dir * 34;
+      var slope = Math.max(-0.2, Math.min(0.2, (e2 - e1) / Math.max(1, last.sx - first.sx)));
+      var beamY = function (xx) { return e1 + slope * (xx - first.sx); };
+      // keep every stem at least 28 long
+      var need = 0;
+      its.forEach(function (o) {
+        var gap = dir * (beamY(o.sx) - o.y);
+        if (gap < 28) need = Math.max(need, 28 - gap);
+      });
+      e1 += dir * need;
+      var g = el('g', { class: 'beam' }, svg);
+      its.forEach(function (o) {
+        el('line', { x1: o.sx, x2: o.sx, y1: o.y, y2: beamY(o.sx), class: 'stem', stroke: o.color }, g);
+      });
+      var beam = function (x1, x2, level) {
+        var off = -dir * level * 7;
+        var ya = beamY(x1) + off, yb = beamY(x2) + off;
+        var th = dir * -BEAM;
+        el('path', { d: 'M ' + x1 + ' ' + ya + ' L ' + x2 + ' ' + yb + ' L ' + x2 + ' ' + (yb + th) + ' L ' + x1 + ' ' + (ya + th) + ' Z', class: INK + ' fill' }, g);
+      };
+      beam(first.sx, last.sx, 0);
+      // secondary beams for sixteenths; a lone one gets a stub
+      its.forEach(function (o, j) {
+        if (o.base > 0.25) return;
+        var next = its[j + 1], prev = its[j - 1];
+        if (next && next.base <= 0.25) beam(o.sx, next.sx, 1);
+        else if (!(prev && prev.base <= 0.25)) {
+          if (next) beam(o.sx, o.sx + 10, 1); else beam(o.sx - 10, o.sx, 1);
+        }
+      });
+    });
+
+    // ties
+    info.forEach(function (o, i) {
+      if (!o.e.tie || o.e.rest || !info[i + 1]) return;
+      var n = info[i + 1];
+      var below = o.up !== false;
+      var y = (o.y || yFor(o.pos)) + (below ? 9 : -9);
+      var c = below ? y + 9 : y - 9;
+      el('path', { d: 'M ' + (o.x + 6) + ' ' + y + ' Q ' + ((o.x + n.x) / 2) + ' ' + c + ', ' + (n.x - 6) + ' ' + y, fill: 'none', 'stroke-width': 2, class: INK }, svg);
+    });
+    return xs;
+  }
+  var BEAM = 4.8;
+
+  root.Staff = { render: render, renderMeasures: renderMeasures, yFor: yFor };
 })(this);

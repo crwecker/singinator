@@ -18,19 +18,17 @@
     return ctx;
   }
 
-  // A soft, music-box-ish tone: triangle + a touch of sine an octave up.
-  function playNote(midi, duration, when, level) {
+  // A soft, music-box-ish tone: triangle + a touch of sine an octave up,
+  // scheduled at an absolute AudioContext time. Returns its end time.
+  function tone(midi, start, duration, level) {
     var c = context();
-    duration = duration || 0.9;
-    level = level || 0.35;
-    var start = c.currentTime + (when || 0) + 0.02;
     var end = start + duration;
     var hz = Pitch.midiToHz(midi);
 
     var gain = c.createGain();
     gain.gain.setValueAtTime(0, start);
     gain.gain.linearRampToValueAtTime(level, start + 0.02);
-    gain.gain.setValueAtTime(level, end - 0.25);
+    gain.gain.setValueAtTime(level, Math.max(start + 0.03, end - 0.25));
     gain.gain.exponentialRampToValueAtTime(0.001, end);
     gain.connect(c.destination);
 
@@ -47,10 +45,60 @@
 
     osc.start(start); osc.stop(end + 0.05);
     shimmer.start(start); shimmer.stop(end + 0.05);
+    return end;
+  }
 
+  // A reference note: listening pauses while it sounds, so the app can't
+  // hear itself and call it a match.
+  function playNote(midi, duration, when, level) {
+    var c = context();
+    var end = tone(midi, c.currentTime + (when || 0) + 0.02, duration || 0.9, level || 0.35);
     quietUntil = Math.max(quietUntil, end + LISTEN_GAP);
     return end;
   }
+
+  // Accompaniment and rhythm playback at an absolute time. Doesn't pause
+  // listening: the student sings along with it.
+  function playAt(midi, at, duration, level) {
+    return tone(midi, at, duration, level || 0.3);
+  }
+
+  // Metronome tick: a short high blip, above the pitch detector's range so
+  // it never reads as a sung note.
+  function click(at, accent) {
+    var c = context();
+    var g = c.createGain();
+    g.gain.setValueAtTime(0, at);
+    g.gain.linearRampToValueAtTime(accent ? 0.35 : 0.22, at + 0.002);
+    g.gain.exponentialRampToValueAtTime(0.001, at + 0.04);
+    g.connect(c.destination);
+    var o = c.createOscillator();
+    o.frequency.value = accent ? 2200 : 1600;
+    o.connect(g);
+    o.start(at);
+    o.stop(at + 0.05);
+  }
+
+  // Woodblock-ish hit for playing a rhythm back.
+  function hit(at, accent) {
+    var c = context();
+    var g = c.createGain();
+    g.gain.setValueAtTime(0, at);
+    g.gain.linearRampToValueAtTime(accent ? 0.5 : 0.38, at + 0.003);
+    g.gain.exponentialRampToValueAtTime(0.001, at + 0.12);
+    g.connect(c.destination);
+    var o = c.createOscillator();
+    o.type = 'square';
+    o.frequency.value = 820;
+    var f = c.createBiquadFilter();
+    f.type = 'bandpass';
+    f.frequency.value = 1200;
+    o.connect(f).connect(g);
+    o.start(at);
+    o.stop(at + 0.13);
+  }
+
+  function now() { return context().currentTime; }
 
   // Plays notes (or chords, given as arrays) one after another.
   // onNote(i) fires as each one starts.
@@ -184,6 +232,10 @@
   root.Sound = {
     context: context,
     playNote: playNote,
+    playAt: playAt,
+    click: click,
+    hit: hit,
+    now: now,
     playSequence: playSequence,
     startMic: startMic,
     switchMic: openMic,

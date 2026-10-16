@@ -14,6 +14,7 @@
     earChord: 'Ear', readChord: 'Read', readNumeral: 'Read', singChord: 'Sing', earCadence: 'Ear', dictation: 'Dictation',
     exploreScale: 'Explore', earScale: 'Ear', readScale: 'Read', modeFinal: 'Read', singScale: 'Sing', invertInterval: 'Read',
     earModulation: 'Ear', sightSingMod: 'Sing',
+    tapRhythm: 'Rhythm', earRhythm: 'Ear', singRhythm: 'Sing',
   };
 
   function allLessons() {

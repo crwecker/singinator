@@ -15,6 +15,7 @@
 <!-- Visual check: every key signature in every clef, plus chromatic notes. -->
 <div class="grid" id="grid"></div>
 <script src="../js/theory.js"></script>
+<script src="../js/rhythm.js"></script>
 <script src="../js/staff.js"></script>
 <script>
   var grid = document.getElementById('grid');
@@ -68,6 +69,23 @@
     cell('C# aug-ish stack', { clef: 'treble', notes: accs, minWidth: 260 });
     var accs2 = ['Db4', 'Eb4', 'F#4'].map(function (s) { return { n: Theory.parse(s), col: 0 }; });
     cell('accidental seconds', { clef: 'treble', notes: accs2, minWidth: 260 });
+  }
+
+  if (new URLSearchParams(location.search).get('rhythm')) {
+    grid.innerHTML = '';
+    grid.style.gridTemplateColumns = '1fr 1fr';
+    var seed = 1;
+    var rnd = function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    var level = Number(new URLSearchParams(location.search).get('rhythm'));
+    ['2/4', '3/4', '4/4', '6/8', '9/8', '12/8', '2/2'].forEach(function (ts, i) {
+      var ev = Rhythm.makeRhythm(ts, 2, level, rnd);
+      var d = document.createElement('div'); d.textContent = ts + ' L' + level; grid.appendChild(d);
+      var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('class', 'staff'); d.appendChild(svg);
+      var pitched = i % 2 === 1;
+      var pitches = ['C4', 'E4', 'G4', 'B4', 'D5', 'F#5', 'A5', 'G4', 'F4', 'D4', 'Bb3', 'C5'];
+      Staff.renderMeasures(svg, { clef: pitched ? 'treble' : 'percussion', fifths: pitched ? 1 : 0, time: ts, minWidth: 560,
+        events: ev.map(function (e, j) { return Object.assign({ n: pitched ? Theory.parse(pitches[j % pitches.length]) : null }, e); }) });
+    });
   }
 </script>
 </body>
