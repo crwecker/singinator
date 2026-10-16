@@ -69,6 +69,21 @@
       ],
     },
     {
+      id: 'u-chords', title: 'Chords', blurb: 'Triads and seventh chords by ear, on the staff, and sung as arpeggios.',
+      lessons: [
+        { id: 'ch-ear-mm', title: 'Hear major vs. minor triads', engine: 'earChord', types: ['maj', 'min'] },
+        { id: 'ch-ear-tri', title: 'Hear all four triads', engine: 'earChord', types: ['maj', 'min', 'dim', 'aug'] },
+        { id: 'ch-read-tri', title: 'Read triad qualities', engine: 'readChord', types: ['maj', 'min', 'dim', 'aug'], clefs: ['treble', 'bass'] },
+        { id: 'ch-sing-tri', title: 'Sing I, IV, V and vi', engine: 'singChord', keys: { mode: 'major', max: 3 }, clefs: ['treble', 'bass'], chords: ['I', 'IV', 'V', 'vi', 'ii'] },
+        { id: 'ch-ear-inv', title: 'Hear triad inversions', engine: 'earChord', types: ['maj', 'min'], askInversion: true },
+        { id: 'ch-read-inv', title: 'Read triads with inversions', engine: 'readChord', types: ['maj', 'min', 'dim'], inversions: true, clefs: ['treble', 'bass'] },
+        { id: 'ch-ear-7', title: 'Hear seventh chords', engine: 'earChord', types: ['dom7', 'maj7', 'min7', 'hdim7', 'dim7'] },
+        { id: 'ch-read-7', title: 'Read seventh chords', engine: 'readChord', types: ['dom7', 'maj7', 'min7', 'hdim7', 'dim7'], clefs: ['treble', 'bass'] },
+        { id: 'ch-read-7-inv', title: 'Read sevenths with inversions', engine: 'readChord', types: ['dom7', 'min7', 'hdim7'], inversions: true, clefs: ['treble', 'bass'] },
+        { id: 'ch-sing-7', title: 'Sing seventh-chord arpeggios', engine: 'singChord', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'], chords: ['V7', 'ii7', 'IV7', 'vii7', 'I7'] },
+      ],
+    },
+    {
       id: 'u4', title: 'Minor', blurb: 'Natural, harmonic and melodic minor. Change do- or la-based minor in Settings.',
       lessons: [
         { id: 'min-meet', title: 'Natural minor', engine: 'explore', keys: { list: ['A', 'C', 'D', 'E'], mode: 'minor' }, clefs: ['treble'], degrees: MINOR_NAT },
@@ -100,6 +115,22 @@
         { id: 'c-read', title: 'Movable do in C clefs', engine: 'readSyllable', keys: { mode: 'major', max: 4 }, clefs: ['alto', 'tenor'], degrees: MAJOR },
         { id: 'ks-c', title: 'Key signatures in all four clefs', engine: 'keySig', keys: { mode: 'major', max: 7 }, clefs: ['treble', 'bass', 'alto', 'tenor'] },
         { id: 'all-names', title: 'Note names in any clef', engine: 'readLetter', keys: { mode: 'major', max: 7 }, clefs: ['treble', 'bass', 'alto', 'tenor'] },
+      ],
+    },
+    {
+      id: 'u-harmony', title: 'Harmony & Cadences', blurb: 'Roman numerals, cadences, and writing down the chords you hear.',
+      lessons: [
+        { id: 'rn-read', title: 'Roman numerals: diatonic triads', engine: 'readNumeral', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'], chords: ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii\u00B0'] },
+        { id: 'rn-read-inv', title: 'Roman numerals with inversions', engine: 'readNumeral', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'], chords: ['I', 'I6', 'I6/4', 'ii', 'ii6', 'IV', 'IV6', 'V', 'V6', 'V6/4', 'vi', 'vii\u00B06'] },
+        { id: 'rn-read-7', title: 'Roman numerals: V7 and its inversions', engine: 'readNumeral', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'], chords: ['V7', 'V6/5', 'V4/3', 'V4/2', 'ii7', 'ii6/5'] },
+        { id: 'rn-read-min', title: 'Roman numerals in minor', engine: 'readNumeral', keys: { mode: 'minor', max: 4 }, clefs: ['treble', 'bass'], chords: ['I', 'ii\u00B06', 'III', 'IV', 'V', 'V7', 'VI', 'vii\u00B0'] },
+        { id: 'cad-ear-1', title: 'Hear cadences: authentic, half, plagal, deceptive', engine: 'earCadence', keys: { mode: 'major', max: 4 }, cadences: ['PAC', 'HC', 'PC', 'DC'] },
+        { id: 'cad-ear-2', title: 'Perfect vs. imperfect authentic', engine: 'earCadence', keys: { mode: 'major', max: 4 }, cadences: ['PAC', 'IAC', 'HC', 'PC', 'DC'] },
+        { id: 'cad-ear-min', title: 'Cadences in minor', engine: 'earCadence', keys: { mode: 'minor', max: 4 }, cadences: ['PAC', 'IAC', 'HC', 'PC', 'DC'] },
+        { id: 'dict-1', title: 'Dictation: I, IV, V', engine: 'dictation', keys: { mode: 'major', max: 3 }, chords: ['I', 'IV', 'V'], length: 4 },
+        { id: 'dict-2', title: 'Dictation: adding ii, vi and V7', engine: 'dictation', keys: { mode: 'major', max: 4 }, chords: ['I', 'ii', 'IV', 'V', 'V7', 'vi'], length: [4, 5] },
+        { id: 'dict-3', title: 'Dictation with inversions', engine: 'dictation', keys: { mode: 'major', max: 4 }, chords: ['I', 'I6', 'ii6', 'IV', 'IV6', 'V', 'V6', 'V7', 'V6/5', 'V4/3', 'vi', 'I6/4', 'vii\u00B06'], length: [5, 6] },
+        { id: 'dict-min', title: 'Dictation in minor', engine: 'dictation', keys: { mode: 'minor', max: 4 }, chords: ['I', 'ii6', 'IV', 'V', 'V7', 'vi', 'V6/5'], length: [4, 6] },
       ],
     },
     {

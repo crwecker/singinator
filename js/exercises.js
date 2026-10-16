@@ -650,5 +650,11 @@
     },
   };
 
-  root.Exercises = { engines: E, makeMelody: makeMelody };
+  root.Exercises = {
+    engines: E, makeMelody: makeMelody,
+    helpers: {
+      later: later, settle: settle, staffNote: staffNote, singMelody: singMelody, clefOf: clefOf,
+      clefName: clefName, keyLine: keyLine, midiOf: midiOf, placeMelody: placeMelody,
+    },
+  };
 })(this);

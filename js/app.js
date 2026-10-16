@@ -158,19 +158,14 @@
     return n;
   }
 
-  // I-IV-V-I around the tonic, in a comfortable middle register.
-  function cadenceChords(k) {
-    var T = Theory.midi(Theory.note(k.tonic.l, k.tonic.acc, 4));
-    while (T > 66) T -= 12;
-    while (T < 55) T += 12;
-    var minor = k.mode === 'minor';
-    var third = minor ? 3 : 4, sixth = minor ? 8 : 9;
-    return [[T - 12, T, T + third, T + 7], [T - 7, T, T + 5, T + sixth], [T - 5, T - 1, T + 2, T + 7], [T - 12, T, T + third, T + 7]];
-  }
-
   function playCadence(k, force) {
     if (!settings.cadence && !force) return Promise.resolve();
-    return Sound.playSequence(cadenceChords(k), 0.7);
+    return playVoicings(Harmony.establishing(k), 0.7);
+  }
+
+  // Four-part voicings ([[b, t, a, s], ...] spelled) as block chords.
+  function playVoicings(voices, len, onChord) {
+    return Sound.playSequence(voices.map(function (v) { return v.map(Theory.midi); }), len || 0.9, onChord);
   }
 
   // ---------- Lesson session ----------
@@ -234,7 +229,20 @@
       if (show && meter.root.parentNode !== slot) slot.appendChild(meter.root);
       slot.hidden = !show;
     },
+    // Answer slots for dictation: [{ label, state: 'given'|'filled'|'empty'|'right'|'wrong', sub }]
+    slots: function (items) {
+      var box = $('slots');
+      box.innerHTML = '';
+      box.hidden = !items || !items.length;
+      (items || []).forEach(function (it) {
+        var d = document.createElement('div');
+        d.className = 'slot ' + (it.state || '');
+        d.innerHTML = '<span>' + (it.label || '?') + '</span>' + (it.sub ? '<small>' + it.sub + '</small>' : '');
+        box.appendChild(d);
+      });
+    },
     clear: function () {
+      this.slots([]);
       this.prompt(''); this.sub(''); this.feedback('');
       this.answers([], function () {}); this.actions([]); this.meter(false);
       stopListening();
@@ -415,7 +423,7 @@
     lessonScore: lessonScore, record: record, markSeen: markSeen, resetProgress: resetProgress,
     renderDots: renderDots, celebrate: celebrate, stars: function () { return stars; },
     DEG_COLORS: DEG_COLORS, cap: cap, sylOf: sylOf, pick: pick, keysFor: keysFor, keyLabel: keyLabel,
-    parseDegree: parseDegree, placeTonic: placeTonic, noteAt: noteAt, playCadence: playCadence,
+    parseDegree: parseDegree, placeTonic: placeTonic, noteAt: noteAt, playCadence: playCadence, playVoicings: playVoicings,
     session: session, newToken: newToken, alive: alive, ui: ui,
     meter: meter, listen: listen, stopListening: stopListening, currentTarget: currentTarget,
     withMic: withMic,

@@ -133,9 +133,10 @@
     for (var p = -2; p >= lo; p -= 2) el('line', { x1: lx1, x2: lx2, y1: yFor(p), y2: yFor(p), class: 'staff-line' }, g);
     for (p = 10; p <= hi; p += 2) el('line', { x1: lx1, x2: lx2, y1: yFor(p), y2: yFor(p), class: 'staff-line' }, g);
 
-    items.forEach(function (it) {
-      if (it.state === 'current') el('circle', { cx: x + it.dx, cy: yFor(it.pos), r: 17, class: 'note-halo' }, g);
-    });
+    // One halo for a single note; chords get none (rings would pile up).
+    if (items.length === 1 && items[0].state === 'current') {
+      el('circle', { cx: x, cy: yFor(items[0].pos), r: 17, class: 'note-halo' }, g);
+    }
 
     // Accidentals, top down, each in the first slot far enough from the
     // ones already placed (about a 6th apart can share a slot).

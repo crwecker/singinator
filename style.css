@@ -472,3 +472,20 @@ main {
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.01s !important; transition: none !important; }
 }
+
+/* ---------- Dictation slots ---------- */
+.slots { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 14px 0 0; }
+.slot {
+  min-width: 64px; padding: 8px 10px; border-radius: 12px; text-align: center;
+  background: var(--card); box-shadow: var(--shadow); border: 2px dashed color-mix(in srgb, var(--muted) 50%, transparent);
+  font-weight: 900; font-size: 20px; display: flex; flex-direction: column;
+}
+.slot small { font-size: 12px; font-weight: 700; color: var(--muted); }
+.slot.given { border-style: solid; border-color: transparent; color: var(--muted); }
+.slot.filled { border-style: solid; border-color: var(--sol); }
+.slot.empty.next { border-color: var(--sol); }
+.slot.right { border-style: solid; border-color: var(--fa); color: var(--fa); }
+.slot.wrong { border-style: solid; border-color: var(--do); color: var(--do); }
+.slot.playing { transform: scale(1.08); }
+.answers.chords .ans-main { font-size: 18px; }
+.answers.dense .ans-btn { min-width: 58px; padding: 8px 8px 6px; }
