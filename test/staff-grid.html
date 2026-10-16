@@ -47,6 +47,28 @@
       cell(c + ' notes (D major)', { clef: c, fifths: 2, notes: notes, minWidth: 260 });
     });
   }
+
+  if (new URLSearchParams(location.search).get('chords')) {
+    grid.innerHTML = '';
+    var chords = [
+      ['treble', 0, 'G3', 'dom7', 0], ['treble', 0, 'G3', 'dom7', 1], ['treble', 0, 'G3', 'dom7', 2], ['treble', 0, 'G3', 'dom7', 3],
+      ['bass', 0, 'G2', 'dom7', 3], ['treble', 0, 'C#4', 'dim7', 0], ['treble', 2, 'F#4', 'hdim7', 1], ['alto', -3, 'Ab3', 'maj7', 2],
+    ];
+    chords.forEach(function (c) {
+      var tones = Theory.chordVoicing(Theory.parse(c[2]), c[3], c[4]);
+      if (c[0] === 'treble') tones.forEach(function (t) { t.oct += 1; });
+      cell(c.slice(2).join(' '), { clef: c[0], fifths: c[1], minWidth: 260,
+        notes: tones.map(function (t) { return { n: t, col: 0, label: Theory.name(t) }; }) });
+    });
+    var cluster = ['C5', 'D5', 'E5', 'F5'].map(function (s) { return { n: Theory.parse(s), col: 0 }; });
+    cell('cluster stem down', { clef: 'treble', notes: cluster, minWidth: 260 });
+    var low = ['C4', 'D4', 'E4'].map(function (s) { return { n: Theory.parse(s), col: 0 }; });
+    cell('cluster stem up', { clef: 'treble', notes: low, minWidth: 260 });
+    var accs = ['C#4', 'E#4', 'G#4', 'B#4'].map(function (s) { return { n: Theory.parse(s), col: 0 }; });
+    cell('C# aug-ish stack', { clef: 'treble', notes: accs, minWidth: 260 });
+    var accs2 = ['Db4', 'Eb4', 'F#4'].map(function (s) { return { n: Theory.parse(s), col: 0 }; });
+    cell('accidental seconds', { clef: 'treble', notes: accs2, minWidth: 260 });
+  }
 </script>
 </body>
 </html>

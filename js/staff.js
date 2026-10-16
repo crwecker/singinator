@@ -104,35 +104,69 @@
   }
 
   // ---------- Notes ----------
-  function ledgers(g, pos, x) {
-    for (var p = -2; p >= pos; p -= 2) {
-      el('line', { x1: x - 14, x2: x + 14, y1: yFor(p), y2: yFor(p), class: 'staff-line' }, g);
-    }
-    for (p = 10; p <= pos; p += 2) {
-      el('line', { x1: x - 14, x2: x + 14, y1: yFor(p), y2: yFor(p), class: 'staff-line' }, g);
-    }
-  }
+  var HEAD_W = 16.4; // a note head's width: seconds in a chord shift by this
 
-  function drawNote(svg, item, x, pos, showAcc) {
-    var y = yFor(pos);
-    var color = item.color || '#3b3355';
-    var g = el('g', { class: 'note ' + (item.state || '') }, svg);
-    ledgers(g, pos, x);
-    if (item.state === 'current') el('circle', { cx: x, cy: y, r: 17, class: 'note-halo' }, g);
-    if (showAcc != null) accidental(g, showAcc, x - 20, y, 'note-acc');
-    if (!item.hideHead) {
-      var stemUp = pos < 4;
+  // One column: a single note or a chord sharing a stem. items carry
+  // { pos, show (accidental to draw or null), color, state, label }.
+  function drawColumn(svg, items, x) {
+    items = items.slice().sort(function (a, b) { return a.pos - b.pos; });
+    var lo = items[0].pos, hi = items[items.length - 1].pos;
+    var stemUp = (lo + hi) / 2 < 4;
+    var color = items[0].color || '#3b3355';
+    var state = items.every(function (it) { return it.state === items[0].state; }) ? items[0].state : '';
+    var g = el('g', { class: 'note ' + (state || '') }, svg);
+
+    // Seconds can't share a side of the stem: walk from the end the stem
+    // starts at and push every other note of a cluster across it.
+    var order = stemUp ? items : items.slice().reverse();
+    var shifted = false;
+    order.forEach(function (it, i) {
+      var prev = order[i - 1];
+      shifted = !!prev && Math.abs(it.pos - prev.pos) === 1 && !shifted;
+      it.dx = shifted ? (stemUp ? HEAD_W : -HEAD_W) : 0;
+    });
+    var anyRight = items.some(function (it) { return it.dx > 0; });
+    var anyLeft = items.some(function (it) { return it.dx < 0; });
+
+    // Ledger lines wide enough for displaced heads.
+    var lx1 = x - 14 + (anyLeft ? -HEAD_W : 0), lx2 = x + 14 + (anyRight ? HEAD_W : 0);
+    for (var p = -2; p >= lo; p -= 2) el('line', { x1: lx1, x2: lx2, y1: yFor(p), y2: yFor(p), class: 'staff-line' }, g);
+    for (p = 10; p <= hi; p += 2) el('line', { x1: lx1, x2: lx2, y1: yFor(p), y2: yFor(p), class: 'staff-line' }, g);
+
+    items.forEach(function (it) {
+      if (it.state === 'current') el('circle', { cx: x + it.dx, cy: yFor(it.pos), r: 17, class: 'note-halo' }, g);
+    });
+
+    // Accidentals, top down, each in the first slot far enough from the
+    // ones already placed (about a 6th apart can share a slot).
+    var slots = [];
+    var accLeft = x - 20 + (anyLeft ? -HEAD_W : 0);
+    items.slice().reverse().forEach(function (it) {
+      if (it.show == null) return;
+      var s = 0;
+      while ((slots[s] || []).some(function (q) { return Math.abs(q - it.pos) < 6; })) s++;
+      (slots[s] = slots[s] || []).push(it.pos);
+      accidental(g, it.show, accLeft - s * 11, yFor(it.pos), 'note-acc');
+    });
+
+    if (!items[0].noStem) {
       var sx = stemUp ? x + 7.2 : x - 7.2;
-      if (!item.whole) el('line', { x1: sx, x2: sx, y1: y, y2: stemUp ? y - 38 : y + 38, class: 'stem', stroke: color }, g);
+      var y1 = yFor(stemUp ? lo : hi), y2 = stemUp ? yFor(hi) - 38 : yFor(lo) + 38;
+      el('line', { x1: sx, x2: sx, y1: y1, y2: y2, class: 'stem', stroke: color }, g);
+    }
+    items.forEach(function (it) {
+      var hx = x + it.dx, y = yFor(it.pos);
       el('ellipse', {
-        cx: x, cy: y, rx: 8.2, ry: 5.8, transform: 'rotate(-20 ' + x + ' ' + y + ')',
-        fill: color, class: 'note-head',
+        cx: hx, cy: y, rx: 8.2, ry: 5.8, transform: 'rotate(-20 ' + hx + ' ' + y + ')',
+        fill: it.color || '#3b3355', class: 'note-head',
       }, g);
-    }
-    if (item.label) {
-      var t = el('text', { x: x, y: HEIGHT - 8, 'text-anchor': 'middle', class: 'note-label', fill: color }, g);
-      t.textContent = item.label;
-    }
+    });
+
+    var labels = items.filter(function (it) { return it.label; });
+    labels.reverse().forEach(function (it, i) {
+      var t = el('text', { x: x, y: HEIGHT - 8 - (labels.length - 1 - i) * 16, 'text-anchor': 'middle', class: 'note-label', fill: it.color || '#3b3355' }, g);
+      t.textContent = it.label;
+    });
   }
 
   // opts: { clef, fifths, notes: [{ n, color, state, label, col }], width, minWidth }
@@ -162,6 +196,7 @@
     var span = width - startX - 50;
     var colW = cols > 1 ? Math.min(110, span / (cols - 1)) : 0;
     var x0 = cols > 1 ? startX + (span - colW * (cols - 1)) / 2 : startX;
+    var byCol = [];
     notes.forEach(function (it) {
       if (it.hidden) return; // placeholder: keeps its column, draws nothing
       var n = it.n;
@@ -170,8 +205,11 @@
       var current = k in inForce ? inForce[k] : keyAcc;
       var show = n.acc !== current || it.forceAcc ? n.acc : null;
       inForce[k] = n.acc;
-      var x = cols === 1 ? startX + span / 2 : x0 + it.col * colW;
-      drawNote(svg, it, x, Theory.staffPos(n, clef), show);
+      (byCol[it.col] = byCol[it.col] || []).push(Object.assign({}, it, { pos: Theory.staffPos(n, clef), show: show }));
+    });
+    byCol.forEach(function (items, c) {
+      if (!items) return;
+      drawColumn(svg, items, cols === 1 ? startX + span / 2 : x0 + c * colW);
     });
   }
 
