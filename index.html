@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Singinator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="start" class="overlay">
+    <div class="start-card">
+      <h1 class="logo">Sing<span>inator</span></h1>
+      <p>Solfège, sight-singing and ear training, from do-mi-sol to chromatic melodies in any clef.</p>
+      <button id="start-btn" class="big-btn">Start</button>
+      <p class="fine">Use headphones if you can. You'll need a microphone for the singing lessons.</p>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <button id="home-btn" class="icon-btn" aria-label="Back to course" hidden>&larr;</button>
+    <div class="logo small">Sing<span>inator</span></div>
+    <div class="stars" aria-label="Points earned"><span class="star-icon">&#9733;</span> <span id="star-count">0</span></div>
+    <button id="settings-btn" class="icon-btn" aria-label="Settings">&#9881;</button>
+  </header>
+
+  <main>
+    <!-- Course map -->
+    <section id="home" class="screen">
+      <div class="continue-card">
+        <div>
+          <div class="eyebrow">Up next</div>
+          <div class="continue-title" id="continue-title"></div>
+          <div class="continue-meta" id="continue-meta"></div>
+        </div>
+        <button id="continue-btn" class="big-btn">Go</button>
+      </div>
+      <div id="units"></div>
+    </section>
+
+    <!-- Any lesson -->
+    <section id="lesson" class="screen" hidden>
+      <div class="lesson-head">
+        <div>
+          <div class="eyebrow" id="lesson-unit"></div>
+          <h2 class="lesson-title" id="lesson-title"></h2>
+        </div>
+        <div class="dots" id="dots" aria-label="Last 10 answers"></div>
+      </div>
+      <div class="prompt" id="prompt"></div>
+      <div class="sub" id="sub"></div>
+      <svg id="staff" class="staff" role="img" aria-label="Music staff"></svg>
+      <div class="feedback" id="feedback">&nbsp;</div>
+      <div class="answers" id="answers"></div>
+      <div class="meter-slot"></div>
+      <div class="action-row" id="actions"></div>
+    </section>
+  </main>
+
+  <template id="meter-tpl">
+    <div class="meter">
+      <div class="meter-track">
+        <div class="meter-zone"></div>
+        <div class="meter-target"></div>
+        <div class="meter-ball"></div>
+      </div>
+      <div class="meter-side">
+        <div class="meter-hint">Sing when you're ready</div>
+        <div class="meter-sung">&nbsp;</div>
+        <div class="meter-hold"><div class="meter-hold-fill"></div></div>
+        <div class="meter-level" title="Microphone volume"><span>Mic</span><div class="meter-level-bar"><div class="meter-level-fill"></div></div></div>
+        <select class="mic-select" aria-label="Microphone"></select>
+        <div class="meter-debug" hidden></div>
+      </div>
+    </div>
+  </template>
+
+  <div id="settings" class="overlay dim" hidden>
+    <div class="start-card settings-card">
+      <h2>Settings</h2>
+      <label class="setting">
+        <span><b>Minor keys</b><small>Which syllable is the tonic in minor</small></span>
+        <select id="set-minor">
+          <option value="do">Do-based (do re me…)</option>
+          <option value="la">La-based (la ti do…)</option>
+        </select>
+      </label>
+      <label class="setting">
+        <span><b>Pitch accuracy</b><small>How close counts as in tune</small></span>
+        <select id="set-tol">
+          <option value="50">Relaxed (±50¢)</option>
+          <option value="35">Standard (±35¢)</option>
+          <option value="25">Strict (±25¢)</option>
+        </select>
+      </label>
+      <label class="setting">
+        <span><b>Establish the key</b><small>Play a cadence before each question</small></span>
+        <input type="checkbox" id="set-cadence">
+      </label>
+      <div class="action-row">
+        <button id="set-reset" class="pill-btn ghost">Reset progress</button>
+        <button id="set-close" class="pill-btn">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="mic-help" class="overlay dim" hidden>
+    <div class="start-card">
+      <h2>Microphone needed</h2>
+      <p id="mic-help-text">Singing lessons need your microphone. Allow microphone access in your browser, then try again.</p>
+      <button id="mic-retry" class="big-btn">Try again</button>
+      <button id="mic-cancel" class="pill-btn ghost">Back</button>
+    </div>
+  </div>
+
+  <div id="dev-panel" hidden>
+    <b>Dev tone</b>
+    <input type="range" id="dev-hz" min="0" max="900" step="0.5" value="0">
+    <span id="dev-hz-val">off</span>
+    <button id="dev-target">= target</button>
+    <button id="dev-target-8vb">target 8vb</button>
+    <button id="dev-off">off</button>
+  </div>
+
+  <div id="celebrate" aria-live="polite"></div>
+
+  <script src="js/pitch.js"></script>
+  <script src="js/theory.js"></script>
+  <script src="js/staff.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/curriculum.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/exercises.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

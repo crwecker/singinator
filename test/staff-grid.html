@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Staff grid</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+  body { background: #fff; padding: 8px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .grid div { font: 12px monospace; }
+  .grid svg { width: 100%; border: 1px solid #ddd; }
+</style>
+</head>
+<body>
+<!-- Visual check: every key signature in every clef, plus chromatic notes. -->
+<div class="grid" id="grid"></div>
+<script src="../js/theory.js"></script>
+<script src="../js/staff.js"></script>
+<script>
+  var grid = document.getElementById('grid');
+  var clefs = ['treble', 'bass', 'alto', 'tenor'];
+  var rows = [7, 6, 5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5, -6, -7];
+  var only = new URLSearchParams(location.search).get('rows');
+  if (only) rows = only.split(',').map(Number);
+  function cell(label, opts) {
+    var d = document.createElement('div');
+    d.textContent = label;
+    var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'staff');
+    d.appendChild(svg);
+    grid.appendChild(d);
+    Staff.render(svg, opts);
+  }
+  rows.forEach(function (f) {
+    clefs.forEach(function (c) { cell(c + ' ' + f, { clef: c, fifths: f, minWidth: 260 }); });
+  });
+  if (new URLSearchParams(location.search).get('notes') !== '0') {
+    clefs.forEach(function (c) {
+      var mid = Theory.CLEFS[c].bottom;
+      var notes = ['C4', 'F#4', 'F4', 'Bb3', 'B3', 'C#5'].map(function (s, i) {
+        var n = Theory.parse(s);
+        // keep each clef's notes on/near its staff
+        var shift = Math.round((Theory.step(mid) + 4 - Theory.step(Theory.parse('B4'))) / 7);
+        n.oct += shift;
+        return { n: n, color: ['#e53935','#fb8c00','#43a047','#5e35b1','#1e88e5','#d81b60'][i], label: Theory.name(n, true) };
+      });
+      cell(c + ' notes (D major)', { clef: c, fifths: 2, notes: notes, minWidth: 260 });
+    });
+  }
+</script>
+</body>
+</html>
