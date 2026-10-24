@@ -43,6 +43,7 @@
         <div>
           <div class="eyebrow" id="lesson-unit"></div>
           <h2 class="lesson-title" id="lesson-title"></h2>
+          <a href="#" class="learn-link" id="lesson-learn" hidden></a>
         </div>
         <div class="dots" id="dots" aria-label="Last 10 answers"></div>
       </div>
@@ -55,6 +56,14 @@
       <div class="answers" id="answers"></div>
       <div class="meter-slot"></div>
       <div class="action-row" id="actions"></div>
+    </section>
+
+    <!-- Reading for a lesson of the book -->
+    <section id="learn" class="screen" hidden>
+      <button id="learn-back" class="pill-btn ghost learn-back" hidden></button>
+      <div class="eyebrow" id="learn-book"></div>
+      <h2 class="lesson-title" id="learn-title"></h2>
+      <div id="learn-body"></div>
     </section>
   </main>
 
@@ -130,9 +139,13 @@
   <script src="js/harmony.js"></script>
   <script src="js/rhythm.js"></script>
   <script src="js/counterpoint.js"></script>
+  <script src="js/partwriting.js"></script>
+  <script src="js/nct.js"></script>
+  <script src="js/phrase.js"></script>
   <script src="js/staff.js"></script>
   <script src="js/sound.js"></script>
   <script src="js/curriculum.js"></script>
+  <script src="js/learn.js"></script>
   <script src="js/app.js"></script>
   <script src="js/exercises.js"></script>
   <script src="js/exercises-harmony.js"></script>
@@ -141,6 +154,8 @@
   <script src="js/exercises-rhythm.js"></script>
   <script src="js/exercises-dictation.js"></script>
   <script src="js/exercises-twopart.js"></script>
+  <script src="js/exercises-writing.js"></script>
+  <script src="js/learn-view.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

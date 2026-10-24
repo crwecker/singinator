@@ -167,6 +167,22 @@
       }, g);
     });
 
+    // Tags: a small word to the right of each head (chord member, syllable).
+    // Two tags a step apart would overlap, so they spread up and down.
+    var tagX = x + (anyRight ? HEAD_W : 0) + 13;
+    var last = null;
+    items.forEach(function (it) {
+      if (!it.tag) return;
+      var y = yFor(it.pos) + 4;
+      var t = el('text', { x: tagX, y: y, class: 'note-tag', fill: it.color || '#3b3355' }, g);
+      t.textContent = it.tag;
+      if (last && it.pos - last.pos < 2) {
+        last.t.setAttribute('y', last.y + 3);
+        t.setAttribute('y', y - 3);
+        last = null;
+      } else last = { t: t, y: y, pos: it.pos };
+    });
+
     var labels = items.filter(function (it) { return it.label; });
     labels.reverse().forEach(function (it, i) {
       var t = el('text', { x: x, y: HEIGHT - 8 - (labels.length - 1 - i) * 16, 'text-anchor': 'middle', class: 'note-label', fill: it.color || '#3b3355' }, g);
@@ -212,9 +228,25 @@
       inForce[k] = n.acc;
       (byCol[it.col] = byCol[it.col] || []).push(Object.assign({}, it, { pos: Theory.staffPos(n, clef), show: show }));
     });
+    var colX = function (c) { return cols === 1 ? startX + span / 2 : x0 + c * colW; };
     byCol.forEach(function (items, c) {
       if (!items) return;
-      drawColumn(svg, items, cols === 1 ? startX + span / 2 : x0 + c * colW);
+      drawColumn(svg, items, colX(c));
+    });
+    // A tie runs from a note to the same note in the next column that has one.
+    byCol.forEach(function (items, c) {
+      (items || []).forEach(function (it) {
+        if (!it.tie) return;
+        var next = c + 1;
+        while (next < byCol.length && !byCol[next]) next++;
+        if (next >= byCol.length) return;
+        // the top note of a chord ties above, others below
+        var top = items.every(function (o) { return o.pos <= it.pos; }) && (items.length > 1 || it.pos >= 4);
+        var y = yFor(it.pos) + (top ? -9 : 9);
+        var bend = top ? -8 : 8;
+        var xa = colX(c) + 9, xb = colX(next) - 9;
+        stroke('M ' + xa + ' ' + y + ' Q ' + (xa + xb) / 2 + ' ' + (y + bend) + ' ' + xb + ' ' + y, 2, svg);
+      });
     });
   }
 

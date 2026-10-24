@@ -16,6 +16,8 @@
     earModulation: 'Ear', sightSingMod: 'Sing',
     tapRhythm: 'Rhythm', earRhythm: 'Ear', singRhythm: 'Sing',
     melodicDictation: 'Dictation', twoPart: 'Sing',
+    earPhrase: 'Ear', readPeriod: 'Read', earPeriod: 'Ear', singConsequent: 'Sing', cpError: 'Read',
+    spotError: 'Read', singVoice: 'Sing', readNCT: 'Read', earNCT: 'Ear', singNCT: 'Sing', learn: 'Learn',
   };
 
   function allLessons() {
@@ -37,17 +39,30 @@
     current = null;
     $('home').hidden = false;
     $('lesson').hidden = true;
+    $('learn').hidden = true;
     $('home-btn').hidden = true;
     renderHome();
   }
 
   function openLesson(unit, lesson) {
+    if (lesson.engine === 'learn') {
+      A.markSeen(lesson.id);
+      openLearn(lesson.page, null);
+      return;
+    }
     current = lesson;
     $('home').hidden = true;
     $('lesson').hidden = false;
+    $('learn').hidden = true;
     $('home-btn').hidden = false;
     $('lesson-unit').textContent = unit.title;
     $('lesson-title').textContent = lesson.title;
+    var ref = lesson.learn && Learn.find(lesson.learn);
+    $('lesson-learn').hidden = !ref;
+    if (ref) {
+      $('lesson-learn').textContent = 'Read: ' + (ref.section || ref.page).title + ' \u2192';
+      $('lesson-learn').dataset.learn = lesson.learn;
+    }
     A.ui.clear();
     A.ui.staff({ clef: (lesson.clefs || ['treble'])[0], notes: [] });
     A.renderDots(lesson.id);
@@ -66,7 +81,15 @@
 
     var box = $('units');
     box.innerHTML = '';
+    var section = null;
     UNITS.forEach(function (u, ui) {
+      if (u.section && u.section !== section) {
+        section = u.section;
+        var h = document.createElement('h2');
+        h.className = 'section-head';
+        h.textContent = section;
+        box.appendChild(h);
+      }
       var mastered = u.lessons.filter(function (l) { return A.lessonScore(l.id).mastered; }).length;
       var sec = document.createElement('section');
       sec.className = 'unit';
@@ -91,6 +114,55 @@
       box.appendChild(sec);
     });
   }
+
+  // ---------- Learn pages ----------
+  // ref: 'page' or 'page#section'. from: the exercise to go back to.
+  var learnPage = null, learnFrom = null;
+  function openLearn(ref, from) {
+    var found = Learn.find(ref);
+    if (!found) return;
+    // a link to another part of the page that's open just scrolls there
+    if (!$('learn').hidden && learnPage === found.page.id) {
+      LearnView.scrollTo($('learn-body'), found.section && found.section.id);
+      return;
+    }
+    learnPage = found.page.id;
+    learnFrom = from;
+    A.newToken();
+    A.stopListening();
+    current = null;
+    $('home').hidden = true;
+    $('lesson').hidden = true;
+    $('learn').hidden = false;
+    $('home-btn').hidden = false;
+    $('learn-book').textContent = found.page.book;
+    $('learn-title').textContent = found.page.title;
+    var back = $('learn-back');
+    back.hidden = !from;
+    if (from) {
+      back.textContent = '\u2190 Back to \u201C' + from.lesson.title + '\u201D';
+      back.onclick = function () { openLesson(from.unit, from.lesson); };
+    }
+    var practice = allLessons().filter(function (x) {
+      return x.lesson.learn && x.lesson.learn.split('#')[0] === found.page.id;
+    }).map(function (x) {
+      return { tag: ENGINE_LABEL[x.lesson.engine], title: x.lesson.title, onclick: function () { openLesson(x.unit, x.lesson); } };
+    });
+    LearnView.render($('learn-body'), found.page, practice);
+    LearnView.scrollTo($('learn-body'), found.section && found.section.id);
+  }
+
+  // Any element with data-learn="page#section" opens that page, with a way
+  // back to the exercise it came from.
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('[data-learn]');
+    if (!a) return;
+    e.preventDefault();
+    var from = null;
+    if (current) allLessons().forEach(function (x) { if (x.lesson === current) from = x; });
+    else if (!$('learn').hidden) from = learnFrom; // reading on: keep the way back
+    openLearn(a.dataset.learn, from);
+  });
 
   // ---------- Settings ----------
   function openSettings() {
@@ -155,5 +227,5 @@
   renderHome();
   window.__app = { open: function (id) {
     allLessons().forEach(function (x) { if (x.lesson.id === id) openLesson(x.unit, x.lesson); });
-  } };
+  }, learn: function (ref) { openLearn(ref, null); } };
 })();

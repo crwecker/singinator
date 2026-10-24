@@ -12,6 +12,10 @@
   var E = Exercises.engines;
   var midiOf = X.midiOf;
 
+  // Harmonic function for the function lessons (the cadential 6/4 is dominant).
+  var FN_NAMES = { T: 'Tonic', PD: 'Predominant', D: 'Dominant', CAD: 'Dominant' };
+  var FN_SHORT = { T: 'T', PD: 'PD', D: 'D', CAD: 'D' };
+
   var ROOTS = ['C3', 'D3', 'Eb3', 'E3', 'F3', 'F#3', 'G3', 'Ab3', 'A3', 'Bb3', 'B3', 'C4', 'Db4', 'D4', 'E4', 'F4'];
   var INV_NAMES = ['Root position', '1st inversion', '2nd inversion', '3rd inversion'];
 
@@ -145,21 +149,26 @@
       notes = notes.map(function (n) { return T.note(n.l, n.acc, n.oct + shift); });
       var again = function () { E.readNumeral.round(lesson); };
 
-      ui.prompt('Roman numeral?');
+      var fn = lesson.askFunction ? FN_NAMES[H.FUNCTION[id]] : null;
+      var answer = fn || c.label;
+
+      ui.prompt(fn ? 'Tonic, predominant or dominant?' : 'Roman numeral?');
       ui.sub(X.keyLine(k, clef));
       ui.feedback('');
       ui.actions([]);
       ui.staff(chordStaff(notes, clef, T.fifths(k), ''));
       var seen = {};
-      var choices = lesson.chords.map(function (x) { return H.chord(k, x).label; })
-        .filter(function (l) { if (seen[l]) return false; seen[l] = true; return true; })
-        .map(function (l) { return { label: l, value: l }; });
+      var choices = fn ? ['Tonic', 'Predominant', 'Dominant'].map(function (l) { return { label: l, value: l }; })
+        : lesson.chords.map(function (x) { return H.chord(k, x).label; })
+          .filter(function (l) { if (seen[l]) return false; seen[l] = true; return true; })
+          .map(function (l) { return { label: l, value: l }; });
       ui.answers(choices, function (v) {
-        var ok = v === c.label;
-        ui.lockAnswers(c.label, v);
+        var ok = v === answer;
+        ui.lockAnswers(answer, v);
         ui.staff(chordStaff(notes, clef, T.fifths(k), c.label));
-        ui.feedback((ok ? '' : 'It’s ') + '<b>' + c.label + '</b> — ' + T.name(c.root) + ' ' + T.CHORDS[c.type].name, ok ? 'good' : 'bad');
+        ui.feedback((ok ? '' : 'It’s ') + '<b>' + (fn ? fn + '</b>: ' + c.label : c.label + '</b>') + ' — ' + T.name(c.root) + ' ' + T.CHORDS[c.type].name, ok ? 'good' : 'bad');
         A.playCadence(k, true).then(function () { if (A.alive(token)) playChord(notes, false); });
+        if (!ok && fn) X.review('function#categories');
         X.settle(lesson, token, ok, again);
       }, 'chords');
     },
@@ -248,6 +257,7 @@
         var labels = phrase.chords.map(function (c) { return c.label; });
         ui.staff(bassLine(phrase.voices, k, labels));
         ui.feedback((ok ? '' : 'It was ') + '<b>' + H.CADENCES[type].name + '</b>: ' + labels.slice(-2).join(' → '), ok ? 'good' : 'bad');
+        if (!ok) X.review(Learn.LINKS.cadence[type]);
         X.settle(lesson, token, ok, again);
       }, 'cadences');
       play();
@@ -265,7 +275,9 @@
       len = ids.length; // the generator's fallback can be shorter
       var chords = ids.map(function (id) { return H.chord(k, id); });
       var voices = H.voiceLead(k, chords);
-      var labels = chords.map(function (c) { return c.label; });
+      var numerals = chords.map(function (c) { return c.label; });
+      // function lessons write T / PD / D in place of numerals
+      var labels = lesson.functions ? ids.map(function (id) { return FN_SHORT[H.FUNCTION[id]]; }) : numerals;
       var answer = [labels[0]];
       var done = false;
       var again = function () { E.dictation.round(lesson); };
@@ -283,13 +295,13 @@
         }));
       }
 
-      ui.prompt('Write the progression');
+      ui.prompt(lesson.functions ? 'Write each chord’s function' : 'Write the progression');
       ui.sub('Key: <b>' + A.keyLabel(k) + '</b> · ' + len + ' chords · the first is given');
       ui.feedback('');
       ui.staff(null);
       drawSlots(-1);
       var seen = {};
-      var palette = lesson.chords.map(function (x) { return H.chord(k, x).label; })
+      var palette = lesson.functions ? ['T', 'PD', 'D'] : lesson.chords.map(function (x) { return H.chord(k, x).label; })
         .filter(function (l) { if (seen[l]) return false; seen[l] = true; return true; });
       ui.answers(palette.map(function (l) { return { label: l, value: l }; }), function (v) {
         if (done || answer.length >= len) return;
@@ -304,8 +316,9 @@
           return { label: answer[i], state: i === 0 ? 'given' : answer[i] === l ? 'right' : 'wrong', sub: answer[i] === l ? '' : l };
         }));
         document.getElementById('answers').classList.add('locked');
-        ui.staff(bassLine(voices, k, labels));
-        ui.feedback(ok ? 'All correct' : 'Answer: <b>' + labels.join(' – ') + '</b>', ok ? 'good' : 'bad');
+        ui.staff(bassLine(voices, k, numerals));
+        ui.feedback(ok ? 'All correct' + (lesson.functions ? ': ' + numerals.join(' – ') : '') : 'Answer: <b>' + labels.join(' – ') + '</b>' +
+          (lesson.functions ? ' (' + numerals.join(' – ') + ')' : ''), ok ? 'good' : 'bad');
         A.record(lesson.id, ok);
         if (ok) A.celebrate('✓', false);
         ui.actions([{ label: 'Replay', ghost: true, fn: play }, { label: 'Next →', fn: again }]);

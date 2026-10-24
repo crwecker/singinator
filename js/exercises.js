@@ -7,6 +7,7 @@
   var A = App;
   var T = Theory;
   var ui = A.ui;
+  var $ = A.$;
 
   function clefOf(lesson) { return A.pick(lesson.clefs || ['treble']); }
   function clefName(c) { return T.CLEFS[c].name + ' clef'; }
@@ -27,8 +28,32 @@
       A.celebrate('✓', false);
       later(token, 1100, again);
     } else {
+      review(lesson.learn);
       ui.actions([{ label: 'Next →', fn: again }]);
+      // after a miss, clicking the highlighted right answer also moves on
+      var right = $('answers').querySelector('.ans-btn.right');
+      if (right) {
+        right.classList.add('go');
+        right.title = 'Next question';
+        right.onclick = function () { if (A.alive(token)) again(); };
+      }
     }
+  }
+
+  // After a miss, a link under the feedback to the part of the reading that
+  // covers it ('page#section'). The first link wins, so an engine can point
+  // at the exact rule before settle adds the lesson's general one.
+  function review(ref) {
+    var f = $('feedback');
+    var found = ref && Learn.find(ref);
+    if (!found || f.querySelector('[data-learn]')) return;
+    var a = document.createElement('a');
+    a.href = '#';
+    a.className = 'learn-link';
+    a.dataset.learn = ref;
+    a.textContent = 'Review: ' + (found.section || found.page).title + ' \u2192';
+    f.appendChild(document.createElement('br'));
+    f.appendChild(a);
   }
 
   // Skip spellings that need a double accidental (ri in E major = F
@@ -658,7 +683,7 @@
   root.Exercises = {
     engines: E, makeMelody: makeMelody,
     helpers: {
-      later: later, settle: settle, staffNote: staffNote, singMelody: singMelody, clefOf: clefOf,
+      later: later, settle: settle, review: review, staffNote: staffNote, singMelody: singMelody, clefOf: clefOf,
       clefName: clefName, keyLine: keyLine, midiOf: midiOf, placeMelody: placeMelody,
     },
   };

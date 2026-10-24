@@ -104,6 +104,9 @@
             if (!count[0]) cost += 60;
             if (!seventh && !count[2]) cost += 30;
             if (!seventh && c.inv === 2 && count[2] < 2) cost += 20;
+            // diminished triads double the third; other root-position triads don't
+            if (!seventh && !c.secondary && c.type === 'dim' && count[1] < 2) cost += 25;
+            if (!seventh && !c.secondary && c.inv === 0 && c.type !== 'dim' && count[1] > 1) cost += 25;
             out.push({ v: voices, m: [mb, tn.m, al.m, so.m], cost: cost });
           }
         }
@@ -117,6 +120,8 @@
   // programming over all voicings, minimizing motion, with parallel 5ths
   // and 8ves as heavy penalties. opts.sopranoEnd: pitch class the last
   // soprano note must have (PAC vs IAC); the search plans ahead for it.
+  // opts.single / opts.double: { chordIndex: pitch class that chord must
+  // not double / must double }.
   function voiceLead(k, chords, opts) {
     opts = opts || {};
     var layers = chords.map(function (c) { return voicingsFor(k, c); });
@@ -126,15 +131,24 @@
       best[li] = layer.map(function (cand) {
         var own = cand.cost;
         if (last && opts.sopranoEnd != null && T.pc(cand.v[3]) !== opts.sopranoEnd) own += 1000;
+        if (opts.single && opts.single[li] != null && cand.v.filter(function (n) { return T.pc(n) === opts.single[li]; }).length > 1) own += 1000;
+        if (opts.double && opts.double[li] != null && cand.v.filter(function (n) { return T.pc(n) === opts.double[li]; }).length < 2) own += 1000;
         if (li === 0) return { total: own + Math.abs(cand.m[3] - 70), from: -1 };
         var bestTotal = Infinity, from = -1;
         layers[li - 1].forEach(function (prev, pi) {
           var t = best[li - 1][pi].total;
           if (t >= bestTotal) return;
-          var move = 0.5 * Math.abs(cand.m[0] - prev.m[0]);
+          var bassLeap = Math.abs(cand.m[0] - prev.m[0]);
+          var move = 0.5 * bassLeap + (bassLeap === 10 || bassLeap === 11 ? 60 : 0); // no 7ths in the bass
           for (var v = 1; v < 4; v++) {
             var d = Math.abs(cand.m[v] - prev.m[v]);
-            move += d + (d > 7 ? 10 : 0);
+            move += d + (d > 7 ? 80 : 0); // no leaps over a 5th up top
+          }
+          if (bassLeap > 12) move += 80;
+          for (var av = 0; av < 4; av++) {
+            if (cand.m[av] === prev.m[av] || Math.abs(cand.m[av] - prev.m[av]) > 12) continue;
+            var aid = T.interval(prev.v[av], cand.v[av]).id;
+            if (aid[0] === 'A' && aid !== 'A1') move += 80; // no augmented 2nds or 4ths
           }
           var total = t + move + parallelPenalty(prev.v, cand.v);
           if (total < bestTotal) { bestTotal = total; from = pi; }
@@ -230,6 +244,8 @@
     HC:  { name: 'Half', tail: ['V'] },
     PC:  { name: 'Plagal', tail: ['IV', 'I'], noPredominant: true },
     DC:  { name: 'Deceptive', tail: ['V', 'vi'] },
+    // minor keys only: iv6 - V, the bass stepping down a half step
+    Ph:  { name: 'Phrygian half', tail: ['IV6', 'V'], noPredominant: true },
   };
 
   // A short phrase ending in the cadence.
@@ -242,7 +258,13 @@
     var sopranoEnd = null;
     if (c.end === 'do') sopranoEnd = T.pc(k.tonic);
     if (c.end === 'mi') sopranoEnd = T.pc(T.degreeNote(k, 2, 0, 4));
-    return { ids: ids, chords: chords, voices: voiceLead(k, chords, { sopranoEnd: sopranoEnd }) };
+    // Phrygian: iv6's bass (le) is a tendency tone, so it isn't doubled
+    var single = {};
+    if (type === 'Ph') single[ids.length - 2] = T.pc(chords[ids.length - 2].tones[1]);
+    // deceptive in minor: VI doubles its third, avoiding parallels and le-ti
+    var double = {};
+    if (type === 'DC' && k.mode === 'minor') double[ids.length - 1] = T.pc(chords[ids.length - 1].tones[1]);
+    return { ids: ids, chords: chords, voices: voiceLead(k, chords, { sopranoEnd: sopranoEnd, single: single, double: double }) };
   }
 
   // Chords that establish a key: I-IV-V-I in major/minor; modes get their

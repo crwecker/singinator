@@ -286,6 +286,7 @@
       if ((k.mode === 'minor') && (deg === 4 || deg === 6) && d % 7 === 6) n.acc += 1;
       tones.push(n);
     }
+    root = tones[0]; // minor's vii° is built on the raised 7th
     var type = chordType(tones);
     return { root: root, type: type, deg: deg, numeral: numeral(type, deg, 0) };
   }

@@ -141,7 +141,59 @@
     return null;
   }
 
-  var api = { makeCantus: makeCantus, makeCounterpoint: makeCounterpoint, makeDuet: makeDuet, violation: violation, noteAt: noteAt };
+  // ---------- Find-the-error exercises ----------
+  // Rule families a student names, matched against violation() messages.
+  var ERROR_RULES = {
+    parallel: { name: 'Parallel 5ths or octaves', test: /^parallel/ },
+    dissonance: { name: 'Dissonance', test: /^dissonance/ },
+    hidden: { name: 'Direct (hidden) 5th or octave', test: /^hidden/ },
+    leap: { name: 'Bad leap', test: /leap/ },
+  };
+
+  function violations(cf, cp, above) {
+    var out = [];
+    for (var j = 0; j < cf.length; j++) {
+      var v = violation(cf, cp, j, above, cf.length);
+      if (v) out.push({ at: j, why: v });
+    }
+    return out;
+  }
+
+  function errorRule(why) {
+    for (var r in ERROR_RULES) if (ERROR_RULES[r].test.test(why)) return r;
+    return null;
+  }
+
+  // A duet with one counterpoint note changed so it breaks exactly one rule
+  // of the given family ('none' leaves it correct). Returns
+  // { duet, fixed, above, error: { at, why } } or null.
+  function brokenDuet(k, len, rule, rnd) {
+    rnd = rnd || Math.random;
+    for (var tries = 0; tries < 30; tries++) {
+      var cfAbove = rnd() < 0.5;
+      var duet = makeDuet(k, len, cfAbove, T.note(k.tonic.l, k.tonic.acc, cfAbove ? 4 : 3), rnd);
+      if (!duet) continue;
+      var above = !cfAbove;
+      if (rule === 'none') return { duet: duet, fixed: duet, above: above, error: null };
+      var spots = [];
+      for (var i = 1; i < len - 2; i++) {
+        for (var d = -5; d <= 5; d++) {
+          if (!d) continue;
+          var cp = duet.cp.slice();
+          cp[i] = noteAt(k, duet.cp[i], d);
+          var vs = violations(duet.cf, cp, above);
+          if (vs.length === 1 && errorRule(vs[0].why) === rule) spots.push({ cp: cp, error: vs[0] });
+        }
+      }
+      if (!spots.length) continue;
+      var s = rngPick(spots, rnd);
+      var broken = { cf: duet.cf, cp: s.cp, upper: cfAbove ? duet.cf : s.cp, lower: cfAbove ? s.cp : duet.cf };
+      return { duet: broken, fixed: duet, above: above, error: s.error };
+    }
+    return null;
+  }
+
+  var api = { ERROR_RULES: ERROR_RULES, violations: violations, brokenDuet: brokenDuet, makeCantus: makeCantus, makeCounterpoint: makeCounterpoint, makeDuet: makeDuet, violation: violation, noteAt: noteAt };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.Counterpoint = api;
 })(this);
