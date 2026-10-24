@@ -269,6 +269,8 @@
       $('staff').classList.remove('mine');
       document.getElementById('staff').onpointerdown = null; // dictation input
       document.getElementById('staff').classList.remove('writable');
+      document.getElementById('staff2').onpointerdown = null; // four-part writing
+      document.getElementById('staff2').classList.remove('writable');
       this.slots([]);
       this.prompt(''); this.sub(''); this.feedback('');
       this.answers([], function () {}); this.actions([]); this.meter(false);

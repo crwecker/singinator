@@ -28,20 +28,20 @@ The units follow the order of a fundamentals-to-harmony theory course (Michael F
 | 5 | Major Keys | All 15 major key signatures, movable do in any key, stepwise sight-singing |
 | 6 | Minor | Natural, harmonic and melodic minor, minor key signatures |
 | 7 | C Clefs | Alto and tenor clef, key signatures in all four clefs |
-| 8 | First-Species Counterpoint | Find the broken rule (parallels, dissonance, hidden 5ths/8ves, bad leaps); sing one voice while the app sings the other |
+| 8 | First-Species Counterpoint | Find the broken rule (parallels, dissonance, hidden 5ths/8ves, bad leaps); sing one voice while the app sings the other; write your own counterpoint over a cantus firmus |
 | 9 | Triads & Inversions | Triad qualities and inversions by ear and on the staff; letter symbols (F♯6, c6/4, g°); build a triad from its root, third or fifth; sung as arpeggios |
 | | **Four-Voice Writing** | |
-| 10 | Chorale Style | Sing the soprano, alto, tenor or bass of a progression; find errors in one chord (range, spacing, crossing, doubling incl. 6/4 and diminished triads) and between chords (awkward leaps, augmented intervals, parallels), like Exercises III.1.3; which triad a bass and figure (6, 6/4) give |
-| 11 | Connecting Chords I | Name the root relationship (5th, 3rd, 2nd); find errors in 4th/5th-related connections and with the leading tone; figured bass with ♯ |
-| 12 | Connecting Chords II | Find errors in 3rd- and 2nd-related connections, then any connection; sing any voice |
+| 10 | Chorale Style | Sing the soprano, alto, tenor or bass of a progression; find errors in one chord (range, spacing, crossing, doubling incl. 6/4 and diminished triads) and between chords (awkward leaps, augmented intervals, parallels), like Exercises III.1.3; which triad a bass and figure (6, 6/4) give; write a triad in four voices from its symbol |
+| 11 | Connecting Chords I | Name the root relationship (5th, 3rd, 2nd); find errors in 4th/5th-related connections and with the leading tone; figured bass with ♯; write two-chord groups and realize a figured bass |
+| 12 | Connecting Chords II | Find errors in 3rd- and 2nd-related connections, then any connection; sing any voice; write 3rd- and 2nd-related pairs |
 | | **Non-Chord Tones & Seventh Chords** | |
 | 13 | Non-Chord Tones I | Passing, neighbor, anticipation, appoggiatura, escape tone: on the staff, by ear, sung over the chords |
 | 14 | Non-Chord Tones II | Suspensions (4–3, 7–6, 9–8) and retardations; any non-chord tone |
 | 15 | Seventh Chords | Five qualities by ear and on the staff, with inversions; letter symbols (GM7, gø7, B♭4/3); build one from any member; sung as arpeggios |
 | | **Functional Harmony** | |
-| 16 | Sevenths in Four Voices | Find unresolved 7ths and leading tones in V7–I; sing a voice through V7; figured bass (7, 6/5, 4/3, 4/2); how a 7th is approached (suspension, passing, neighbor, appoggiatura) |
+| 16 | Sevenths in Four Voices | Find unresolved 7ths and leading tones in V7–I; sing a voice through V7; figured bass (7, 6/5, 4/3, 4/2); how a 7th is approached (suspension, passing, neighbor, appoggiatura); write seventh chords in four voices and realize figured basses with sevenths |
 | 17 | Harmonic Function & Roman Numerals | Roman numerals with figured bass; progressive vs. retrogressive root motion; label tonic, predominant and dominant on the staff and by ear; write the triad for a numeral or function name in a key; find the key where a chord has a given numeral |
-| 18 | Cadences | PAC, IAC, half, Phrygian half, plagal, deceptive by ear and from the score |
+| 18 | Cadences | PAC, IAC, half, Phrygian half, plagal, deceptive by ear and from the score; write the cadence over a given soprano |
 | | **Harmonic Function** | |
 | 19 | Primary Triads & Sevenths | Partwriting review; I–IV–V dictation; V7, I7 and IV7 |
 | 20 | The Submediant & Mediant | Harmonic dictation adding vi and iii, inversions, minor |
@@ -60,6 +60,16 @@ The units follow the order of a fundamentals-to-harmony theory course (Michael F
 Units 10–18 (Murray Units III–V) each open with a **Learn** page, written from the book's lessons in our own words. Each page has the book's page numbers and workbook exercises, its rules and guidelines, and four-part examples you can play. Every exercise in those units has a **Read:** link to the section it drills. After a wrong answer, a **Review** link goes to the exact rule you missed, such as parallel 5ths, suspensions or the Phrygian cadence, and **Back** returns to the exercise. Every rule has a short **Why** line. Terms like *tendency tone* or *first inversion* are underlined the first time they appear in a section; tap one for a definition and a link to where it's taught (`Learn.TERMS`). In the examples, a small label beside each note shows its chord member (R, 3, 5, 7), or its solfège syllable (switch at the top of the page). Under each example, a line spells out every chord symbol, for example *vii°6: diminished triad on ti, first inversion*. Chorale Style opens with **Chord members and inversions** and **Reading chord symbols**. The pages live in `js/learn.js`. The photos of the book they were written from are in `content/`, which is git-ignored and stays on your machine (the book is copyrighted).
 
 A lesson counts as **mastered** after 8 correct answers in its last 10. Every lesson is open from the start, so advanced students can skip ahead. **Up next** points to the first lesson not yet mastered.
+
+### Writing exercises
+
+The **Write** lessons put a grand staff in front of you. Tap a staff to place the selected voice (S, A, T, B, or the counterpoint), then adjust it with ↑ ↓ and ♭ ♮ ♯ (or the arrow keys and b / n / #). Given notes are grey. **Check** grades by rule, not against one stored answer, in this order:
+1. spelling (letter and accidental) and wrong notes;
+2. the bass is the chord member the symbol or figure asks for;
+3. complete chords (a triad may drop its fifth only with a tripled root; a dominant, major or minor seventh only with a doubled root; diminished sevenths never);
+4. the part-writing rules: range, spacing, crossing, doubling, parallels, leaps, resolutions.
+
+Guidelines (a doubled third, diminished-triad doubling) are pointed out but don't count as wrong. Counterpoint is graded with the first-species rules. `test/write-check.html` makes sure the app's own model answers always pass, that answers the book allows pass, and that common mistakes fail.
 
 ## How it works
 
@@ -138,5 +148,5 @@ Visual checks:
 | `js/learn.js` | The Learn pages and what each missed answer links to, as data |
 | `js/learn-view.js` | Draws a Learn page with playable examples |
 | `js/app.js` | Shared services: progress, settings, pitch meter and listener, microphone handling |
-| `js/exercises*.js` | Exercise engines: core, harmony, scales and modes, modulation, rhythm, dictation, two-part, writing (phrases, counterpoint errors, partwriting, non-chord tones), book (workbook-style drills: figured bass, chord symbols, building chords, numerals and keys, approaching 7ths, cadences from the score) |
+| `js/exercises*.js` | Exercise engines: core, harmony, scales and modes, modulation, rhythm, dictation, two-part, writing (phrases, counterpoint errors, partwriting, non-chord tones), book (workbook-style drills: figured bass, chord symbols, building chords, numerals and keys, approaching 7ths, cadences from the score), compose (the four-part and counterpoint writer and its grader) |
 | `js/main.js` | Navigation, course map, settings, dev panel |

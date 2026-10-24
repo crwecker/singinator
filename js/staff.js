@@ -190,7 +190,8 @@
     });
   }
 
-  // opts: { clef, fifths, notes: [{ n, color, state, label, col }], width, minWidth }
+  // opts: { clef, fifths, notes: [{ n, color, state, label, col, tag, hidden,
+  //   labelOnly }], width, minWidth }
   // Notes sharing a col are drawn as a chord (harmonic interval).
   function render(svg, opts) {
     var clef = opts.clef || 'treble';
@@ -218,7 +219,9 @@
     var colW = cols > 1 ? Math.min(110, span / (cols - 1)) : 0;
     var x0 = cols > 1 ? startX + (span - colW * (cols - 1)) / 2 : startX;
     var byCol = [];
+    var labelOnly = [];
     notes.forEach(function (it) {
+      if (it.labelOnly) { labelOnly.push(it); return; } // a label under an empty column
       if (it.hidden) return; // placeholder: keeps its column, draws nothing
       var n = it.n;
       var keyAcc = Theory.sigAcc(fifths, n.l);
@@ -232,6 +235,10 @@
     byCol.forEach(function (items, c) {
       if (!items) return;
       drawColumn(svg, items, colX(c));
+    });
+    labelOnly.forEach(function (it) {
+      var t = el('text', { x: colX(it.col), y: HEIGHT - 8, 'text-anchor': 'middle', class: 'note-label', fill: it.color || '#3b3355' }, svg);
+      t.textContent = it.label;
     });
     // A tie runs from a note to the same note in the next column that has one.
     byCol.forEach(function (items, c) {

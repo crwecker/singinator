@@ -556,6 +556,10 @@ button.slot { cursor: pointer; font: inherit; }
 .book-line { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: var(--muted); }
 .book-ref b { color: var(--c, var(--la)); font-weight: 800; }
 .lesson-book { display: block; margin-top: 4px; font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 0.02em; }
+.answers.tools .voice-pick { min-width: 44px; }
+.answers.tools .voice-pick.on { background: var(--sol); border-color: var(--sol); color: #fff; }
+.write-list { margin: 6px 0 0; padding-left: 20px; text-align: left; font-weight: 600; font-size: 15px; }
+.write-list li { margin: 2px 0; }
 .learn-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 12px; font-size: 14px; }
 .learn-tags .chip { border: 2px solid color-mix(in srgb, var(--muted) 40%, transparent); background: transparent; color: inherit; border-radius: 999px; padding: 4px 12px; font: inherit; font-weight: 700; cursor: pointer; }
 .learn-tags .chip.on { background: var(--la); border-color: var(--la); color: #fff; }

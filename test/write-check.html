@@ -1,0 +1,52 @@
+<!doctype html>
+<!-- Open at http://localhost:8000/test/write-check.html. Plays 100 rounds of
+     every writing lesson, entering the app's own model answer (all must be
+     correct), then grades answers the book accepts (must pass) and common
+     mistakes (must fail). -->
+<meta charset="utf-8"><title>Writing check</title>
+<iframe id="f" src="../index.html" style="width:900px;height:600px"></iframe><pre id="out">running…</pre>
+<script>
+var f = document.getElementById('f'), out = [];
+f.onload = function () {
+  var w = f.contentWindow, d = f.contentDocument;
+  w.onerror = function (m, s, l) { out.push('ERROR ' + m + ' @' + l); };
+  d.getElementById('start').hidden = true;
+  w.Sound.playNote = w.Sound.playAt = function () {};
+  w.Sound.playSequence = function () { return Promise.resolve(); };
+  var T = w.Theory, H = w.Harmony, C = w.Exercises.compose, P = T.parse, k = T.key('C');
+  var lessons = [];
+  w.Curriculum.UNITS.forEach(function (u) { u.lessons.forEach(function (l) { if (/^write/.test(l.engine)) lessons.push(l); }); });
+  lessons.forEach(function (L) {
+    var E = w.Exercises.engines[L.engine], bad = 0;
+    for (var i = 0; i < 100; i++) {
+      E.round(L);
+      var cur = E.current;
+      cur.model.forEach(function (col, c) { col.forEach(function (n, vi) { if (n && !cur.notes[c][vi]) cur.place(c, vi, T.note(n.l, n.acc, n.oct)); }); });
+      cur.check();
+      var fb = d.getElementById('feedback');
+      if (!/good/.test(fb.className)) { bad++; if (bad < 4) out.push(L.id + ' model failed: ' + fb.textContent); }
+    }
+    out.push((bad ? 'FAIL ' : 'ok   ') + L.id + ': ' + bad + '/100 model answers marked wrong');
+  });
+  function grade(ids, vs, opts) {
+    var ch = ids.map(function (id) { return id.tones ? id : H.chord(k, id); });
+    return C.gradeFour(k, ch, vs.map(function (x) { return x.map(P); }), opts).problems.map(function (p) { return p.msg; });
+  }
+  function expect(name, ok, problems) { out.push((ok === !problems.length ? 'ok   ' : 'FAIL ') + name + (problems.length ? ': ' + problems.join(' | ') : '')); }
+  expect('incomplete V7 to complete I', true, grade(['V7', 'I'], [['G2', 'F3', 'B3', 'G4'], ['C3', 'E3', 'C4', 'G4']]));
+  expect('complete V7 to I with a tripled root', true, grade(['V7', 'I'], [['G2', 'F3', 'B3', 'D4'], ['C3', 'E3', 'C4', 'C4']]));
+  expect('frustrated leading tone in the alto', true, grade(['V', 'I'], [['G2', 'D3', 'B3', 'G4'], ['C3', 'E3', 'G3', 'G4']]));
+  expect('I6–vi doubling vi’s third (a guideline note only)', true, grade(['I6', 'vi'], [['E3', 'G3', 'C4', 'C5'], ['A2', 'E3', 'C4', 'C5']]));
+  expect('parallel 5ths', false, grade(['IV', 'V'], [['F2', 'C3', 'A3', 'F4'], ['G2', 'D3', 'B3', 'G4']]));
+  expect('enharmonic misspelling', false, grade(['V'], [['G2', 'D3', 'Cb4', 'G4']]));
+  expect('wrong bass for the figure', false, grade(['V6'], [['G2', 'D3', 'B3', 'G4']]));
+  expect('doubled leading tone', false, grade(['V'], [['G2', 'B3', 'D4', 'B4']]));
+  expect('wrong note', false, grade(['I'], [['C3', 'G3', 'E4', 'D5']]));
+  var dim7 = C.looseChord(P('B3'), 'dim7', 0);
+  expect('diminished 7th without its fifth', false, grade([dim7], [['B2', 'B3', 'D4', 'Ab4']], { keyless: true }));
+  var a = T.key('A', 'minor');
+  expect('figures: V in a minor is ♯', true, C.figureText(a, H.chord(a, 'V')) === '♯' ? [] : ['got ' + C.figureText(a, H.chord(a, 'V'))]);
+  expect('figures: vii°6 in a minor is ♯6', true, C.figureText(a, H.chord(a, 'vii°6')) === '♯6' ? [] : ['got ' + C.figureText(a, H.chord(a, 'vii°6'))]);
+  document.getElementById('out').textContent = out.join('\n');
+};
+</script>

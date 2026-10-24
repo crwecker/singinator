@@ -163,6 +163,7 @@
         { id: 'tp-cf-below', title: 'Sing the cantus under a counterpoint', engine: 'twoPart', keys: { mode: 'major', max: 2 }, part: 'lower', cantus: 'lower', length: 6, bpm: 50 },
         { id: 'tp-cp-below', title: 'Sing a counterpoint below the cantus', engine: 'twoPart', keys: { mode: 'major', max: 3 }, part: 'lower', cantus: 'upper', length: 7, bpm: 54 },
         { id: 'tp-either', title: 'Either part, any key', engine: 'twoPart', keys: { mode: 'major', max: 5 }, length: 8, bpm: 58 },
+        { id: 'wr-cp', ex: 'II.2.1–3', title: 'Write a first-species counterpoint', engine: 'writeCounterpoint', keys: { mode: 'major', max: 3 }, length: 8 },
       ],
     },
     {
@@ -193,6 +194,7 @@
         { id: 'pw-sing-a', title: 'Sing the alto', engine: 'singVoice', keys: { mode: 'major', max: 3 }, voice: 'alto', chords: ['I', 'IV', 'V'], length: 4, learn: 'chorale#texture' },
         { id: 'pw-sing-t', title: 'Sing the tenor', engine: 'singVoice', keys: { mode: 'major', max: 3 }, voice: 'tenor', chords: ['I', 'IV', 'V'], length: 4, learn: 'chorale#texture' },
         { id: 'fb-tri', ex: 'III.1.1', title: 'Figured bass: which triad? (6, 6/4)', engine: 'figuredBass', keys: { mode: 'any', max: 5 }, figures: ['', '6', '6/4'], learn: 'connecting-1#figured-bass' },
+        { id: 'wr-chord', ex: 'III.1.1', title: 'Write a triad in four voices: F♯6, c6/4, d°6', engine: 'writeChord', types: ['maj', 'min', 'dim'], learn: 'chorale#doubling' },
       ],
     },
     {
@@ -203,6 +205,8 @@
         { id: 'pw-spot-45', title: 'Find the error: 4th- and 5th-related chords', engine: 'spotError', keys: { mode: 'major', max: 3 }, rules: ['range', 'spacing', 'noThird', 'par5', 'par8'], pairs: PW_FIFTHS, learn: 'connecting-1#common-tone' },
         { id: 'pw-spot-lt', title: 'Find the error: the leading tone', engine: 'spotError', keys: { mode: 'major', max: 4 }, rules: ['ltRes', 'ltDouble'], pairs: PW_DOMINANT, learn: 'chorale#doubling' },
         { id: 'fb-sharp', ex: 'III.2.3–4', title: 'Figured bass with ♯: the leading tone in minor', engine: 'figuredBass', keys: { mode: 'any', max: 5 }, figures: ['', '6', '\u266F', '\u266F', '\u266F6'], learn: 'connecting-1#figured-bass' },
+        { id: 'wr-pair-45', ex: 'III.2.1–2', title: 'Write two chords a 4th or 5th apart', engine: 'writePair', keys: { mode: 'any', max: 4 }, pairs: PW_FIFTHS, learn: 'connecting-1#common-tone' },
+        { id: 'wr-fb', ex: 'III.2.3–4', title: 'Realize a figured bass: two chords', engine: 'writePair', keys: { mode: 'any', max: 4 }, pairs: PW_TRIADS, given: 'bass', figures: true, learn: 'connecting-1#figured-bass' },
       ],
     },
     {
@@ -213,6 +217,7 @@
         { id: 'pw-spot-27', ex: 'III.3.1–2', title: 'Find the error: chords a step apart', engine: 'spotError', keys: { mode: 'major', max: 4 }, rules: ['par5', 'par8', 'spacing', 'ltDouble'], pairs: PW_SECONDS, learn: 'connecting-2#seconds' },
         { id: 'pw-spot-2', ex: 'III.3.1–2', title: 'Find the error: all the rules so far', engine: 'spotError', keys: { mode: 'major', max: 4 }, rules: ['range', 'spacing', 'noThird', 'ltDouble', 'par5', 'par8', 'ltRes'], pairs: PW_TRIADS.concat(PW_DOMINANT), learn: 'connecting-2#checking' },
         { id: 'pw-sing-any', title: 'Sing any voice: I, ii, IV, V, vi', engine: 'singVoice', keys: { mode: 'major', max: 4 }, voice: 'any', chords: ['I', 'I6', 'ii', 'ii6', 'IV', 'V', 'vi'], length: 5, learn: 'connecting-2#thirds' },
+        { id: 'wr-pair-36', ex: 'III.3.1–2', title: 'Write two chords a 3rd or a step apart', engine: 'writePair', keys: { mode: 'any', max: 4 }, pairs: PW_THIRDS.concat(PW_SECONDS), learn: 'connecting-2#seconds' },
       ],
     },
     {
@@ -257,6 +262,8 @@
         { id: 'pw-sing-7', title: 'Sing a voice through V7 to I', engine: 'singVoice', keys: { mode: 'major', max: 4 }, voice: 'any', chords: ['I', 'ii', 'ii6', 'IV', 'V7', 'V6/5'], length: 4, learn: 'sevenths-4v#tritone' },
         { id: 'fb-7', ex: 'V.1.1–2', title: 'Figured bass: which seventh chord? (7, 6/5, 4/3, 4/2)', engine: 'figuredBass', keys: { mode: 'any', max: 5 }, figures: ['7', '6/5', '4/3', '4/2'], learn: 'sevenths#inversions' },
         { id: 'sev-approach', ex: 'V.1.3–4', title: 'How is the 7th approached?', engine: 'sevenApproach', keys: { mode: 'major', max: 5 }, learn: 'sevenths-4v#approach' },
+        { id: 'wr-chord-7', ex: 'V.1.1–2', title: 'Write a seventh chord in four voices: D7, b♭6/5, f♯ø7', engine: 'writeChord', types: ['maj7', 'dom7', 'min7', 'hdim7', 'dim7'], learn: 'sevenths-4v#doubling' },
+        { id: 'wr-fb-7', ex: 'V.1.3–4', title: 'Realize a figured bass with sevenths', engine: 'writePair', keys: { mode: 'major', max: 4 }, pairs: PW_SEVENTHS, given: 'bass', figures: true, learn: 'sevenths-4v#approach' },
       ],
     },
     {
@@ -284,6 +291,7 @@
         { id: 'cad-ear-ph', title: 'Half or Phrygian half?', engine: 'earCadence', keys: { mode: 'minor', max: 4 }, cadences: ['HC', 'Ph', 'PAC', 'DC'], learn: 'cadences#phrygian' },
         { id: 'cad-ear-min', title: 'Cadences in minor', engine: 'earCadence', keys: { mode: 'minor', max: 4 }, cadences: ['PAC', 'IAC', 'HC', 'Ph', 'PC', 'DC'], learn: 'cadences' },
         { id: 'cad-read', ex: 'V.3.1–2', title: 'Name the cadence from the score', engine: 'readCadence', keys: { mode: 'any', max: 4 }, cadences: ['PAC', 'IAC', 'HC', 'Ph', 'DC', 'PC'], learn: 'cadences#identify' },
+        { id: 'wr-cad', ex: 'V.3.3–4', title: 'Write the cadence over a given soprano', engine: 'writePair', keys: { mode: 'any', max: 4 }, cadence: ['PAC', 'IAC', 'HC', 'DC', 'PC', 'Ph'], given: 'soprano', learn: 'cadences#partwriting' },
       ],
     },
     {

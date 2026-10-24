@@ -97,6 +97,9 @@
             [c.inv, tn.ti, al.ti, so.ti].forEach(function (x) { count[x]++; });
             if (!count[1]) continue;
             if (seventh && (!count[3] || count[3] > 1)) continue;
+            // a seventh chord may drop its fifth only with the root doubled,
+            // and never a half- or fully diminished one
+            if (seventh && !count[2] && (c.type === 'hdim7' || c.type === 'dim7' || count[0] !== 2)) continue;
             var voices = [bass, tn.n, al.n, so.n];
             var ltCount = voices.filter(function (n) { return T.pc(n) === lt; }).length;
             if (ltCount > 1 && (c.deg === 4 || c.deg === 6 || c.secondary)) continue;
