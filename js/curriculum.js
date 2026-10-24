@@ -37,6 +37,9 @@
   // grouped by root relationship (Connecting Chords I and II)
   var PW_FIFTHS = [['I', 'IV'], ['I', 'V'], ['IV', 'I'], ['V', 'I'], ['ii', 'V'], ['vi', 'ii'], ['iii', 'vi'], ['I', 'V6'], ['I6', 'IV'], ['ii6', 'V']];
   var PW_THIRDS = [['I', 'vi'], ['vi', 'IV'], ['IV', 'ii'], ['I', 'iii'], ['iii', 'I'], ['I6', 'vi'], ['vi', 'IV6']];
+  // a wide pool, so every kind of suspension has somewhere to happen
+  var PW_SUS = [['I', 'IV'], ['I', 'V'], ['IV', 'V'], ['V', 'I'], ['ii', 'V'], ['I', 'vi'], ['vi', 'ii'], ['IV', 'I'], ['vi', 'V'],
+    ['I', 'V6'], ['IV', 'I6'], ['ii', 'I6'], ['I', 'vii\u00B06'], ['vi', 'IV6'], ['IV', 'V6'], ['I', 'IV6'], ['iii', 'IV'], ['V', 'vi']];
   var PW_SECONDS = [['IV', 'V'], ['V', 'vi'], ['I', 'ii'], ['vi', 'V'], ['IV6', 'V'], ['IV', 'V6']];
   var NCT_ALL = ['PT', 'NT', 'ANT', 'ET', 'APP', 'SUS', 'RET'];
 
@@ -105,6 +108,8 @@
         { id: 'rh-tap-4', title: 'Sixteenth notes', engine: 'tapRhythm', time: ['2/4', '4/4'], level: 4, measures: 2, bpm: 66 },
         { id: 'rh-tap-c4', title: 'Compound sixteenths and 12/8', engine: 'tapRhythm', time: ['6/8', '12/8'], level: 4, measures: 1, bpm: 52 },
         { id: 'rh-ear-2', title: 'Rhythmic dictation: dotted, 16ths, 6/8', engine: 'earRhythm', time: ['2/4', '4/4', '6/8'], level: 4, measures: 1, bpm: 72, choices: 4 },
+        { id: 'rh-beam', ex: 'I.2.3', title: 'Beam by the beat', engine: 'beamRhythm', time: ['2/4', '3/4', '4/4', '6/8', '12/8'], level: 4, measures: 1 },
+        { id: 'rh-beam-bars', ex: 'I.2.3', title: 'Add beams and barlines', engine: 'beamRhythm', mode: 'both', time: ['2/4', '3/4', '6/8'], level: 3, measures: 3 },
         { id: 'rh-sing-1', title: 'Sing in time: simple rhythms', engine: 'singRhythm', keys: { mode: 'major', max: 2 }, clefs: ['treble', 'bass'], degrees: ['1', '2', '3', '4', '5', '6', '7', '8'], time: ['4/4', '3/4'], level: 1, measures: 2, bpm: 72 },
         { id: 'rh-sing-2', title: 'Sing in time: eighths and rests', engine: 'singRhythm', keys: { mode: 'major', max: 3 }, clefs: ['treble', 'bass'], degrees: ['1', '2', '3', '4', '5', '6', '7', '8'], time: ['2/4', '3/4', '4/4'], level: 2, measures: 2, bpm: 72 },
         { id: 'rh-sing-68', title: 'Sing in time: 6/8', engine: 'singRhythm', keys: { mode: 'major', max: 3 }, clefs: ['treble', 'bass'], degrees: ['1', '2', '3', '4', '5', '6', '7', '8'], time: ['6/8'], level: 2, measures: 2, bpm: 50 },
@@ -229,6 +234,7 @@
         { id: 'nct-sing-1', title: 'Sing passing and neighbor tones', engine: 'singNCT', keys: { mode: 'major', max: 3 }, types: ['PT', 'NT'], learn: 'nct-1#passing' },
         { id: 'nct-read-2', ex: 'IV.1.1–2', title: 'Add appoggiaturas and escape tones', engine: 'readNCT', keys: { mode: 'major', max: 4 }, types: ['PT', 'NT', 'ANT', 'APP', 'ET'], learn: 'nct-1#labels' },
         { id: 'nct-ear-app', title: 'Hear appoggiaturas and escape tones', engine: 'earNCT', keys: { mode: 'major', max: 4 }, types: ['PT', 'NT', 'ANT', 'APP', 'ET'], learn: 'nct-1#labels' },
+        { id: 'wr-nct', ex: 'IV.1.3–4', title: 'Write in a non-chord tone: p, n, ant, app', engine: 'writeNCT', keys: { mode: 'any', max: 4 }, types: ['PT', 'NT', 'ANT', 'APP', 'APT'], pairs: PW_TRIADS, learn: 'nct-1#identify' },
       ],
     },
     {
@@ -240,6 +246,7 @@
         { id: 'nct-sing-2', title: 'Sing suspensions and retardations', engine: 'singNCT', keys: { mode: 'major', max: 4 }, types: ['SUS', 'RET'], learn: 'nct-2#suspension' },
         { id: 'nct-read-all', ex: 'IV.2.1–2', title: 'Name any non-chord tone', engine: 'readNCT', keys: { mode: 'major', max: 5 }, types: NCT_ALL, learn: 'nct-1#labels' },
         { id: 'nct-ear-2', title: 'Hear any non-chord tone', engine: 'earNCT', keys: { mode: 'major', max: 4 }, types: NCT_ALL, learn: 'nct-1#labels' },
+        { id: 'wr-sus', ex: 'IV.2.3–4', title: 'Write in a suspension: 4–3, 7–6, 9–8, 2–3', engine: 'writeNCT', keys: { mode: 'major', max: 4 }, figures: ['4-3', '7-6', '9-8', '2-3'], pairs: PW_SUS, learn: 'nct-2#types' },
       ],
     },
     {
@@ -264,6 +271,7 @@
         { id: 'sev-approach', ex: 'V.1.3–4', title: 'How is the 7th approached?', engine: 'sevenApproach', keys: { mode: 'major', max: 5 }, learn: 'sevenths-4v#approach' },
         { id: 'wr-chord-7', ex: 'V.1.1–2', title: 'Write a seventh chord in four voices: D7, b♭6/5, f♯ø7', engine: 'writeChord', types: ['maj7', 'dom7', 'min7', 'hdim7', 'dim7'], learn: 'sevenths-4v#doubling' },
         { id: 'wr-fb-7', ex: 'V.1.3–4', title: 'Realize a figured bass with sevenths', engine: 'writePair', keys: { mode: 'major', max: 4 }, pairs: PW_SEVENTHS, given: 'bass', figures: true, learn: 'sevenths-4v#approach' },
+        { id: 'wr-sev-approach', ex: 'V.1.3–4', title: 'Write the 7th’s approach: suspension, passing, neighbor, appoggiatura', engine: 'writeSeventh', keys: { mode: 'major', max: 4 }, learn: 'sevenths-4v#approach' },
       ],
     },
     {

@@ -351,4 +351,135 @@
       E.singRhythm.current = { events: events, spq: spq, t0: function () { return t0; }, start: start };
     },
   };
+
+  // ---------- Beams and barlines (Exercises I.2.3) ----------
+  // A rhythm written with flags. Tap between two notes to beam them (and,
+  // in 'both' mode, to draw a barline). Beam by the beat: eighths and
+  // shorter join inside one beat, never across it.
+  function beamable(e) { return !e.rest && e.dur <= 0.75; }
+  function beatOf(ts, e) {
+    var b = R.TIME[ts].beat === 2 ? 1 : R.TIME[ts].beat;
+    return Math.floor(e.start / b + 1e-9);
+  }
+  function rightBeams(ts, events) {
+    return events.slice(0, -1).map(function (e, i) {
+      var f = events[i + 1];
+      return beamable(e) && beamable(f) && beatOf(ts, e) === beatOf(ts, f) && e.measure === f.measure;
+    });
+  }
+  function rightBars(events) {
+    return events.slice(0, -1).map(function (e, i) { return events[i + 1].measure !== e.measure; });
+  }
+  var BEAT_WORDS = { '2/4': 'a quarter', '3/4': 'a quarter', '4/4': 'a quarter', '6/8': 'a dotted quarter (three eighths)',
+    '9/8': 'a dotted quarter (three eighths)', '12/8': 'a dotted quarter (three eighths)' };
+
+  E.beamRhythm = {
+    round: function (lesson) {
+      var token = A.newToken();
+      var both = lesson.mode === 'both';
+      var ts, events, want;
+      for (var t = 0; t < 40; t++) {
+        ts = A.pick(lesson.time);
+        events = R.makeRhythm(ts, lesson.measures || 1, lesson.level || 3);
+        want = rightBeams(ts, events);
+        if (want.filter(Boolean).length >= 2) break;
+      }
+      var wantBars = rightBars(events);
+      var links = want.map(function () { return false; });
+      var bars = both ? wantBars.map(function () { return false; }) : null;
+      var tool = 'beam', done = false, result = null;
+      var svg = document.getElementById('staff');
+      var xs = [];
+      var again = function () { E.beamRhythm.round(lesson); };
+
+      function draw() {
+        var showLinks = result ? want : links, showBars = result && both ? wantBars : bars;
+        svg.style.display = '';
+        xs = Staff.renderMeasures(svg, { clef: 'percussion', time: ts, minWidth: 560, links: showLinks, bars: showBars,
+          events: events.map(function (e, i) {
+            var bad = result && ((i > 0 && result[i - 1]) || result[i]);
+            return Object.assign({}, e, { color: bad ? 'var(--do)' : result ? 'var(--fa)' : null });
+          }) });
+        svg.classList.toggle('writable', !done);
+        drawTools();
+      }
+
+      function drawTools() {
+        var box = document.getElementById('answers');
+        box.innerHTML = '';
+        box.className = 'answers tools' + (done ? ' locked' : '');
+        var tools = both ? [['beam', 'Beam'], ['bar', 'Barline']] : [];
+        tools.forEach(function (tt) {
+          var b = document.createElement('button');
+          b.className = 'ans-btn tool voice-pick' + (tool === tt[0] ? ' on' : '');
+          b.innerHTML = '<span class="ans-main">' + tt[1] + '</span>';
+          b.onclick = function () { if (!done) { tool = tt[0]; drawTools(); } };
+          box.appendChild(b);
+        });
+        var clr = document.createElement('button');
+        clr.className = 'ans-btn tool';
+        clr.innerHTML = '<span class="ans-main">Clear</span>';
+        clr.onclick = function () {
+          if (done) return;
+          links = links.map(function () { return false; });
+          if (bars) bars = bars.map(function () { return false; });
+          draw();
+        };
+        box.appendChild(clr);
+      }
+
+      // the gap nearest a tap, between event i and i + 1
+      function gapAt(ev) {
+        var rect = svg.getBoundingClientRect();
+        var vb = svg.viewBox.baseVal;
+        var x = (ev.clientX - rect.left) * (vb.width / rect.width);
+        var best = -1, dist = Infinity;
+        for (var i = 0; i < xs.length - 1; i++) {
+          var d = Math.abs(x - (xs[i] + xs[i + 1]) / 2);
+          if (d < dist) { dist = d; best = i; }
+        }
+        return best;
+      }
+
+      function toggle(i) {
+        if (done || i < 0) return;
+        if (tool === 'bar') { bars[i] = !bars[i]; draw(); return; }
+        if (!beamable(events[i]) || !beamable(events[i + 1])) {
+          ui.feedback('Only eighth notes and shorter get beams');
+          return;
+        }
+        ui.feedback('');
+        links[i] = !links[i];
+        draw();
+      }
+
+      function check() {
+        if (done) return;
+        done = true;
+        result = links.map(function (l, i) { return l !== want[i] || (both && bars[i] !== wantBars[i]); });
+        var beamMiss = links.filter(function (l, i) { return l !== want[i]; }).length;
+        var barMiss = both ? bars.filter(function (b, i) { return b !== wantBars[i]; }).length : 0;
+        var ok = !beamMiss && !barMiss;
+        draw();
+        var why = 'In ' + ts + ' the beat is ' + BEAT_WORDS[ts] + ': beam the eighths and sixteenths inside each beat, and break the beam between beats.';
+        var parts = [];
+        if (beamMiss) parts.push(beamMiss + ' beam' + (beamMiss > 1 ? 's' : '') + ' wrong');
+        if (barMiss) parts.push(barMiss + ' barline' + (barMiss > 1 ? 's' : '') + ' wrong (each measure of ' + ts + ' holds ' + R.TIME[ts].top + ' ' + (R.TIME[ts].bottom === 8 ? 'eighths' : R.TIME[ts].bottom === 2 ? 'halves' : 'quarters') + ')');
+        ui.feedback(ok ? '<b>Correct.</b> ' + why : '<b>Not quite:</b> ' + parts.join(', ') + '. This is the right version. ' + why, ok ? 'good' : 'bad');
+        A.record(lesson.id, ok);
+        if (ok) A.celebrate('✓', false);
+        else X.review(lesson.learn);
+        ui.actions([{ label: 'Next →', fn: again }]);
+      }
+
+      svg.onpointerdown = function (ev) { ev.preventDefault(); toggle(gapAt(ev)); };
+      ui.prompt(both ? 'Add the beams and barlines' : 'Add the beams');
+      ui.sub('Meter: <b>' + ts + '</b> · tap between two notes' + (both ? ' (choose Beam or Barline first)' : ' to beam them') + ' · tap again to undo');
+      ui.feedback('');
+      ui.staff2(null);
+      ui.actions([{ label: 'Check', fn: check }]);
+      draw();
+      E.beamRhythm.current = { want: want, wantBars: wantBars, toggle: toggle, setTool: function (t2) { tool = t2; }, check: check }; // for tests
+    },
+  };
 })();

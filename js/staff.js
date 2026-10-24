@@ -279,7 +279,9 @@
     if (dotted) el('circle', { cx: x + 11, cy: y - 3, r: 2.3, class: INK + ' fill' }, g);
   }
 
-  // opts: { clef ('percussion' for a one-line rhythm staff), fifths,
+  // Returns the x of each event (for hit-testing).
+  // opts: { clef ('percussion' for a one-line rhythm staff), fifths, links,
+  //   bars (see the beam and barline comments below),
   //   time: '3/4', events: [{ n (null for rests / percussion), dur, rest,
   //   tie, state, result: 'right'|'wrong', label, color }], minWidth }
   function renderMeasures(svg, opts) {
@@ -298,7 +300,9 @@
     var xs = [], bars = [];
     var x = startX + 14, measure = 0;
     events.forEach(function (e, i) {
-      if (e.measure !== measure) { bars.push(x - 8); x += 14; measure = e.measure; }
+      // opts.bars: [true after event i] puts barlines where a student drew them
+      var bar = opts.bars ? i > 0 && opts.bars[i - 1] : e.measure !== measure;
+      if (bar) { bars.push(x - 8); x += 14; measure = e.measure; }
       xs[i] = x;
       x += adv(e);
     });
@@ -347,12 +351,14 @@
       return o;
     });
 
-    // beam groups: runs of eighths/sixteenths inside one beat
+    // beam groups: runs of eighths/sixteenths inside one beat, or where
+    // opts.links says (links[i]: event i is beamed to the next)
     var groups = [];
     var cur = null;
     info.forEach(function (o, i) {
       var beamable = !o.e.rest && o.base <= 0.5;
       var beat = Math.floor(o.e.start / beatLen + 1e-9) + '|' + o.e.measure;
+      if (opts.links) beat = cur && opts.links[i - 1] ? cur.beat : 'g' + i;
       if (beamable && cur && cur.beat === beat) cur.items.push(i);
       else { cur = beamable ? { beat: beat, items: [i] } : null; if (cur) groups.push(cur); }
     });

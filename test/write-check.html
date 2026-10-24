@@ -21,13 +21,50 @@ f.onload = function () {
     for (var i = 0; i < 100; i++) {
       E.round(L);
       var cur = E.current;
-      cur.model.forEach(function (col, c) { col.forEach(function (n, vi) { if (n && !cur.notes[c][vi]) cur.place(c, vi, T.note(n.l, n.acc, n.oct)); }); });
+      cur.model.forEach(function (col, c) { col.forEach(function (n, vi) {
+        if (n && !(cur.notes[c][vi] && T.same(n, cur.notes[c][vi]))) cur.place(c, vi, T.note(n.l, n.acc, n.oct));
+      }); });
       cur.check();
       var fb = d.getElementById('feedback');
       if (!/good/.test(fb.className)) { bad++; if (bad < 4) out.push(L.id + ' model failed: ' + fb.textContent); }
     }
     out.push((bad ? 'FAIL ' : 'ok   ') + L.id + ': ' + bad + '/100 model answers marked wrong');
   });
+  // beams and barlines: the right answer must pass
+  w.Curriculum.UNITS.forEach(function (u) { u.lessons.forEach(function (L) {
+    if (L.engine !== 'beamRhythm') return;
+    var bad = 0;
+    for (var i = 0; i < 50; i++) {
+      w.Exercises.engines.beamRhythm.round(L);
+      var cur = w.Exercises.engines.beamRhythm.current;
+      cur.want.forEach(function (on, j) { if (on) cur.toggle(j); });
+      if (L.mode === 'both') { cur.setTool('bar'); cur.wantBars.forEach(function (on, j) { if (on) cur.toggle(j); }); }
+      cur.check();
+      if (!/good/.test(d.getElementById('feedback').className)) { bad++; if (bad < 3) out.push(L.id + ' failed: ' + d.getElementById('feedback').textContent); }
+    }
+    out.push((bad ? 'FAIL ' : 'ok   ') + L.id + ': ' + bad + '/50 right answers marked wrong');
+  }); });
+
+  // non-chord tones, by hand: C major I - V, model voicing
+  var c1 = H.chord(k, 'I'), c2 = H.chord(k, 'V');
+  var m = [['C3', 'G3', 'E4', 'C5'], ['G2', 'G3', 'D4', 'B4']].map(function (x) { return x.map(P); });
+  function nct(want, mid, beat, after) {
+    var g = [m[0].slice(), [null, null, null, null], m[1].slice(), [null, null, null, null]];
+    (mid || []).forEach(function (x) { g[1][x[0]] = P(x[1]); });
+    (beat || []).forEach(function (x) { g[2][x[0]] = P(x[1]); });
+    (after || []).forEach(function (x) { g[3][x[0]] = P(x[1]); });
+    return C.gradeNCT(k, c1, c2, m, want, g).problems.map(function (p) { return p.msg; });
+  }
+  expect('anticipation: soprano C5, then B4 early, then B4', true, nct({ type: 'ANT' }, [[3, 'B4']]));
+  expect('alto E4, then D4 early: an anticipation, not the passing tone asked for', false, nct({ type: 'PT' }, [[2, 'D4']]));
+  expect('a chord tone is not a non-chord tone (alto E4–G4–D4: G is in I)', false, nct({ type: 'PT' }, [[2, 'G4']]));
+  expect('wrong type: an anticipation when a passing tone is asked', false, nct({ type: 'PT' }, [[3, 'B4']]));
+  expect('two voices decorated', false, nct({ type: 'ANT' }, [[3, 'B4'], [2, 'D4']]));
+  expect('4–3 suspension: soprano C5 held over V, resolving to B4', true, nct({ type: 'SUS', figure: '4-3' }, null, [[3, 'C5']], [[3, 'B4']]));
+  expect('suspension without its resolution', false, nct({ type: 'SUS', figure: '4-3' }, null, [[3, 'C5']]));
+  expect('suspension named wrong (asked 7–6)', false, nct({ type: 'SUS', figure: '7-6' }, null, [[3, 'C5']], [[3, 'B4']]));
+  expect('appoggiatura that resolves away from V’s third (B) loses the third', false, nct({ type: 'APP' }, null, [[3, 'E5']], [[3, 'D5']]));
+
   function grade(ids, vs, opts) {
     var ch = ids.map(function (id) { return id.tones ? id : H.chord(k, id); });
     return C.gradeFour(k, ch, vs.map(function (x) { return x.map(P); }), opts).problems.map(function (p) { return p.msg; });

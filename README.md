@@ -22,7 +22,7 @@ The units follow the order of a fundamentals-to-harmony theory course (Michael F
 | | **Fundamentals I** | |
 | 1 | Foundations | do-mi-sol, then the major scale in C: explore, read, sing, hear, echo; bass clef names |
 | 2 | Intervals | By ear (up, down, harmonic) and on the staff, including augmented and diminished; sung up and down; inversion; compound intervals |
-| 3 | Rhythm & Meter | Simple and compound meter (2/4–12/8, cut time), from quarters to sixteenths, rests, dots, ties and syncopation; tapped, heard and sung in time |
+| 3 | Rhythm & Meter | Simple and compound meter (2/4–12/8, cut time), from quarters to sixteenths, rests, dots, ties and syncopation; tapped, heard and sung in time; add beams by the beat, and barlines |
 | 4 | Melody & Phrase Structure | Authentic vs. half cadences in a melody; parallel, contrasting or no period, on the staff and by ear; singing the answering phrase |
 | | **Fundamentals II** | |
 | 5 | Major Keys | All 15 major key signatures, movable do in any key, stepwise sight-singing |
@@ -35,11 +35,11 @@ The units follow the order of a fundamentals-to-harmony theory course (Michael F
 | 11 | Connecting Chords I | Name the root relationship (5th, 3rd, 2nd); find errors in 4th/5th-related connections and with the leading tone; figured bass with ♯; write two-chord groups and realize a figured bass |
 | 12 | Connecting Chords II | Find errors in 3rd- and 2nd-related connections, then any connection; sing any voice; write 3rd- and 2nd-related pairs |
 | | **Non-Chord Tones & Seventh Chords** | |
-| 13 | Non-Chord Tones I | Passing, neighbor, anticipation, appoggiatura, escape tone: on the staff, by ear, sung over the chords |
-| 14 | Non-Chord Tones II | Suspensions (4–3, 7–6, 9–8) and retardations; any non-chord tone |
+| 13 | Non-Chord Tones I | Passing, neighbor, anticipation, appoggiatura, escape tone: on the staff, by ear, sung over the chords; write one into a chord pair |
+| 14 | Non-Chord Tones II | Suspensions (4–3, 7–6, 9–8) and retardations; any non-chord tone; write a 4–3, 7–6, 9–8 or 2–3 suspension |
 | 15 | Seventh Chords | Five qualities by ear and on the staff, with inversions; letter symbols (GM7, gø7, B♭4/3); build one from any member; sung as arpeggios |
 | | **Functional Harmony** | |
-| 16 | Sevenths in Four Voices | Find unresolved 7ths and leading tones in V7–I; sing a voice through V7; figured bass (7, 6/5, 4/3, 4/2); how a 7th is approached (suspension, passing, neighbor, appoggiatura); write seventh chords in four voices and realize figured basses with sevenths |
+| 16 | Sevenths in Four Voices | Find unresolved 7ths and leading tones in V7–I; sing a voice through V7; figured bass (7, 6/5, 4/3, 4/2); how a 7th is approached (suspension, passing, neighbor, appoggiatura); write seventh chords in four voices and realize figured basses with sevenths; write three-chord groups approaching the 7th like a given non-chord tone |
 | 17 | Harmonic Function & Roman Numerals | Roman numerals with figured bass; progressive vs. retrogressive root motion; label tonic, predominant and dominant on the staff and by ear; write the triad for a numeral or function name in a key; find the key where a chord has a given numeral |
 | 18 | Cadences | PAC, IAC, half, Phrygian half, plagal, deceptive by ear and from the score; write the cadence over a given soprano |
 | | **Harmonic Function** | |
@@ -69,7 +69,9 @@ The **Write** lessons put a grand staff in front of you. Tap a staff to place th
 3. complete chords (a triad may drop its fifth only with a tripled root; a dominant, major or minor seventh only with a doubled root; diminished sevenths never);
 4. the part-writing rules: range, spacing, crossing, doubling, parallels, leaps, resolutions.
 
-Guidelines (a doubled third, diminished-triad doubling) are pointed out but don't count as wrong. Counterpoint is graded with the first-species rules. `test/write-check.html` makes sure the app's own model answers always pass, that answers the book allows pass, and that common mistakes fail.
+Guidelines (a doubled third, diminished-triad doubling) are pointed out but don't count as wrong. Counterpoint is graded with the first-species rules.
+
+Non-chord tones and suspensions are written into a given chord pair: an unaccented one on the half beat between the chords, or an accented one (appoggiatura, accented passing tone, suspension) by changing a note of the second chord and resolving it on the half beat after. The grader names what you actually wrote (by how it's approached and left, and for suspensions by the figure over the bass), then checks it against the task, the key, augmented leaps, new parallels and the resolved chord. **Beams and barlines** are tapped in between notes and graded by the beat. `test/write-check.html` makes sure the app's own model answers (and right beamings) always pass, that answers the book allows pass, and that common mistakes fail.
 
 ## How it works
 
