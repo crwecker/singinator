@@ -273,9 +273,18 @@
       ui.feedback('');
       ui.actions([]);
       ui.staff({ clef: clef, fifths: T.fifths(k), notes: [{ n: n, state: 'current' }] });
-      ui.answers(T.LETTERS.map(function (L) { return { label: L, value: L }; }), function (v) {
-        var ok = v === T.LETTERS[n.l];
-        ui.lockAnswers(T.LETTERS[n.l], v);
+      // lesson.octave: name it with its octave number (C4 = middle C)
+      var answer = lesson.octave ? T.name(n, true) : T.LETTERS[n.l];
+      var choices = T.LETTERS.map(function (L) { return { label: L, value: L }; });
+      if (lesson.octave) {
+        var near = [-7, 7, -1, 1, -8, 8].map(function (d) { var x = T.fromStep(s + d, 0); x.acc = T.sigAcc(T.fifths(k), x.l); return T.name(x, true); });
+        choices = [answer].concat(near.slice(0, 4)).sort().map(function (L) { return { label: L, value: L }; });
+        ui.prompt('Name this note, with its octave');
+        ui.sub(clefName(clef) + ' · middle C is C4');
+      }
+      ui.answers(choices, function (v) {
+        var ok = v === answer;
+        ui.lockAnswers(answer, v);
         ui.staff({ clef: clef, fifths: T.fifths(k), notes: [{ n: n, state: 'current', label: T.name(n, true) }] });
         ui.feedback((ok ? '' : 'It’s ') + '<b>' + T.name(n, true) + '</b>', ok ? 'good' : 'bad');
         Sound.playNote(midiOf(n), 0.7);

@@ -66,7 +66,10 @@
             '<li>the parts stay <b>independent</b>: they don’t cross, and no two of them move together in unisons, octaves or fifths;</li>' +
             '<li>almost every vertical sonority (the notes sounding at one moment) is a <b>triad</b> or a seventh chord;</li>' +
             '<li><b>cadences</b> mark the ends of phrases.</li></ul>' +
-            '<p>We write it on a grand staff: soprano and alto share the treble staff, tenor and bass the bass staff. On each staff the upper voice has stems up and the lower voice stems down.</p>',
+            '<p>We write it on a grand staff: soprano and alto share the treble staff, tenor and bass the bass staff. On each staff the upper voice has stems up and the lower voice stems down.</p>' +
+            '<div class="rule"><b>Notation.</b> Two voices per staff: soprano and alto on the treble staff, tenor and bass on the bass staff, even when the tenor goes high. Soprano and tenor stems go <b>up</b>, alto and bass stems go <b>down</b>, wherever the notes sit.' +
+            '<p class="why"><b>Why:</b> the stems show which line each note belongs to. With three voices on one staff, or a stem the wrong way, the reader can’t follow the parts.</p></div>' +
+            '<p><b>Spelling</b> counts too: a chord’s notes are spelled in 3rds from its root. F♯ major is F♯–A♯–C♯; writing B♭ for the A♯ is the same key on a piano but a misspelled chord.</p>',
           examples: [{ key: 'G', chords: ['I', 'IV', 'V', 'I'], caption: 'I–IV–V–I in four parts' }],
         },
         {
@@ -644,7 +647,7 @@
     rule: {
       range: 'chorale#ranges', spacing: 'chorale#spacing', crossing: 'chorale#spacing', noThird: 'chorale#doubling',
       ltDouble: 'chorale#doubling', par5: 'chorale#motion', par8: 'chorale#motion',
-      dbl3: 'chorale#doubling', dimDouble: 'chorale#doubling', dbl64: 'chorale#doubling', leap: 'chorale#melody', augmented: 'chorale#melody', ltRes: 'cadences#partwriting', sevRes: 'sevenths-4v#approach',
+      dbl3: 'chorale#doubling', dimDouble: 'chorale#doubling', spelling: 'chorale#symbols', notation: 'chorale#texture', dbl64: 'chorale#doubling', leap: 'chorale#melody', augmented: 'chorale#melody', ltRes: 'cadences#partwriting', sevRes: 'sevenths-4v#approach',
     },
     nct: {
       PT: 'nct-1#passing', NT: 'nct-1#neighbor', ANT: 'nct-1#anticipation', APP: 'nct-1#appoggiatura', ET: 'nct-1#escape',

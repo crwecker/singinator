@@ -39,6 +39,16 @@
   // ({ v, k }: syllables under that voice), svgs ([upper, lower] to draw
   // into instead of the lesson's staves), tag(v, j) / lineTag(e, i): a
   // small word beside a note head.
+  // Chorale stems: soprano and tenor up, alto and bass down. For the
+  // notation-error exercises, opts.flip(v, j) turns a voice's stem the
+  // wrong way and opts.upper(v, j) writes it on the treble staff.
+  function stemOf(vi, j, opts) {
+    var up = vi === 1 || vi === 3;
+    if (opts.flip && opts.flip(vi, j)) up = !up;
+    if (opts.upper && opts.upper(vi, j) && vi === 1) up = false; // a third voice on the staff: no free direction
+    return up ? 'up' : 'down';
+  }
+
   function grandStaff(k, voices, opts) {
     opts = opts || {};
     var hide = opts.hide || [];
@@ -47,15 +57,17 @@
     voices.forEach(function (v, j) {
       [0, 1, 2, 3].forEach(function (vi) {
         if (hide.indexOf(vi) >= 0 || (opts.line && vi === 3)) return;
-        var it = { n: v[vi], col: 2 * j, color: color(vi, j), tag: opts.tag && opts.tag(vi, j) };
+        var it = { n: v[vi], col: 2 * j, color: color(vi, j), tag: opts.tag && opts.tag(vi, j),
+          stem: opts.stems === false ? null : stemOf(vi, j, opts) };
         if (vi === 0 && opts.labels) it.label = opts.labels[j];
         if (opts.sylLabels && opts.sylLabels.v === vi && opts.sylLabels.upTo > j) it.label = A.sylOf(v[vi], k).text;
-        (vi >= 2 ? upper : lower).push(it);
+        (vi >= 2 || (opts.upper && opts.upper(vi, j)) ? upper : lower).push(it);
       });
     });
     if (opts.line && hide.indexOf(3) < 0) {
       opts.line.forEach(function (e, i) {
-        var it = { n: e.n, col: e.col, tie: e.tie, color: opts.lineColor ? opts.lineColor(e, i) : INK, tag: opts.lineTag && opts.lineTag(e, i) };
+        var it = { n: e.n, col: e.col, tie: e.tie, color: opts.lineColor ? opts.lineColor(e, i) : INK, tag: opts.lineTag && opts.lineTag(e, i),
+          stem: opts.stems === false ? null : 'up' };
         if (opts.sylLabels && opts.sylLabels.v === 3 && opts.sylLabels.upTo > i) it.label = A.sylOf(e.n, k).text;
         upper.push(it);
       });
@@ -122,7 +134,12 @@
       ui.prompt('What’s wrong with this connection?');
       ui.sub('Key: <b>' + A.keyLabel(k) + '</b> · soprano and alto on top, tenor and bass below');
       ui.feedback('');
-      grandStaff(k, r.voices, { labels: labels });
+      var err0 = r.error;
+      var notation = err0 && err0.rule === 'notation' ? {
+        flip: function (vi, j) { return err0.kind === 'stems' && j === err0.at && vi === err0.voices[0]; },
+        upper: function (vi, j) { return err0.kind === 'staff' && j === err0.at && vi === 1; },
+      } : {};
+      grandStaff(k, r.voices, Object.assign({ labels: labels }, notation));
       ui.actions([
         { label: 'Hear it', fn: function () { playFour(r.voices); } },
       ]);
@@ -130,12 +147,12 @@
         var ok = v === rule;
         ui.lockAnswers(rule, v);
         var err = r.error;
-        grandStaff(k, r.voices, { labels: labels, color: function (vi, j) {
+        grandStaff(k, r.voices, Object.assign({ labels: labels }, notation, { color: function (vi, j) {
           if (!err) return INK;
           // connection errors involve both chords; chord errors only their own
           var chord = P.MOTION_RULES[err.rule] ? j <= 1 : j === err.at;
           return chord && err.voices.indexOf(vi) >= 0 ? BAD : INK;
-        } });
+        } }));
         var what = err ? P.RULES[err.rule] + (err.voices.length ? ' (' + voicesList(err.voices) + ')' : '') : 'No errors: this connection is fine';
         ui.feedback((ok ? '' : 'It’s: ') + '<b>' + what + '</b>', ok ? 'good' : 'bad');
         if (!ok) X.review(Learn.LINKS.rule[err ? err.rule : v]);

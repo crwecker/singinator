@@ -30,6 +30,10 @@
     dbl64: '6/4 chord: double the bass',
     leap: 'Awkward leap (over a 5th, or a 7th in the bass)',
     augmented: 'Augmented melodic interval',
+    // the next two are about how it's written, not how it sounds; only the
+    // find-the-error exercises make them (errors() can't hear them)
+    spelling: 'Spelling (wrong letter name)',
+    notation: 'Notation (wrong staff or stem direction)',
   };
   // Rules about the move between two chords (the rest are about one chord).
   var MOTION_RULES = { par5: 1, par8: 1, ltRes: 1, sevRes: 1, leap: 1, augmented: 1 };
@@ -179,6 +183,17 @@
   // connection with one chord rewritten to break exactly that rule.
   // pairs: [['V', 'I'], ...] chord ids. Returns
   // { ids, chords, clean, voices, error } or null if nothing fits.
+  // The same pitch spelled with a neighboring letter (B -> C♭, F♯ -> G♭).
+  function respell(n) {
+    var out = [];
+    [-1, 1].forEach(function (d) {
+      var x = T.fromStep(T.step(n) + d, 0);
+      x.acc = T.midi(n) - T.midi(x);
+      if (Math.abs(x.acc) <= 1) out.push(x);
+    });
+    return out;
+  }
+
   function faultyConnection(k, pairs, rule, rnd) {
     rnd = rnd || Math.random;
     for (var tries = 0; tries < 40; tries++) {
@@ -187,6 +202,26 @@
       var clean = H.voiceLead(k, chords);
       if (errors(k, chords, clean).length) continue;
       if (!rule) return { ids: ids, chords: chords, clean: clean, voices: clean, error: null };
+      if (rule === 'spelling') {
+        var spots = [];
+        clean.forEach(function (v, at) { v.forEach(function (n, vi) { respell(n).forEach(function (x) { spots.push({ at: at, vi: vi, x: x }); }); }); });
+        // a respelling can read as an augmented leap; keep only the pure spelling slips
+        spots = spots.filter(function (p) {
+          var b = clean.map(function (v, at) { return v.map(function (n, vi) { return at === p.at && vi === p.vi ? p.x : n; }); });
+          return !errors(k, chords, b).length;
+        });
+        if (!spots.length) continue;
+        var sp = pick(spots, rnd);
+        var bent = clean.map(function (v, at) { return v.map(function (n, vi) { return at === sp.at && vi === sp.vi ? sp.x : n; }); });
+        return { ids: ids, chords: chords, clean: clean, voices: bent, error: { rule: 'spelling', at: sp.at, voices: [sp.vi] } };
+      }
+      if (rule === 'notation') {
+        // the tenor written on the treble staff, or one voice's stems turned
+        var at = Math.floor(rnd() * 2);
+        var kind = rnd() < 0.5 ? 'staff' : 'stems';
+        var vi = kind === 'staff' ? 1 : Math.floor(rnd() * 4);
+        return { ids: ids, chords: chords, clean: clean, voices: clean, error: { rule: 'notation', at: at, voices: [vi], kind: kind } };
+      }
       // Bend the second chord, or (when that can't do it) the first.
       var fits = [];
       [1, 0].forEach(function (bend) {

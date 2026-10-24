@@ -198,7 +198,10 @@ check('every spotError lesson can make every one of its rules in every key', () 
         for (let t = 0; t < 3 && !x; t++) x = P.faultyConnection(k, l.pairs, rule, r);
         assert(x, `${l.id}: ${rule} in ${T.keyName(k)}`);
         const errs = P.errors(k, x.chords, x.voices);
-        assert.strictEqual(errs.length, rule ? 1 : 0, `${l.id}: ${rule}`);
+        // spelling and notation are seen, not heard: the checker finds nothing
+        const seen = rule === 'spelling' || rule === 'notation';
+        assert.strictEqual(errs.length, rule && !seen ? 1 : 0, `${l.id}: ${rule}`);
+        if (seen) assert.strictEqual(x.error.rule, rule);
       }
     }
   }

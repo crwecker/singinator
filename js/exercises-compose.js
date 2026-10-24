@@ -25,8 +25,8 @@
   var GOOD = 'var(--fa)';
   var MEMBERS = ['root', 'third', 'fifth', 'seventh'];
   var FOUR = [
-    { name: 'Bass', short: 'B', staff: 1 }, { name: 'Tenor', short: 'T', staff: 1 },
-    { name: 'Alto', short: 'A', staff: 0 }, { name: 'Soprano', short: 'S', staff: 0 },
+    { name: 'Bass', short: 'B', staff: 1, stem: 'down' }, { name: 'Tenor', short: 'T', staff: 1, stem: 'up' },
+    { name: 'Alto', short: 'A', staff: 0, stem: 'down' }, { name: 'Soprano', short: 'S', staff: 0, stem: 'up' },
   ];
   var GUIDELINES = { dbl3: 1, dimDouble: 1 };
 
@@ -41,11 +41,13 @@
   //   labels (under the lowest staff, per column), slotLabels, order (voice
   //   indexes in the order to fill), prefill (notes shown but editable),
   //   optional ([col]: may stay empty), lens (beats per column), start
-  //   ({ col, vi } to select first), grade(notes) -> { problems:
+  //   ({ col, vi } to select first), clefs ([upper, lower]), single (one
+  //   staff only), grade(notes) -> { problems:
   //   [{ col, voices, msg }], notes: [msg] }, model (voices to play/show),
   //   onDone(ok) }
   function writer(o) {
     var svgs = [document.getElementById('staff'), document.getElementById('staff2')];
+    var clefs = o.clefs || ['treble', 'bass'];
     var nv = o.voices.length;
     var notes = o.given.map(function (col, c) {
       return col.map(function (n, vi) { return n || (o.prefill && o.prefill[c][vi]) || null; });
@@ -66,8 +68,10 @@
       return null;
     }
 
+    // a single line takes one column per note; chords leave room between
+    var step = o.single ? 1 : 2;
     function staffOpts(staff) {
-      var cols = o.cols * 2;
+      var cols = o.cols * step;
       var width = Math.max(480, 140 + cols * 46);
       var items = [];
       notes.forEach(function (col, c) {
@@ -75,7 +79,7 @@
           if (!n || o.voices[vi].staff !== staff) return;
           var color = marks ? (marks[c] && marks[c][vi] ? BAD : GOOD) : !editable(c, vi) ? GIVEN : INK;
           if (marks && o.plain && o.plain(c, vi, n)) color = !editable(c, vi) ? GIVEN : INK;
-          var it = { n: n, col: 2 * c, color: color, tag: o.voices[vi].short,
+          var it = { n: n, col: step * c, color: color, tag: o.voices[vi].short, stem: o.voices[vi].stem,
             state: !done && sel.col === c && sel.vi === vi ? 'current' : '' };
           items.push(it);
         });
@@ -83,19 +87,19 @@
       if (o.labels && staff === 1) {
         // labels hang under the bass staff, whether or not the column has notes yet
         o.labels.forEach(function (l, c) {
-          var here = items.filter(function (it) { return it.col === 2 * c; });
+          var here = items.filter(function (it) { return it.col === step * c; });
           if (here.length) here[0].label = l;
-          else items.push({ col: 2 * c, labelOnly: true, label: l });
+          else items.push({ col: step * c, labelOnly: true, label: l });
         });
       }
-      var place = staff ? T.parse('C3') : T.parse('C5');
-      return { clef: staff ? 'bass' : 'treble', fifths: o.fifths, minWidth: width,
+      var place = T.fromStep(T.clefRange(clefs[staff]).lo + 4, 0);
+      return { clef: clefs[staff], fifths: o.fifths, minWidth: width,
         notes: items.concat([{ n: place, col: cols - 1, hidden: true }]) };
     }
 
     function draw() {
       ui.staff(staffOpts(0));
-      ui.staff2(staffOpts(1));
+      ui.staff2(o.single ? null : staffOpts(1));
       svgs.forEach(function (s) { s.classList.toggle('writable', !done); });
       drawSlots();
       drawTools();
@@ -129,7 +133,7 @@
       var box = document.getElementById('answers');
       box.innerHTML = '';
       box.className = 'answers tools' + (done ? ' locked' : '');
-      order.slice().reverse().forEach(function (vi) {
+      (order.length > 1 ? order.slice().reverse() : []).forEach(function (vi) {
         var v = o.voices[vi];
         var b = document.createElement('button');
         b.className = 'ans-btn tool voice-pick' + (sel.vi === vi ? ' on' : '');
@@ -160,7 +164,7 @@
     }
 
     function noteAt(staff, pos) {
-      var clef = staff ? 'bass' : 'treble';
+      var clef = clefs[staff];
       var n = T.fromStep(T.step(T.CLEFS[clef].bottom) + pos, 0);
       n.acc = T.sigAcc(o.fifths, n.l);
       return n;
@@ -280,7 +284,7 @@
       if (!ok) X.review(o.lesson.learn);
     }
 
-    svgs.forEach(function (s, staff) { s.onpointerdown = function (ev) { tap(staff, ev); }; });
+    svgs.forEach(function (s, staff) { s.onpointerdown = o.single && staff ? null : function (ev) { tap(staff, ev); }; });
     activeKey = function (ev) {
       if (!A.alive(o.token)) return;
       if (ev.key === 'ArrowUp') { ev.preventDefault(); nudge(1); }
@@ -786,5 +790,5 @@
   };
 
   // Shared with the tests.
-  Exercises.compose = { gradeFour: gradeFour, gradeNCT: gradeNCT, readNCT: readNCT, nctSolutions: nctSolutions, sevenApproach: sevenApproach, looseChord: looseChord, figureText: figureText, cadenceName: cadenceName, FOUR: FOUR };
+  Exercises.compose = { writer: writer, gradeFour: gradeFour, gradeNCT: gradeNCT, readNCT: readNCT, nctSolutions: nctSolutions, sevenApproach: sevenApproach, looseChord: looseChord, figureText: figureText, cadenceName: cadenceName, FOUR: FOUR };
 })();

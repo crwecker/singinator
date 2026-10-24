@@ -110,6 +110,11 @@
   // { pos, show (accidental to draw or null), color, state, label }.
   function drawColumn(svg, items, x) {
     items = items.slice().sort(function (a, b) { return a.pos - b.pos; });
+    // an accidental alone (a key signature being written)
+    if (items[0].accOnly) {
+      items.forEach(function (it) { accidental(svg, it.n.acc, x, yFor(it.pos), 'sig ' + (it.state || '')); });
+      return;
+    }
     var lo = items[0].pos, hi = items[items.length - 1].pos;
     var stemUp = (lo + hi) / 2 < 4;
     var color = items[0].color || '#3b3355';
@@ -118,13 +123,23 @@
 
     // Seconds can't share a side of the stem: walk from the end the stem
     // starts at and push every other note of a cluster across it.
-    var order = stemUp ? items : items.slice().reverse();
-    var shifted = false;
-    order.forEach(function (it, i) {
-      var prev = order[i - 1];
-      shifted = !!prev && Math.abs(it.pos - prev.pos) === 1 && !shifted;
-      it.dx = shifted ? (stemUp ? HEAD_W : -HEAD_W) : 0;
-    });
+    // With two voices on a staff (it.stem 'up' / 'down'), each voice keeps
+    // its own stem, and the upper voice of a 2nd moves right.
+    var voiced = items.some(function (it) { return it.stem; });
+    if (voiced) {
+      items.forEach(function (it, i) {
+        var below = items[i - 1];
+        it.dx = below && it.pos - below.pos === 1 && it.stem === 'up' ? HEAD_W : 0;
+      });
+    } else {
+      var order = stemUp ? items : items.slice().reverse();
+      var shifted = false;
+      order.forEach(function (it, i) {
+        var prev = order[i - 1];
+        shifted = !!prev && Math.abs(it.pos - prev.pos) === 1 && !shifted;
+        it.dx = shifted ? (stemUp ? HEAD_W : -HEAD_W) : 0;
+      });
+    }
     var anyRight = items.some(function (it) { return it.dx > 0; });
     var anyLeft = items.some(function (it) { return it.dx < 0; });
 
@@ -150,7 +165,16 @@
       accidental(g, it.show, accLeft - s * 11, yFor(it.pos), 'note-acc');
     });
 
-    if (!items[0].noStem) {
+    if (voiced) {
+      ['up', 'down'].forEach(function (d) {
+        var mine = items.filter(function (it) { return it.stem === d; });
+        if (!mine.length) return;
+        var a = mine[0], b = mine[mine.length - 1];
+        var sx = d === 'up' ? x + a.dx + 7.2 : x + a.dx - 7.2;
+        var y1 = d === 'up' ? yFor(a.pos) : yFor(b.pos), y2 = d === 'up' ? yFor(b.pos) - 38 : yFor(a.pos) + 38;
+        el('line', { x1: sx, x2: sx, y1: y1, y2: y2, class: 'stem', stroke: a.color || '#3b3355' }, g);
+      });
+    } else if (!items[0].noStem) {
       var sx = stemUp ? x + 7.2 : x - 7.2;
       var y1 = yFor(stemUp ? lo : hi), y2 = stemUp ? yFor(hi) - 38 : yFor(lo) + 38;
       el('line', { x1: sx, x2: sx, y1: y1, y2: y2, class: 'stem', stroke: color }, g);
