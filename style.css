@@ -553,6 +553,9 @@ button.slot { cursor: pointer; font: inherit; }
 .learn-ex figcaption { text-align: center; font-weight: 700; margin-top: 6px; }
 .learn-ex .action-row { margin-top: 8px; }
 .muted { color: var(--muted); }
+.book-line { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: var(--muted); }
+.book-ref b { color: var(--c, var(--la)); font-weight: 800; }
+.lesson-book { display: block; margin-top: 4px; font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 0.02em; }
 .learn-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 12px; font-size: 14px; }
 .learn-tags .chip { border: 2px solid color-mix(in srgb, var(--muted) 40%, transparent); background: transparent; color: inherit; border-radius: 999px; padding: 4px 12px; font: inherit; font-weight: 700; cursor: pointer; }
 .learn-tags .chip.on { background: var(--la); border-color: var(--la); color: #fff; }

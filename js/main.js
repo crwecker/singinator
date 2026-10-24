@@ -15,7 +15,7 @@
     exploreScale: 'Explore', earScale: 'Ear', readScale: 'Read', modeFinal: 'Read', singScale: 'Sing', invertInterval: 'Read',
     earModulation: 'Ear', sightSingMod: 'Sing',
     tapRhythm: 'Rhythm', earRhythm: 'Ear', singRhythm: 'Sing',
-    melodicDictation: 'Dictation', twoPart: 'Sing',
+    melodicDictation: 'Dictation', twoPart: 'Sing', rootMotion: 'Read',
     earPhrase: 'Ear', readPeriod: 'Read', earPeriod: 'Ear', singConsequent: 'Sing', cpError: 'Read',
     spotError: 'Read', singVoice: 'Sing', readNCT: 'Read', earNCT: 'Ear', singNCT: 'Sing', learn: 'Learn',
   };
@@ -73,6 +73,22 @@
     else engine.round(lesson);
   }
 
+  // 'Murray III.1 Four-Voice Chorale Style, pp. 21–23' for a unit's lessons.
+  function bookLine(u) {
+    if (!u.murray) return '';
+    return u.murray.map(function (ref) {
+      var m = Curriculum.MURRAY[ref];
+      return '<span class="book-ref"><b>Murray ' + ref + '</b> ' + m[0] + ' · pp. ' + m[1] + '</span>';
+    }).join('');
+  }
+
+  // A lesson card's book note: its workbook set, or the text for a Learn card.
+  function lessonBook(u, l) {
+    if (l.ex) return 'Exercises ' + l.ex;
+    if (l.engine === 'learn' && u.murray) return 'Text pp. ' + Curriculum.MURRAY[u.murray[0]][1];
+    return '';
+  }
+
   function renderHome() {
     var up = nextUp();
     $('continue-title').textContent = up.lesson.title;
@@ -95,7 +111,7 @@
       sec.className = 'unit';
       sec.style.setProperty('--c', A.DEG_COLORS[ui % 7]);
       sec.innerHTML = '<div class="unit-head"><div><div class="eyebrow">Unit ' + (ui + 1) + '</div>' +
-        '<h3>' + u.title + '</h3><p>' + u.blurb + '</p></div>' +
+        '<h3>' + u.title + '</h3><p>' + u.blurb + '</p>' + (u.murray ? '<p class="book-line">' + bookLine(u) + '</p>' : '') + '</div>' +
         '<div class="unit-count">' + mastered + '/' + u.lessons.length + '</div></div>';
       var grid = document.createElement('div');
       grid.className = 'lesson-grid';
@@ -106,6 +122,7 @@
         var pct = l.engine === 'explore' ? (s.mastered ? 100 : 0) : Math.round((s.right / 8) * 100);
         b.innerHTML = '<span class="tag">' + ENGINE_LABEL[l.engine] + '</span>' +
           '<span class="lesson-name">' + l.title + '</span>' +
+          (lessonBook(u, l) ? '<span class="lesson-book">' + lessonBook(u, l) + '</span>' : '') +
           '<span class="bar"><i style="width:' + Math.min(100, pct) + '%"></i></span>';
         b.onclick = function () { openLesson(u, l); };
         grid.appendChild(b);

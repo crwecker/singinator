@@ -42,9 +42,26 @@
 
   // Units follow the order of a fundamentals-to-harmony theory course;
   // section names the larger part each unit belongs to.
+  // Murray, Essential Materials of Music Theory (from the table of contents,
+  // Part I pp. iii-iv): lesson -> [title, text pages]. Units say which
+  // lessons they cover (murray); a lesson that mirrors a workbook set says
+  // which (ex: 'III.1.3' or 'III.1.3-4').
+  var MURRAY = {
+    'I.1': ['Pitch Notation and Intervals', '1–6'], 'I.2': ['Rhythm and Meter', '7–9'], 'I.3': ['Melody and Phrase Structure', '10–12'],
+    'II.1': ['Scales and Key Signatures', '13–16'], 'II.2': ['First-Species Counterpoint', '17–18'], 'II.3': ['Triads and Inversions', '19–20'],
+    'III.1': ['Four-Voice Chorale Style', '21–23'], 'III.2': ['Connecting Chords I', '24–25'], 'III.3': ['Connecting Chords II', '26–27'],
+    'IV.1': ['Non-Chord Tones I', '29–30'], 'IV.2': ['Non-Chord Tones II', '31–32'], 'IV.3': ['Seventh Chords', '33–34'],
+    'V.1': ['Writing Seventh Chords in Four Voices', '35–36'], 'V.2': ['Harmonic Function and Roman Numerals', '37–39'], 'V.3': ['Harmonic Cadences', '40–42'],
+    'VI.1': ['Partwriting Review', '43–45'], 'VI.2': ['The Primary Triads', '46–47'], 'VI.3': ['The Dominant Seventh, Tonic Seventh, and Subdominant Seventh Chords', '48–50'],
+    'VII.1': ['The Cadential Six-Four Chord', '51–52'], 'VII.2': ['The Passing and Pedal Six-Four Chords', '53–54'], 'VII.3': ['The Supertonic Triad and Seventh Chord', '55–56'],
+    'VIII.1': ['Melody Harmonization', '57–58'], 'VIII.2': ['The Leading-Tone Triad and Leading-Tone Seventh Chord', '59–61'], 'VIII.3': ['The Submediant and Mediant', '62–64'],
+    'IX.1': ['Harmonic Variety in Minor Scales', '65–66'], 'IX.2': ['Functional Chromaticism and Decorative Chromaticism', '67–68'], 'IX.3': ['Review of Triad and Seventh Chord Qualities', '69–70'],
+    'X.1': ['Secondary V7 and V', '71–73'], 'X.2': ['Secondary V7 and V in Inversion', '74–75'], 'X.3': ['Secondary vii°, vii°7, and viiø7', '76–78'],
+  };
+
   var UNITS = [
     {
-      id: 'u1', section: 'Fundamentals I', title: 'Foundations', blurb: 'Do, mi, sol and the major scale in C; reading treble and bass clef.',
+      id: 'u1', murray: ['I.1'], section: 'Fundamentals I', title: 'Foundations', blurb: 'Do, mi, sol and the major scale in C; reading treble and bass clef.',
       lessons: [
         { id: 'dms-meet', title: 'Meet do, mi, sol', engine: 'explore', keys: { list: ['C'] }, clefs: ['treble'], degrees: ['1', '3', '5', '8'] },
         { id: 'dms-read', title: 'Read do, mi, sol', engine: 'readSyllable', keys: { list: ['C'] }, clefs: ['treble'], degrees: ['1', '3', '5', '8'] },
@@ -55,19 +72,19 @@
         { id: 'maj-sing', title: 'Sing scale degrees', engine: 'sing', keys: { list: ['C'] }, clefs: ['treble'], degrees: MAJOR },
         { id: 'maj-ear', title: 'Hear scale degrees', engine: 'earSyllable', keys: { list: ['C'] }, clefs: ['treble'], degrees: MAJOR },
         { id: 'maj-echo', title: 'Echo stepwise melodies', engine: 'echo', keys: { list: ['C'] }, clefs: ['treble'], degrees: MAJOR, length: 4 },
-        { id: 'bass-names', title: 'Bass clef note names', engine: 'readLetter', keys: { list: ['C'] }, clefs: ['bass'] },
+        { id: 'bass-names', ex: 'I.1.1', title: 'Bass clef note names', engine: 'readLetter', keys: { list: ['C'] }, clefs: ['bass'] },
       ],
     },
     {
-      id: 'u3', section: 'Fundamentals I', title: 'Intervals', blurb: 'Hear, read and sing every interval, then inversions and compound intervals.',
+      id: 'u3', murray: ['I.1'], section: 'Fundamentals I', title: 'Intervals', blurb: 'Hear, read and sing every interval, then inversions and compound intervals.',
       lessons: [
         { id: 'ear-iv-1', title: 'Hear 2nds and 3rds', engine: 'earInterval', intervals: EAR_1, dirs: ['up'] },
         { id: 'ear-iv-2', title: 'Hear 4ths, 5ths, octaves', engine: 'earInterval', intervals: EAR_2, dirs: ['up'] },
         { id: 'ear-iv-3', title: 'Hear 6ths and 7ths', engine: 'earInterval', intervals: EAR_3, dirs: ['up'] },
         { id: 'ear-iv-4', title: 'All intervals, up and down', engine: 'earInterval', intervals: EAR_ALL, dirs: ['up', 'down'] },
         { id: 'ear-iv-5', title: 'Harmonic intervals', engine: 'earInterval', intervals: EAR_ALL, dirs: ['harmonic'] },
-        { id: 'read-iv-1', title: 'Read intervals: P, M, m', engine: 'readInterval', intervals: SPELLED_1, clefs: ['treble', 'bass'] },
-        { id: 'read-iv-2', title: 'Read augmented & diminished', engine: 'readInterval', intervals: SPELLED_ALL, clefs: ['treble', 'bass'] },
+        { id: 'read-iv-1', ex: 'I.1.5–8', title: 'Read intervals: P, M, m', engine: 'readInterval', intervals: SPELLED_1, clefs: ['treble', 'bass'] },
+        { id: 'read-iv-2', ex: 'I.1.5', title: 'Read augmented & diminished', engine: 'readInterval', intervals: SPELLED_ALL, clefs: ['treble', 'bass'] },
         { id: 'sing-iv-1', title: 'Sing intervals up: m2 to P5', engine: 'singInterval', intervals: ['m2', 'M2', 'm3', 'M3', 'P4', 'P5'], dirs: ['up'], clefs: ['treble', 'bass'] },
         { id: 'sing-iv-2', title: 'Sing intervals up & down', engine: 'singInterval', intervals: ['m2', 'M2', 'm3', 'M3', 'P4', 'P5', 'm6', 'M6', 'P8'], dirs: ['up', 'down'], clefs: ['treble', 'bass'] },
         { id: 'sing-iv-3', title: 'Sing 7ths and the tritone', engine: 'singInterval', intervals: ['m7', 'M7', 'A4', 'd5', 'm6', 'M6'], dirs: ['up', 'down'], clefs: ['treble', 'bass'] },
@@ -77,7 +94,7 @@
       ],
     },
     {
-      id: 'u-rhythm', section: 'Fundamentals I', title: 'Rhythm & Meter', blurb: 'Meter, note values, rests, ties and syncopation: tap them, hear them, then sing in time.',
+      id: 'u-rhythm', murray: ['I.2'], section: 'Fundamentals I', title: 'Rhythm & Meter', blurb: 'Meter, note values, rests, ties and syncopation: tap them, hear them, then sing in time.',
       lessons: [
         { id: 'rh-tap-1', title: 'Tap quarters, halves and wholes', engine: 'tapRhythm', time: ['4/4'], level: 1, measures: 2, bpm: 80 },
         { id: 'rh-tap-2', title: 'Eighth notes and quarter rests', engine: 'tapRhythm', time: ['2/4', '3/4', '4/4'], level: 2, measures: 2, bpm: 76 },
@@ -94,31 +111,31 @@
       ],
     },
     {
-      id: 'u-phrase', section: 'Fundamentals I', title: 'Melody & Phrase Structure', blurb: 'Phrases end in cadences; a weaker cadence answered by a stronger one makes a period.',
+      id: 'u-phrase', murray: ['I.3'], section: 'Fundamentals I', title: 'Melody & Phrase Structure', blurb: 'Phrases end in cadences; a weaker cadence answered by a stronger one makes a period.',
       lessons: [
         { id: 'ph-ear-cad', title: 'Hear the cadence: authentic or half', engine: 'earPhrase', keys: { mode: 'major', max: 3 }, clefs: ['treble', 'bass'] },
-        { id: 'ph-read-period', title: 'Parallel, contrasting, or not a period', engine: 'readPeriod', keys: { mode: 'major', max: 3 }, clefs: ['treble', 'bass'] },
+        { id: 'ph-read-period', ex: 'I.3.1', title: 'Parallel, contrasting, or not a period', engine: 'readPeriod', keys: { mode: 'major', max: 3 }, clefs: ['treble', 'bass'] },
         { id: 'ph-ear-period', title: 'Hear periods', engine: 'earPeriod', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'] },
         { id: 'ph-sing-answer', title: 'Sing the answering phrase', engine: 'singConsequent', keys: { mode: 'major', max: 3 }, clefs: ['treble', 'bass'] },
       ],
     },
     {
-      id: 'u2', section: 'Fundamentals II', title: 'Major Keys', blurb: 'All 15 major key signatures and movable do in every key.',
+      id: 'u2', murray: ['II.1'], section: 'Fundamentals II', title: 'Major Keys', blurb: 'All 15 major key signatures and movable do in every key.',
       lessons: [
-        { id: 'ks-maj-4', title: 'Major key signatures (up to 4 ♯/♭)', engine: 'keySig', keys: { mode: 'major', max: 4 }, clefs: ['treble'] },
+        { id: 'ks-maj-4', ex: 'II.1.2', title: 'Major key signatures (up to 4 ♯/♭)', engine: 'keySig', keys: { mode: 'major', max: 4 }, clefs: ['treble'] },
         { id: 'keys-read', title: 'Movable do in G, D, F, B♭', engine: 'readSyllable', keys: { list: ['G', 'D', 'F', 'Bb'] }, clefs: ['treble'], degrees: MAJOR },
         { id: 'bass-read', title: 'Movable do in bass clef', engine: 'readSyllable', keys: { mode: 'major', max: 3 }, clefs: ['bass'], degrees: MAJOR },
         { id: 'keys-sing', title: 'Sing in new keys', engine: 'sing', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'], degrees: MAJOR },
-        { id: 'ks-maj-all', title: 'All 15 major key signatures', engine: 'keySig', keys: { mode: 'major', max: 7 }, clefs: ['treble', 'bass'] },
+        { id: 'ks-maj-all', ex: 'II.1.2', title: 'All 15 major key signatures', engine: 'keySig', keys: { mode: 'major', max: 7 }, clefs: ['treble', 'bass'] },
         { id: 'keys-ear', title: 'Hear degrees in any key', engine: 'earSyllable', keys: { mode: 'major', max: 7 }, clefs: ['treble', 'bass'], degrees: MAJOR },
         { id: 'ss-maj-step', title: 'Sight-sing: stepwise major', engine: 'sightSing', keys: { mode: 'major', max: 3 }, clefs: ['treble', 'bass'], degrees: MAJOR, length: 5 },
       ],
     },
     {
-      id: 'u4', section: 'Fundamentals II', title: 'Minor', blurb: 'Natural, harmonic and melodic minor. Change do- or la-based minor in Settings.',
+      id: 'u4', murray: ['II.1'], section: 'Fundamentals II', title: 'Minor', blurb: 'Natural, harmonic and melodic minor. Change do- or la-based minor in Settings.',
       lessons: [
         { id: 'min-meet', title: 'Natural minor', engine: 'explore', keys: { list: ['A', 'C', 'D', 'E'], mode: 'minor' }, clefs: ['treble'], degrees: MINOR_NAT },
-        { id: 'ks-min', title: 'Minor key signatures', engine: 'keySig', keys: { mode: 'minor', max: 7 }, clefs: ['treble', 'bass'] },
+        { id: 'ks-min', ex: 'II.1.3', title: 'Minor key signatures', engine: 'keySig', keys: { mode: 'minor', max: 7 }, clefs: ['treble', 'bass'] },
         { id: 'min-read', title: 'Read in minor', engine: 'readSyllable', keys: { mode: 'minor', max: 3 }, clefs: ['treble', 'bass'], degrees: MINOR_NAT },
         { id: 'min-hm', title: 'Harmonic & melodic minor', engine: 'explore', keys: { list: ['A', 'C', 'D', 'E', 'G'], mode: 'minor' }, clefs: ['treble'], degrees: MINOR_ALL },
         { id: 'min-read-2', title: 'Read raised 6th and 7th', engine: 'readSyllable', keys: { mode: 'minor', max: 4 }, clefs: ['treble', 'bass'], degrees: MINOR_ALL },
@@ -128,20 +145,20 @@
       ],
     },
     {
-      id: 'u6', section: 'Fundamentals II', title: 'C Clefs', blurb: 'Alto and tenor clef, the clefs of violas, cellos, bassoons and trombones.',
+      id: 'u6', murray: ['I.1', 'II.1'], section: 'Fundamentals II', title: 'C Clefs', blurb: 'Alto and tenor clef, the clefs of violas, cellos, bassoons and trombones.',
       lessons: [
-        { id: 'alto-names', title: 'Alto clef note names', engine: 'readLetter', keys: { list: ['C'] }, clefs: ['alto'] },
-        { id: 'tenor-names', title: 'Tenor clef note names', engine: 'readLetter', keys: { list: ['C'] }, clefs: ['tenor'] },
+        { id: 'alto-names', ex: 'I.1.1', title: 'Alto clef note names', engine: 'readLetter', keys: { list: ['C'] }, clefs: ['alto'] },
+        { id: 'tenor-names', ex: 'I.1.1', title: 'Tenor clef note names', engine: 'readLetter', keys: { list: ['C'] }, clefs: ['tenor'] },
         { id: 'c-read', title: 'Movable do in C clefs', engine: 'readSyllable', keys: { mode: 'major', max: 4 }, clefs: ['alto', 'tenor'], degrees: MAJOR },
-        { id: 'ks-c', title: 'Key signatures in all four clefs', engine: 'keySig', keys: { mode: 'major', max: 7 }, clefs: ['treble', 'bass', 'alto', 'tenor'] },
-        { id: 'all-names', title: 'Note names in any clef', engine: 'readLetter', keys: { mode: 'major', max: 7 }, clefs: ['treble', 'bass', 'alto', 'tenor'] },
+        { id: 'ks-c', ex: 'II.1.2–3', title: 'Key signatures in all four clefs', engine: 'keySig', keys: { mode: 'major', max: 7 }, clefs: ['treble', 'bass', 'alto', 'tenor'] },
+        { id: 'all-names', ex: 'I.1.1', title: 'Note names in any clef', engine: 'readLetter', keys: { mode: 'major', max: 7 }, clefs: ['treble', 'bass', 'alto', 'tenor'] },
       ],
     },
     {
-      id: 'u-counterpoint', section: 'Fundamentals II', title: 'First-Species Counterpoint', blurb: 'Note against note: find the broken rule, then sing one voice while the app sings the other. Headphones help.',
+      id: 'u-counterpoint', murray: ['II.2'], section: 'Fundamentals II', title: 'First-Species Counterpoint', blurb: 'Note against note: find the broken rule, then sing one voice while the app sings the other. Headphones help.',
       lessons: [
-        { id: 'cp-err-1', title: 'Find the error: parallels and dissonance', engine: 'cpError', keys: { mode: 'major', max: 2 }, rules: ['parallel', 'dissonance'], length: 7 },
-        { id: 'cp-err-2', title: 'Find the error: hidden 5ths and bad leaps too', engine: 'cpError', keys: { mode: 'major', max: 4 }, rules: ['parallel', 'dissonance', 'hidden', 'leap'], length: 8 },
+        { id: 'cp-err-1', ex: 'II.2.3', title: 'Find the error: parallels and dissonance', engine: 'cpError', keys: { mode: 'major', max: 2 }, rules: ['parallel', 'dissonance'], length: 7 },
+        { id: 'cp-err-2', ex: 'II.2.3', title: 'Find the error: hidden 5ths and bad leaps too', engine: 'cpError', keys: { mode: 'major', max: 4 }, rules: ['parallel', 'dissonance', 'hidden', 'leap'], length: 8 },
         { id: 'tp-cp-above', title: 'Sing a counterpoint above the cantus', engine: 'twoPart', keys: { mode: 'major', max: 2 }, part: 'upper', cantus: 'lower', length: 6, bpm: 50 },
         { id: 'tp-cf-below', title: 'Sing the cantus under a counterpoint', engine: 'twoPart', keys: { mode: 'major', max: 2 }, part: 'lower', cantus: 'lower', length: 6, bpm: 50 },
         { id: 'tp-cp-below', title: 'Sing a counterpoint below the cantus', engine: 'twoPart', keys: { mode: 'major', max: 3 }, part: 'lower', cantus: 'upper', length: 7, bpm: 54 },
@@ -149,34 +166,34 @@
       ],
     },
     {
-      id: 'u-chords', section: 'Fundamentals II', title: 'Triads & Inversions', blurb: 'Major, minor, diminished and augmented triads by ear, on the staff, and sung.',
+      id: 'u-chords', murray: ['II.3'], section: 'Fundamentals II', title: 'Triads & Inversions', blurb: 'Major, minor, diminished and augmented triads by ear, on the staff, and sung.',
       lessons: [
         { id: 'ch-ear-mm', title: 'Hear major vs. minor triads', engine: 'earChord', types: ['maj', 'min'] },
         { id: 'ch-ear-tri', title: 'Hear all four triads', engine: 'earChord', types: ['maj', 'min', 'dim', 'aug'] },
-        { id: 'ch-read-tri', title: 'Read triad qualities', engine: 'readChord', types: ['maj', 'min', 'dim', 'aug'], clefs: ['treble', 'bass'] },
+        { id: 'ch-read-tri', ex: 'II.3.3', title: 'Read triad qualities', engine: 'readChord', types: ['maj', 'min', 'dim', 'aug'], clefs: ['treble', 'bass'] },
         { id: 'ch-sing-tri', title: 'Sing I, IV, V and vi', engine: 'singChord', keys: { mode: 'major', max: 3 }, clefs: ['treble', 'bass'], chords: ['I', 'IV', 'V', 'vi', 'ii'] },
         { id: 'ch-ear-inv', title: 'Hear triad inversions', engine: 'earChord', types: ['maj', 'min'], askInversion: true },
-        { id: 'ch-read-inv', title: 'Read triads with inversions', engine: 'readChord', types: ['maj', 'min', 'dim'], inversions: true, clefs: ['treble', 'bass'] },
+        { id: 'ch-read-inv', ex: 'II.3.1', title: 'Read triads with inversions', engine: 'readChord', types: ['maj', 'min', 'dim'], inversions: true, clefs: ['treble', 'bass'] },
       ],
     },
     {
-      id: 'u-chorale', section: 'Four-Voice Writing', title: 'Chorale Style', blurb: 'Four voices in their ranges, spaced and doubled the classroom way. Sing each line.',
+      id: 'u-chorale', murray: ['III.1'], section: 'Four-Voice Writing', title: 'Chorale Style', blurb: 'Four voices in their ranges, spaced and doubled the classroom way. Sing each line.',
       lessons: [
         { id: 'learn-chorale', title: 'Four-voice chorale style', engine: 'learn', page: 'chorale' },
         { id: 'pw-sing-s', title: 'Sing the soprano', engine: 'singVoice', keys: { mode: 'major', max: 3 }, voice: 'soprano', chords: ['I', 'IV', 'V'], length: 4, learn: 'chorale#melody' },
         { id: 'pw-sing-b', title: 'Sing the bass', engine: 'singVoice', keys: { mode: 'major', max: 3 }, voice: 'bass', chords: ['I', 'IV', 'V'], length: 4, learn: 'chorale#melody' },
-        { id: 'pw-spot-1', title: 'Find the error: range, spacing, doubling', engine: 'spotError', keys: { mode: 'major', max: 3 }, rules: ['range', 'spacing', 'noThird', 'ltDouble'], pairs: PW_TRIADS, learn: 'chorale#doubling' },
-        { id: 'pw-spot-chord', title: 'Find the error in one chord: doubling, spacing, crossing', engine: 'spotError', keys: { mode: 'major', max: 4 },
+        { id: 'pw-spot-1', ex: 'III.1.3–4', title: 'Find the error: range, spacing, doubling', engine: 'spotError', keys: { mode: 'major', max: 3 }, rules: ['range', 'spacing', 'noThird', 'ltDouble'], pairs: PW_TRIADS, learn: 'chorale#doubling' },
+        { id: 'pw-spot-chord', ex: 'III.1.3–4', title: 'Find the error in one chord: doubling, spacing, crossing', engine: 'spotError', keys: { mode: 'major', max: 4 },
           rules: ['noThird', 'crossing', 'spacing', 'range', 'dbl3', 'dimDouble', 'dbl64', 'ltDouble'], pairs: PW_DOUBLING, learn: 'chorale#doubling' },
-        { id: 'pw-spot-lines', title: 'Find the error: awkward leaps and parallels (minor)', engine: 'spotError', keys: { mode: 'minor', max: 4 },
+        { id: 'pw-spot-lines', ex: 'III.1.3–4', title: 'Find the error: awkward leaps and parallels (minor)', engine: 'spotError', keys: { mode: 'minor', max: 4 },
           rules: ['leap', 'augmented', 'par5', 'par8', 'spacing', 'crossing'], pairs: PW_LINES, learn: 'chorale#melody' },
-        { id: 'pw-spot-par', title: 'Find the error: parallel 5ths and octaves', engine: 'spotError', keys: { mode: 'major', max: 3 }, rules: ['par5', 'par8'], pairs: PW_TRIADS, learn: 'chorale#motion' },
+        { id: 'pw-spot-par', ex: 'III.1.3', title: 'Find the error: parallel 5ths and octaves', engine: 'spotError', keys: { mode: 'major', max: 3 }, rules: ['par5', 'par8'], pairs: PW_TRIADS, learn: 'chorale#motion' },
         { id: 'pw-sing-a', title: 'Sing the alto', engine: 'singVoice', keys: { mode: 'major', max: 3 }, voice: 'alto', chords: ['I', 'IV', 'V'], length: 4, learn: 'chorale#texture' },
         { id: 'pw-sing-t', title: 'Sing the tenor', engine: 'singVoice', keys: { mode: 'major', max: 3 }, voice: 'tenor', chords: ['I', 'IV', 'V'], length: 4, learn: 'chorale#texture' },
       ],
     },
     {
-      id: 'u-connect', section: 'Four-Voice Writing', title: 'Connecting Chords I', blurb: 'Roots a 4th or 5th apart: hold the common tone, step to the rest.',
+      id: 'u-connect', murray: ['III.2'], section: 'Four-Voice Writing', title: 'Connecting Chords I', blurb: 'Roots a 4th or 5th apart: hold the common tone, step to the rest.',
       lessons: [
         { id: 'learn-connect-1', title: 'Connecting chords I', engine: 'learn', page: 'connecting-1' },
         { id: 'rr-read', title: 'Root relationships: 5th, 3rd or 2nd?', engine: 'rootMotion', ask: 'relation', keys: { mode: 'major', max: 3 }, chords: ['I', 'I6', 'ii', 'iii', 'IV', 'IV6', 'V', 'V6', 'vi'], learn: 'connecting-1#roots' },
@@ -185,49 +202,49 @@
       ],
     },
     {
-      id: 'u-connect2', section: 'Four-Voice Writing', title: 'Connecting Chords II', blurb: 'Roots a 3rd apart share two notes; roots a step apart share none.',
+      id: 'u-connect2', murray: ['III.3'], section: 'Four-Voice Writing', title: 'Connecting Chords II', blurb: 'Roots a 3rd apart share two notes; roots a step apart share none.',
       lessons: [
         { id: 'learn-connect-2', title: 'Connecting chords II', engine: 'learn', page: 'connecting-2' },
-        { id: 'pw-spot-36', title: 'Find the error: 3rd-related chords', engine: 'spotError', keys: { mode: 'major', max: 4 }, rules: ['range', 'spacing', 'noThird', 'par5', 'par8'], pairs: PW_THIRDS, learn: 'connecting-2#thirds' },
-        { id: 'pw-spot-27', title: 'Find the error: chords a step apart', engine: 'spotError', keys: { mode: 'major', max: 4 }, rules: ['par5', 'par8', 'spacing', 'ltDouble'], pairs: PW_SECONDS, learn: 'connecting-2#seconds' },
-        { id: 'pw-spot-2', title: 'Find the error: all the rules so far', engine: 'spotError', keys: { mode: 'major', max: 4 }, rules: ['range', 'spacing', 'noThird', 'ltDouble', 'par5', 'par8', 'ltRes'], pairs: PW_TRIADS.concat(PW_DOMINANT), learn: 'connecting-2#checking' },
+        { id: 'pw-spot-36', ex: 'III.3.1–2', title: 'Find the error: 3rd-related chords', engine: 'spotError', keys: { mode: 'major', max: 4 }, rules: ['range', 'spacing', 'noThird', 'par5', 'par8'], pairs: PW_THIRDS, learn: 'connecting-2#thirds' },
+        { id: 'pw-spot-27', ex: 'III.3.1–2', title: 'Find the error: chords a step apart', engine: 'spotError', keys: { mode: 'major', max: 4 }, rules: ['par5', 'par8', 'spacing', 'ltDouble'], pairs: PW_SECONDS, learn: 'connecting-2#seconds' },
+        { id: 'pw-spot-2', ex: 'III.3.1–2', title: 'Find the error: all the rules so far', engine: 'spotError', keys: { mode: 'major', max: 4 }, rules: ['range', 'spacing', 'noThird', 'ltDouble', 'par5', 'par8', 'ltRes'], pairs: PW_TRIADS.concat(PW_DOMINANT), learn: 'connecting-2#checking' },
         { id: 'pw-sing-any', title: 'Sing any voice: I, ii, IV, V, vi', engine: 'singVoice', keys: { mode: 'major', max: 4 }, voice: 'any', chords: ['I', 'I6', 'ii', 'ii6', 'IV', 'V', 'vi'], length: 5, learn: 'connecting-2#thirds' },
       ],
     },
     {
-      id: 'u-nct', section: 'Non-Chord Tones & Seventh Chords', title: 'Non-Chord Tones I', blurb: 'Passing and neighbor tones, anticipations, appoggiaturas and escape tones.',
+      id: 'u-nct', murray: ['IV.1'], section: 'Non-Chord Tones & Seventh Chords', title: 'Non-Chord Tones I', blurb: 'Passing and neighbor tones, anticipations, appoggiaturas and escape tones.',
       lessons: [
         { id: 'learn-nct-1', title: 'Non-chord tones I', engine: 'learn', page: 'nct-1' },
-        { id: 'nct-read-1', title: 'Passing, neighbor, anticipation', engine: 'readNCT', keys: { mode: 'major', max: 3 }, types: ['PT', 'NT', 'ANT'], learn: 'nct-1#labels' },
+        { id: 'nct-read-1', ex: 'IV.1.1–2', title: 'Passing, neighbor, anticipation', engine: 'readNCT', keys: { mode: 'major', max: 3 }, types: ['PT', 'NT', 'ANT'], learn: 'nct-1#labels' },
         { id: 'nct-ear-1', title: 'Hear passing, neighbor, anticipation', engine: 'earNCT', keys: { mode: 'major', max: 3 }, types: ['PT', 'NT', 'ANT'], learn: 'nct-1#labels' },
         { id: 'nct-sing-1', title: 'Sing passing and neighbor tones', engine: 'singNCT', keys: { mode: 'major', max: 3 }, types: ['PT', 'NT'], learn: 'nct-1#passing' },
-        { id: 'nct-read-2', title: 'Add appoggiaturas and escape tones', engine: 'readNCT', keys: { mode: 'major', max: 4 }, types: ['PT', 'NT', 'ANT', 'APP', 'ET'], learn: 'nct-1#labels' },
+        { id: 'nct-read-2', ex: 'IV.1.1–2', title: 'Add appoggiaturas and escape tones', engine: 'readNCT', keys: { mode: 'major', max: 4 }, types: ['PT', 'NT', 'ANT', 'APP', 'ET'], learn: 'nct-1#labels' },
         { id: 'nct-ear-app', title: 'Hear appoggiaturas and escape tones', engine: 'earNCT', keys: { mode: 'major', max: 4 }, types: ['PT', 'NT', 'ANT', 'APP', 'ET'], learn: 'nct-1#labels' },
       ],
     },
     {
-      id: 'u-nct2', section: 'Non-Chord Tones & Seventh Chords', title: 'Non-Chord Tones II', blurb: 'Suspensions (4–3, 7–6, 9–8) and retardations: the note that arrives late.',
+      id: 'u-nct2', murray: ['IV.2'], section: 'Non-Chord Tones & Seventh Chords', title: 'Non-Chord Tones II', blurb: 'Suspensions (4–3, 7–6, 9–8) and retardations: the note that arrives late.',
       lessons: [
         { id: 'learn-nct-2', title: 'Non-chord tones II: suspensions', engine: 'learn', page: 'nct-2' },
-        { id: 'nct-read-sus', title: 'Suspension or retardation?', engine: 'readNCT', keys: { mode: 'major', max: 4 }, types: ['SUS', 'RET', 'APP', 'ANT'], learn: 'nct-2#suspension' },
+        { id: 'nct-read-sus', ex: 'IV.2.1–2', title: 'Suspension or retardation?', engine: 'readNCT', keys: { mode: 'major', max: 4 }, types: ['SUS', 'RET', 'APP', 'ANT'], learn: 'nct-2#suspension' },
         { id: 'nct-ear-sus', title: 'Hear suspensions and retardations', engine: 'earNCT', keys: { mode: 'major', max: 4 }, types: ['SUS', 'RET', 'APP', 'ANT'], learn: 'nct-2#suspension' },
         { id: 'nct-sing-2', title: 'Sing suspensions and retardations', engine: 'singNCT', keys: { mode: 'major', max: 4 }, types: ['SUS', 'RET'], learn: 'nct-2#suspension' },
-        { id: 'nct-read-all', title: 'Name any non-chord tone', engine: 'readNCT', keys: { mode: 'major', max: 5 }, types: NCT_ALL, learn: 'nct-1#labels' },
+        { id: 'nct-read-all', ex: 'IV.2.1–2', title: 'Name any non-chord tone', engine: 'readNCT', keys: { mode: 'major', max: 5 }, types: NCT_ALL, learn: 'nct-1#labels' },
         { id: 'nct-ear-2', title: 'Hear any non-chord tone', engine: 'earNCT', keys: { mode: 'major', max: 4 }, types: NCT_ALL, learn: 'nct-1#labels' },
       ],
     },
     {
-      id: 'u-sevenths', section: 'Non-Chord Tones & Seventh Chords', title: 'Seventh Chords', blurb: 'Five seventh-chord qualities by ear, on the staff, and sung.',
+      id: 'u-sevenths', murray: ['IV.3'], section: 'Non-Chord Tones & Seventh Chords', title: 'Seventh Chords', blurb: 'Five seventh-chord qualities by ear, on the staff, and sung.',
       lessons: [
         { id: 'learn-sevenths', title: 'Seventh chords', engine: 'learn', page: 'sevenths' },
         { id: 'ch-ear-7', title: 'Hear seventh chords', engine: 'earChord', types: ['dom7', 'maj7', 'min7', 'hdim7', 'dim7'], learn: 'sevenths#qualities' },
-        { id: 'ch-read-7', title: 'Read seventh chords', engine: 'readChord', types: ['dom7', 'maj7', 'min7', 'hdim7', 'dim7'], clefs: ['treble', 'bass'], learn: 'sevenths#qualities' },
-        { id: 'ch-read-7-inv', title: 'Read sevenths with inversions', engine: 'readChord', types: ['dom7', 'min7', 'hdim7'], inversions: true, clefs: ['treble', 'bass'], learn: 'sevenths#inversions' },
+        { id: 'ch-read-7', ex: 'IV.3.3–4', title: 'Read seventh chords', engine: 'readChord', types: ['dom7', 'maj7', 'min7', 'hdim7', 'dim7'], clefs: ['treble', 'bass'], learn: 'sevenths#qualities' },
+        { id: 'ch-read-7-inv', ex: 'IV.3.1–2', title: 'Read sevenths with inversions', engine: 'readChord', types: ['dom7', 'min7', 'hdim7'], inversions: true, clefs: ['treble', 'bass'], learn: 'sevenths#inversions' },
         { id: 'ch-sing-7', title: 'Sing seventh-chord arpeggios', engine: 'singChord', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'], chords: ['V7', 'ii7', 'IV7', 'vii7', 'I7'], learn: 'sevenths#qualities' },
       ],
     },
     {
-      id: 'u-sev4', section: 'Functional Harmony', title: 'Sevenths in Four Voices', blurb: 'The 7th steps down; the leading tone steps up.',
+      id: 'u-sev4', murray: ['V.1'], section: 'Functional Harmony', title: 'Sevenths in Four Voices', blurb: 'The 7th steps down; the leading tone steps up.',
       lessons: [
         { id: 'learn-sevenths-4v', title: 'Writing seventh chords in four voices', engine: 'learn', page: 'sevenths-4v' },
         { id: 'pw-spot-7', title: 'Find the error: resolving V7', engine: 'spotError', keys: { mode: 'major', max: 4 }, rules: ['sevRes', 'ltRes', 'par5', 'par8'], pairs: PW_SEVENTHS, learn: 'sevenths-4v#approach' },
@@ -235,20 +252,20 @@
       ],
     },
     {
-      id: 'u-harmony', section: 'Functional Harmony', title: 'Harmonic Function & Roman Numerals', blurb: 'Tonic, predominant, dominant: what each chord does, and how to label it.',
+      id: 'u-harmony', murray: ['V.2'], section: 'Functional Harmony', title: 'Harmonic Function & Roman Numerals', blurb: 'Tonic, predominant, dominant: what each chord does, and how to label it.',
       lessons: [
         { id: 'learn-function', title: 'Harmonic function and Roman numerals', engine: 'learn', page: 'function' },
-        { id: 'rn-read', title: 'Roman numerals: diatonic triads', engine: 'readNumeral', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'], chords: ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'], learn: 'function#numerals' },
-        { id: 'rn-read-inv', title: 'Roman numerals with inversions', engine: 'readNumeral', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'], chords: ['I', 'I6', 'I6/4', 'ii', 'ii6', 'IV', 'IV6', 'V', 'V6', 'V6/4', 'vi', 'vii°6'], learn: 'function#numerals' },
+        { id: 'rn-read', ex: 'V.2.3–4', title: 'Roman numerals: diatonic triads', engine: 'readNumeral', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'], chords: ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°'], learn: 'function#numerals' },
+        { id: 'rn-read-inv', ex: 'V.2.3–4', title: 'Roman numerals with inversions', engine: 'readNumeral', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'], chords: ['I', 'I6', 'I6/4', 'ii', 'ii6', 'IV', 'IV6', 'V', 'V6', 'V6/4', 'vi', 'vii°6'], learn: 'function#numerals' },
         { id: 'rn-read-7', title: 'Roman numerals: V7 and its inversions', engine: 'readNumeral', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'], chords: ['V7', 'V6/5', 'V4/3', 'V4/2', 'ii7', 'ii6/5'], learn: 'sevenths#inversions' },
         { id: 'rn-read-min', title: 'Roman numerals in minor', engine: 'readNumeral', keys: { mode: 'minor', max: 4 }, clefs: ['treble', 'bass'], chords: ['I', 'ii°6', 'III', 'IV', 'V', 'V7', 'VI', 'vii°'], learn: 'function#minor' },
-        { id: 'rm-motion', title: 'Progressive or retrogressive?', engine: 'rootMotion', ask: 'motion', keys: { mode: 'major', max: 4 }, chords: ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°6'], learn: 'function#root-motion' },
+        { id: 'rm-motion', ex: 'V.2.3–4', title: 'Progressive or retrogressive?', engine: 'rootMotion', ask: 'motion', keys: { mode: 'major', max: 4 }, chords: ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°6'], learn: 'function#root-motion' },
         { id: 'fn-read', title: 'Tonic, predominant or dominant?', engine: 'readNumeral', askFunction: true, keys: { mode: 'major', max: 3 }, clefs: ['treble', 'bass'], chords: ['I', 'I6', 'ii', 'ii6', 'IV', 'IV6', 'V', 'V6', 'V7', 'vii°6'], learn: 'function#categories' },
         { id: 'fn-dict', title: 'Hear the functions: T, PD, D', engine: 'dictation', functions: true, keys: { mode: 'major', max: 3 }, chords: ['I', 'I6', 'ii', 'ii6', 'IV', 'V', 'V7', 'I6/4'], length: [4, 6], learn: 'function#categories' },
       ],
     },
     {
-      id: 'u-cadences', section: 'Functional Harmony', title: 'Cadences', blurb: 'Authentic, half, Phrygian, plagal and deceptive cadences by ear.',
+      id: 'u-cadences', murray: ['V.3'], section: 'Functional Harmony', title: 'Cadences', blurb: 'Authentic, half, Phrygian, plagal and deceptive cadences by ear.',
       lessons: [
         { id: 'learn-cadences', title: 'Harmonic cadences', engine: 'learn', page: 'cadences' },
         { id: 'cad-ear-1', title: 'Hear cadences: authentic, half, plagal, deceptive', engine: 'earCadence', keys: { mode: 'major', max: 4 }, cadences: ['PAC', 'HC', 'PC', 'DC'], learn: 'cadences' },
@@ -258,7 +275,7 @@
       ],
     },
     {
-      id: 'u-primary', section: 'Harmonic Function', title: 'Primary Triads & Sevenths', blurb: 'I, IV and V, the dominant seventh, and the tonic and subdominant sevenths.',
+      id: 'u-primary', murray: ['VI.1', 'VI.2', 'VI.3'], section: 'Harmonic Function', title: 'Primary Triads & Sevenths', blurb: 'I, IV and V, the dominant seventh, and the tonic and subdominant sevenths.',
       lessons: [
         { id: 'pw-review', title: 'Partwriting review: find the error', engine: 'spotError', keys: { mode: 'major', max: 5 }, rules: ['range', 'spacing', 'noThird', 'ltDouble', 'par5', 'par8', 'ltRes', 'sevRes'], pairs: PW_TRIADS.concat(PW_DOMINANT, PW_SEVENTHS) },
         { id: 'dict-1', title: 'Dictation: I, IV, V', engine: 'dictation', keys: { mode: 'major', max: 3 }, chords: ['I', 'IV', 'V'], length: 4 },
@@ -266,7 +283,7 @@
       ],
     },
     {
-      id: 'u-mediant', section: 'Harmonic Function', title: 'The Submediant & Mediant', blurb: 'Adding vi and iii to the progression.',
+      id: 'u-mediant', murray: ['VIII.3'], section: 'Harmonic Function', title: 'The Submediant & Mediant', blurb: 'Adding vi and iii to the progression.',
       lessons: [
         { id: 'dict-2', title: 'Dictation: adding ii, vi and V7', engine: 'dictation', keys: { mode: 'major', max: 4 }, chords: ['I', 'ii', 'IV', 'V', 'V7', 'vi'], length: [4, 5] },
         { id: 'dict-36', title: 'Dictation with iii and vi', engine: 'dictation', keys: { mode: 'major', max: 4 }, chords: ['I', 'ii', 'iii', 'IV', 'V', 'V7', 'vi'], length: [5, 6] },
@@ -286,7 +303,7 @@
       ],
     },
     {
-      id: 'u-chromatic-harmony', section: 'Chromatic Harmony & Modulation', title: 'Secondary Dominants', blurb: 'Borrowed dominants and tonicization: fi goes to sol, te goes to la.',
+      id: 'u-chromatic-harmony', murray: ['X.1', 'X.2'], section: 'Chromatic Harmony & Modulation', title: 'Secondary Dominants', blurb: 'Borrowed dominants and tonicization: fi goes to sol, te goes to la.',
       lessons: [
         { id: 'sec-read', title: 'Read secondary dominants', engine: 'readNumeral', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'],
           chords: ['V', 'V7', 'V/V', 'V7/V', 'V/vi', 'V7/vi', 'V7/IV', 'V/ii', 'V7/ii'] },
@@ -357,5 +374,5 @@
     },
   ];
 
-  root.Curriculum = { UNITS: UNITS };
+  root.Curriculum = { UNITS: UNITS, MURRAY: MURRAY };
 })(this);

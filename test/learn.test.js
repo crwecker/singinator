@@ -31,6 +31,23 @@ check('lesson ids are unique', () => {
   lessons.forEach((l) => { assert(!seen[l.id], 'duplicate ' + l.id); seen[l.id] = 1; });
 });
 
+check('book refs: units name real Murray lessons, exercise sets sit inside their unit', () => {
+  Curriculum.UNITS.forEach((u) => {
+    (u.murray || []).forEach((r) => assert(Curriculum.MURRAY[r], u.id + ' ' + r));
+    u.lessons.filter((l) => l.ex).forEach((l) => {
+      assert(/^[IVX]+\.\d\.\d(–\d)?$/.test(l.ex), l.id + ' ' + l.ex);
+      assert((u.murray || []).some((r) => l.ex.startsWith(r + '.')), l.id + ' ' + l.ex + ' not in ' + u.id);
+    });
+  });
+});
+
+check('every engine in the course has a card tag', () => {
+  const src = fs.readFileSync(path.join(__dirname, '../js/main.js'), 'utf8');
+  const block = src.match(/ENGINE_LABEL = \{([\s\S]*?)\};/)[1];
+  const tagged = new Set([...block.matchAll(/(\w+):/g)].map((m) => m[1]).concat([...src.matchAll(/ENGINE_LABEL\.(\w+) =/g)].map((m) => m[1])));
+  lessons.forEach((l) => assert(tagged.has(l.engine), l.id + ' ' + l.engine));
+});
+
 check('every learn card opens a page, and every page has a card', () => {
   const cards = lessons.filter((l) => l.engine === 'learn');
   cards.forEach((l) => assert(L.find(l.page) && !L.find(l.page).section, l.id + ' -> ' + l.page));
