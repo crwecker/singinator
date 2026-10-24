@@ -73,6 +73,12 @@ Guidelines (a doubled third, diminished-triad doubling) are pointed out but don'
 
 Non-chord tones and suspensions are written into a given chord pair: an unaccented one on the half beat between the chords, or an accented one (appoggiatura, accented passing tone, suspension) by changing a note of the second chord and resolving it on the half beat after. The grader names what you actually wrote (by how it's approached and left, and for suspensions by the figure over the bass), then checks it against the task, the key, augmented leaps, new parallels and the resolved chord. **Beams and barlines** are tapped in between notes and graded by the beat. `test/write-check.html` makes sure the app's own model answers (and right beamings) always pass, that answers the book allows pass, and that common mistakes fail.
 
+### Real Bach chorales
+
+The **Bach** lessons use real phrases from Bach's chorale harmonizations, numbered as Murray's workbook numbers them (Breitkopf / Riemenschneider): name a marked non-chord tone in any voice, or give the Roman numeral or the figured bass of a marked chord. After each answer the whole phrase's analysis appears under the staff.
+
+The notes come from Craig Stuart Sapp's Humdrum edition of the 370 chorales (<https://github.com/craigsapp/bach-370-chorales>), licensed **CC BY-NC-SA 4.0**. `js/chorales.js` is derived from it and carries the same license: attribution, non-commercial use, share-alike. `js/chorale.js` analyzes each phrase by rule (the chord on each beat, then every other note by its contour) and only phrases it reads unambiguously are shipped: no chromatic chords, no chord change inside a beat, no two dissonances on one beat. `test/chorale.test.js` checks the analysis, including that Chorale 29's phrase matches Murray's own analysis in Example V.2.1.
+
 ## How it works
 
 - **Spelling-aware theory** (`theory.js`):
@@ -143,6 +149,8 @@ Visual checks:
 | `js/partwriting.js` | Four-part rule checker and error exercises (pure) |
 | `js/nct.js` | Non-chord tones in a soprano line (pure) |
 | `js/phrase.js` | Phrases, cadences and periods (pure) |
+| `js/chorale.js` | Analyzes real chorale phrases: chords, numerals, figures, non-chord tones (pure) |
+| `js/chorales.js` | Bach chorale phrases (data, CC BY-NC-SA 4.0, see above) |
 | `js/pitch.js` | YIN pitch detection (pure) |
 | `js/staff.js` | SVG staff: four clefs, key and time signatures, chords, rhythm, beams, ties |
 | `js/sound.js` | Web Audio playback, metronome, microphone input |
@@ -150,5 +158,5 @@ Visual checks:
 | `js/learn.js` | The Learn pages and what each missed answer links to, as data |
 | `js/learn-view.js` | Draws a Learn page with playable examples |
 | `js/app.js` | Shared services: progress, settings, pitch meter and listener, microphone handling |
-| `js/exercises*.js` | Exercise engines: core, harmony, scales and modes, modulation, rhythm, dictation, two-part, writing (phrases, counterpoint errors, partwriting, non-chord tones), book (workbook-style drills: figured bass, chord symbols, building chords, numerals and keys, approaching 7ths, cadences from the score), compose (the four-part and counterpoint writer and its grader) |
+| `js/exercises*.js` | Exercise engines: core, harmony, scales and modes, modulation, rhythm, dictation, two-part, writing (phrases, counterpoint errors, partwriting, non-chord tones), book (workbook-style drills: figured bass, chord symbols, building chords, numerals and keys, approaching 7ths, cadences from the score), compose (the four-part and counterpoint writer and its grader), fundamentals (Unit I–II writing: notes, intervals, scales, key signatures; meters; motion; invent a progression), chorale (the Bach analysis drills) |
 | `js/main.js` | Navigation, course map, settings, dev panel |

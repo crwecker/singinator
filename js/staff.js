@@ -170,9 +170,16 @@
         var mine = items.filter(function (it) { return it.stem === d; });
         if (!mine.length) return;
         var a = mine[0], b = mine[mine.length - 1];
+        if (a.whole) return;
         var sx = d === 'up' ? x + a.dx + 7.2 : x + a.dx - 7.2;
         var y1 = d === 'up' ? yFor(a.pos) : yFor(b.pos), y2 = d === 'up' ? yFor(b.pos) - 38 : yFor(a.pos) + 38;
         el('line', { x1: sx, x2: sx, y1: y1, y2: y2, class: 'stem', stroke: a.color || '#3b3355' }, g);
+        // eighths (flag 1) and sixteenths (flag 2) get flags at the stem's end
+        for (var f = 0; f < (a.flag || 0); f++) {
+          var fy = y2 + (d === 'up' ? 1 : -1) * f * 8;
+          var dir = d === 'up' ? 1 : -1;
+          el('path', { d: 'M ' + sx + ' ' + fy + ' c 2 ' + (dir * 8) + ' 10 ' + (dir * 10) + ' 7 ' + (dir * 22), fill: 'none', 'stroke-width': 2, stroke: a.color || '#3b3355' }, g);
+        }
       });
     } else if (!items[0].noStem) {
       var sx = stemUp ? x + 7.2 : x - 7.2;
@@ -205,6 +212,13 @@
         t.setAttribute('y', y - 3);
         last = null;
       } else last = { t: t, y: y, pos: it.pos };
+    });
+
+    // augmentation dots, nudged off a line into the space above
+    items.forEach(function (it) {
+      if (!it.dot) return;
+      var dy = it.pos % 2 === 0 ? -GAP / 2 : 0;
+      el('circle', { cx: x + it.dx + 13, cy: yFor(it.pos) + dy, r: 2.3, fill: it.color || '#3b3355' }, g);
     });
 
     var labels = items.filter(function (it) { return it.label; });
@@ -259,6 +273,11 @@
     byCol.forEach(function (items, c) {
       if (!items) return;
       drawColumn(svg, items, colX(c));
+    });
+    // opts.barsBefore: columns that start a new measure
+    (opts.barsBefore || []).forEach(function (c) {
+      var bx = (colX(c - 1) + colX(c)) / 2;
+      el('line', { x1: bx, x2: bx, y1: yFor(8), y2: yFor(0), class: 'staff-line barline' }, svg);
     });
     labelOnly.forEach(function (it) {
       var t = el('text', { x: colX(it.col), y: HEIGHT - 8, 'text-anchor': 'middle', class: 'note-label', fill: it.color || '#3b3355' }, svg);

@@ -228,6 +228,7 @@
         { id: 'fb-sharp', ex: 'III.2.3–4', title: 'Figured bass with ♯: the leading tone in minor', engine: 'figuredBass', keys: { mode: 'any', max: 5 }, figures: ['', '6', '\u266F', '\u266F', '\u266F6'], learn: 'connecting-1#figured-bass' },
         { id: 'wr-pair-45', ex: 'III.2.1–2', title: 'Write two chords a 4th or 5th apart', engine: 'writePair', keys: { mode: 'any', max: 4 }, pairs: PW_FIFTHS, learn: 'connecting-1#common-tone' },
         { id: 'wr-fb', ex: 'III.2.3–4', title: 'Realize a figured bass: two chords', engine: 'writePair', keys: { mode: 'any', max: 4 }, pairs: PW_TRIADS, given: 'bass', figures: true, learn: 'connecting-1#figured-bass' },
+        { id: 'bach-fig', ex: 'III.2.3–4', title: 'Bach: write the figured bass of a chord', engine: 'choraleAnalysis', ask: 'figures', learn: 'connecting-1#figured-bass' },
       ],
     },
     {
@@ -251,6 +252,7 @@
         { id: 'nct-read-2', ex: 'IV.1.1–2', title: 'Add appoggiaturas and escape tones', engine: 'readNCT', keys: { mode: 'major', max: 4 }, types: ['PT', 'NT', 'ANT', 'APP', 'ET'], learn: 'nct-1#labels' },
         { id: 'nct-ear-app', title: 'Hear appoggiaturas and escape tones', engine: 'earNCT', keys: { mode: 'major', max: 4 }, types: ['PT', 'NT', 'ANT', 'APP', 'ET'], learn: 'nct-1#labels' },
         { id: 'wr-nct', ex: 'IV.1.3–4', title: 'Write in a non-chord tone: p, n, ant, app', engine: 'writeNCT', keys: { mode: 'any', max: 4 }, types: ['PT', 'NT', 'ANT', 'APP', 'APT'], pairs: PW_TRIADS, learn: 'nct-1#identify' },
+        { id: 'bach-nct-1', ex: 'IV.1.1–2', title: 'Bach: name the marked note (p, n, ant)', engine: 'choraleAnalysis', ask: 'nct', types: ['PT', 'NT', 'ANT'], learn: 'nct-1#identify' },
       ],
     },
     {
@@ -263,6 +265,7 @@
         { id: 'nct-read-all', ex: 'IV.2.1–2', title: 'Name any non-chord tone', engine: 'readNCT', keys: { mode: 'major', max: 5 }, types: NCT_ALL, learn: 'nct-1#labels' },
         { id: 'nct-ear-2', title: 'Hear any non-chord tone', engine: 'earNCT', keys: { mode: 'major', max: 4 }, types: NCT_ALL, learn: 'nct-1#labels' },
         { id: 'wr-sus', ex: 'IV.2.3–4', title: 'Write in a suspension: 4–3, 7–6, 9–8, 2–3', engine: 'writeNCT', keys: { mode: 'major', max: 4 }, figures: ['4-3', '7-6', '9-8', '2-3'], pairs: PW_SUS, learn: 'nct-2#types' },
+        { id: 'bach-nct-2', ex: 'IV.2.1–2', title: 'Bach: suspensions and other non-chord tones', engine: 'choraleAnalysis', ask: 'nct', types: ['PT', 'NT', 'ANT', 'SUS'], learn: 'nct-2#suspension' },
       ],
     },
     {
@@ -303,6 +306,7 @@
         { id: 'nk-key', ex: 'V.2.1–2', title: 'One chord, many keys: d is iv in…?', engine: 'numeralKey', ask: 'key', keys: { mode: 'any', max: 5 }, learn: 'function#many-keys' },
         { id: 'rm-motion', ex: 'V.2.3–4', title: 'Progressive or retrogressive?', engine: 'rootMotion', ask: 'motion', keys: { mode: 'major', max: 4 }, chords: ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°6'], learn: 'function#root-motion' },
         { id: 'prog-invent', ex: 'V.2.3–4', title: 'Invent a progression: mostly progressive', engine: 'inventProgression', keys: { mode: 'major', max: 4 }, length: 8, max: 10, learn: 'function#root-motion' },
+        { id: 'bach-rn', ex: 'V.2.3–4', title: 'Bach: Roman numerals in a real chorale', engine: 'choraleAnalysis', ask: 'numeral', learn: 'function#numerals' },
         { id: 'fn-read', title: 'Tonic, predominant or dominant?', engine: 'readNumeral', askFunction: true, keys: { mode: 'major', max: 3 }, clefs: ['treble', 'bass'], chords: ['I', 'I6', 'ii', 'ii6', 'IV', 'IV6', 'V', 'V6', 'V7', 'vii°6'], learn: 'function#categories' },
         { id: 'fn-dict', title: 'Hear the functions: T, PD, D', engine: 'dictation', functions: true, keys: { mode: 'major', max: 3 }, chords: ['I', 'I6', 'ii', 'ii6', 'IV', 'V', 'V7', 'I6/4'], length: [4, 6], learn: 'function#categories' },
       ],

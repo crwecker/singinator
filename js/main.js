@@ -19,7 +19,7 @@
     figuredBass: 'Read', buildChord: 'Read', readSymbol: 'Read', numeralKey: 'Read', sevenApproach: 'Read', readCadence: 'Read',
     writeChord: 'Write', writePair: 'Write', writeCounterpoint: 'Write',
     writeNCT: 'Write', writeSeventh: 'Write', beamRhythm: 'Rhythm',
-    writeNote: 'Write', writeKeySig: 'Write', meterType: 'Read', motionType: 'Read', inventProgression: 'Write',
+    writeNote: 'Write', writeKeySig: 'Write', choraleAnalysis: 'Bach', meterType: 'Read', motionType: 'Read', inventProgression: 'Write',
     earPhrase: 'Ear', readPeriod: 'Read', earPeriod: 'Ear', singConsequent: 'Sing', cpError: 'Read',
     spotError: 'Read', singVoice: 'Sing', readNCT: 'Read', earNCT: 'Ear', singNCT: 'Sing', learn: 'Learn',
   };
