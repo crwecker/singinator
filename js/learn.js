@@ -45,6 +45,16 @@
             '<tr><td>° or +</td><td><b>°</b> is <b>diminished</b> (lowercase, minor 3rd + diminished 5th). <b>+</b> is <b>augmented</b> (uppercase, major 3rd + augmented 5th)</td><td>vii°, ii° in minor; III+</td></tr>' +
             '<tr><td>Figures after it</td><td>the <b>inversion</b>: which chord member is in the bass. No figure is root position</td><td>6 = third in the bass; 6/4 = fifth in the bass</td></tr></table>' +
             '<p>So <b>vii°6</b> reads: the chord built on ti (vii), diminished (°), with its third in the bass (6). In C major that is B–D–F with D in the bass.</p>' +
+            '<p><b>Letter-name symbols.</b> Before you know the key, name a chord by its root’s letter. The workbook does this throughout, with the same case and figure conventions:</p>' +
+            '<table class="learn-table"><tr><th>Symbol</th><th>Means</th><th>Notes</th></tr>' +
+            '<tr><td>G</td><td>G major, root position</td><td>G–B–D, G in the bass</td></tr>' +
+            '<tr><td>g</td><td>G minor, root position</td><td>G–B♭–D</td></tr>' +
+            '<tr><td>G+</td><td>G augmented</td><td>G–B–D♯</td></tr>' +
+            '<tr><td>g°</td><td>G diminished</td><td>G–B♭–D♭</td></tr>' +
+            '<tr><td>F♯6</td><td>F♯ major, first inversion</td><td>F♯–A♯–C♯, A♯ in the bass</td></tr>' +
+            '<tr><td>c6/4</td><td>C minor, second inversion</td><td>C–E♭–G, G in the bass</td></tr>' +
+            '<tr><td>f♯°6</td><td>F♯ diminished, first inversion</td><td>F♯–A–C, A in the bass</td></tr></table>' +
+            '<p>A Roman numeral adds the key: C6 is <b>IV6</b> in G, <b>I6</b> in C and <b>V6</b> in F. The letter says what the chord is; the numeral says what it does.</p>' +
             '<p>Seventh chords add a 7 and have their own inversion figures: <b>7</b> (root position), <b>6/5</b> (third in the bass), <b>4/3</b> (fifth in the bass), <b>4/2</b> (seventh in the bass). V7 is the dominant seventh: sol–ti–re–fa. See <a href="#" data-learn="sevenths#inversions">Seventh Chords</a>.</p>' +
             '<p>The figures come from <b>figured bass</b>: they are the intervals above the bass note. A first-inversion chord has a 6th above its bass (and a 3rd, so its full figure is 6/3, shortened to 6). Under every example on these pages is a line that spells out each symbol.</p>',
           examples: [{ key: 'C', chords: ['I', 'ii6', 'V7', 'vi', 'IV', 'vii°6', 'I'], caption: 'Read each symbol, then check the line below the staff', beat: 0.9 }],
@@ -145,7 +155,9 @@
             '<table class="learn-table"><tr><th>Roots</th><th>Common tones</th><th>Example in C</th></tr>' +
             '<tr><td>4th / 5th apart</td><td>1</td><td>C–G (I–V): G is shared</td></tr>' +
             '<tr><td>3rd / 6th apart</td><td>2</td><td>C–A (I–vi): C and E are shared</td></tr>' +
-            '<tr><td>2nd / 7th apart</td><td>none</td><td>F–G (IV–V)</td></tr></table>',
+            '<tr><td>2nd / 7th apart</td><td>none</td><td>F–G (IV–V)</td></tr></table>' +
+            '<p>To find the relationship, name both roots (not the bass notes) and count the letters between them: C up to G is C-D-E-F-G, a 5th. D6 has F♯ in the bass, but its root is still D.</p>' +
+            '<p class="why"><b>Why it matters:</b> the number of common tones tells you how much can stay put. Two shared notes nearly write the connection for you; none means every voice has to move, and that is where parallels hide.</p>',
           examples: [{ key: 'G', chords: ['I', 'V6', 'I', 'V'], caption: 'I–V6: the basses are a step apart, but the roots (G, D) are a 5th apart' }],
         },
         {
@@ -154,7 +166,14 @@
             '<ol><li><b>Hold the common tone</b> in the same voice.</li>' +
             '<li>Move the other two upper voices <b>by step</b> to the nearest chord tones.</li>' +
             '<li>If both chords are in root position, the bass leaps (a 4th or 5th) and everything else is a step or a held note. Double the root in both chords.</li></ol>' +
-            '<p>Sometimes the smoothest path doubles the fifth instead of the root. Smooth lines can outweigh the first-choice doubling.</p>',
+            '<div class="rule guide"><b>Guideline.</b> Move every voice the <b>shortest possible distance</b>: hold common tones, step to the rest. Only the bass should leap.' +
+            '<p class="why"><b>Why:</b> small moves keep each line singable and the texture smooth, and they make parallels much less likely.</p></div>' +
+            '<p>Sometimes the smoothest path doubles the fifth instead of the root. In the book’s Bach example, the D6 after G doubles its fifth so the alto can keep the common tone. Smooth lines can outweigh the first-choice doubling.</p>' +
+            '<p><b>Writing a connection, step by step:</b></p>' +
+            '<ol><li>Write both bass notes.</li><li>Find the common tone(s) and keep each in the same voice.</li>' +
+            '<li>Move each remaining upper voice to the nearest note of the new chord.</li>' +
+            '<li>Check the new chord: third present, good doubling, spacing, no crossing.</li>' +
+            '<li>Check the motion: all six pairs of voices for parallel 5ths and octaves.</li></ol>',
           examples: [{ key: 'G', chords: ['I', 'IV', 'V', 'I'], caption: 'Common tones held; only the bass leaps' }],
         },
         {
@@ -164,7 +183,15 @@
             '<li><b>No figure</b> means a root-position triad (5/3).</li>' +
             '<li><b>6</b> (short for 6/3) is a first-inversion triad; <b>6/4</b> is second inversion.</li>' +
             '<li>An accidental beside a figure raises or lowers that interval by a half step. A <b>slash</b> through a figure raises it.</li>' +
-            '<li>An accidental <b>by itself</b> applies to the <b>3rd</b> above the bass. In minor, ♯ alone under V gives you the leading tone.</li></ul>',
+            '<li>An accidental <b>by itself</b> applies to the <b>3rd</b> above the bass. In minor, ♯ alone under V gives you the leading tone.</li>' +
+            '<li>Accidentals in figures mean “raise” or “lower”, not always the literal sign: a ♮ on a note that is flat in the key signature raises it.</li></ul>' +
+            '<p><b>Reading a figure, step by step.</b> Take the bass B with a 6 in C major. A 6th above B is G and a 3rd above is D, so the chord is G–B–D with B in the bass: G major in first inversion, <b>G6</b> (V6 in C). The same bass with no figure is B–D–F, <b>b°</b>.</p>' +
+            '<table class="learn-table"><tr><th>Figure</th><th>Notes above the bass</th><th>Chord</th></tr>' +
+            '<tr><td>(none) or 5/3</td><td>a 3rd and a 5th</td><td>root position: the bass is the root</td></tr>' +
+            '<tr><td>6 (6/3)</td><td>a 3rd and a 6th</td><td>first inversion: the root is a 6th above the bass</td></tr>' +
+            '<tr><td>6/4</td><td>a 4th and a 6th</td><td>second inversion: the root is a 4th above the bass</td></tr>' +
+            '<tr><td>♯ (alone)</td><td>a raised 3rd and a 5th</td><td>root position with the 3rd raised</td></tr>' +
+            '<tr><td>♯6</td><td>a 3rd and a raised 6th</td><td>first inversion with the 6th raised</td></tr></table>',
         },
       ],
     },
@@ -175,7 +202,8 @@
       sections: [
         {
           id: 'thirds', title: 'Roots a 3rd apart',
-          html: '<p>Two common tones. Hold <b>both</b> in the same voices, and move the one remaining upper voice by step.</p>',
+          html: '<p>Two common tones. Hold <b>both</b> in the same voices, and move the one remaining upper voice by step. In C, I to vi keeps C and E and moves G up to A; vi to IV keeps A and C and moves E up to F.</p>' +
+            '<p class="why"><b>Why:</b> with two notes held, only one upper voice moves, and it moves by step. There is almost no way to make parallels, and the change sounds smooth because most of the sound stays.</p>',
           examples: [{ key: 'G', chords: ['I', 'vi', 'IV'], caption: 'I–vi–IV: two notes hold at each change' }],
         },
         {
@@ -189,7 +217,9 @@
           html: '<p>No common tones, and every voice moving the same way is a recipe for parallels. With both chords in root position:</p>' +
             '<div class="rule">Move the <b>three upper voices in contrary motion to the bass</b>: bass up, upper voices down (or the reverse).' +
             '<p class="why"><b>Why:</b> the bass moves by step, say F to G. The voice doubling its root would follow it a step up, F to G, and make parallel octaves with the bass. The voice on its fifth would go C to D, parallel 5ths. Moving down against the bass prevents both.</p></div>' +
-            '<p>With an inversion, full contrary motion isn’t always possible. Aim for the smoothest connection that avoids bad spacing, bad doubling and parallel perfect intervals. Doubling the fifth is a good escape.</p>',
+            '<p>With an inversion, full contrary motion isn’t always possible. Aim for the smoothest connection that avoids bad spacing, bad doubling and parallel perfect intervals.</p>' +
+            '<div class="rule guide"><b>The escape: double the fifth.</b> If every way to double the root makes parallels, double the fifth instead.' +
+            '<p class="why"><b>Why:</b> doubling the fifth is the second choice of doubling, but parallel 5ths and octaves are a rule. A weaker doubling beats a broken rule.</p></div>',
           examples: [
             { key: 'G', chords: ['IV', 'V6'], voices: [['C3', 'C4', 'G4', 'E5'], ['F#2', 'D4', 'A4', 'D5']], mark: [[0, 1], [0, 2], [1, 1], [1, 2]],
               caption: 'Wrong: parallel 5ths between tenor and alto' },
@@ -218,16 +248,35 @@
           html: '<ul><li>A non-chord tone (NCT) usually sits <b>between two chord tones</b>, and the chord tone after it <b>resolves</b> the dissonance.</li>' +
             '<li>Most are approached and left by <b>step</b> (or by repeating a note). A note you leap to or from tends to sound like a chord tone, so leaps are rarer.</li>' +
             '<li>Most fall <b>off the beat</b> (unaccented). Accented NCTs, on the beat, are common too.</li>' +
-            '<li>Deciding which notes belong to the chord is partly a matter of ear, and musicians sometimes disagree.</li></ul>',
+            '<li>Deciding which notes belong to the chord is partly a matter of ear, and musicians sometimes disagree.</li></ul>' +
+            '<p class="why"><b>Why composers use them:</b> chord tones alone make blocky, hymn-like lines. Non-chord tones fill the gaps between chord tones, so each voice becomes a real melody and the rhythm gets livelier.</p>',
+        },
+        {
+          id: 'identify', title: 'Naming one, step by step',
+          html: '<ol><li><b>Is it in the chord?</b> Spell the chord sounding with the note. If the note is one of its members, it is a chord tone, not an NCT.</li>' +
+            '<li><b>How does the line get to it?</b> By step, by leap, or by repeating (holding) a note.</li>' +
+            '<li><b>How does the line leave it?</b> By step, by leap, or by repeating a note.</li>' +
+            '<li><b>Same direction or a turn?</b> In and out by step in one direction is a passing tone; out and back is a neighbor.</li>' +
+            '<li><b>On the beat or off?</b> Most are off the beat. On the beat, say “accented” (an accented passing tone). An NCT held over from the last chord, on the beat, is a suspension.</li></ol>' +
+            '<table class="learn-table"><tr><th>In</th><th>Out</th><th>Name</th></tr>' +
+            '<tr><td>step</td><td>step, same direction</td><td>passing (p)</td></tr>' +
+            '<tr><td>step</td><td>step back</td><td>neighbor (n)</td></tr>' +
+            '<tr><td>step</td><td>repeated (the next chord catches up)</td><td>anticipation (ant)</td></tr>' +
+            '<tr><td>leap</td><td>step, other direction</td><td>appoggiatura (app)</td></tr>' +
+            '<tr><td>step</td><td>leap, other direction</td><td>escape tone (e)</td></tr>' +
+            '<tr><td>held from the last chord</td><td>step down</td><td>suspension (s)</td></tr>' +
+            '<tr><td>held from the last chord</td><td>step up</td><td>retardation (ret)</td></tr></table>',
         },
         {
           id: 'passing', title: 'Passing tone (p)',
-          html: '<p>Step in, step on in the <b>same direction</b>. It fills the gap of a 3rd between two chord tones (mi–<b>fa</b>–sol). On the beat it’s an accented passing tone.</p>',
+          html: '<p>Step in, step on in the <b>same direction</b>. It fills the gap of a 3rd between two chord tones (mi–<b>fa</b>–sol). On the beat it’s an accented passing tone. Two in a row can fill a 4th (sol–<b>fa–mi</b>–re).</p>' +
+            '<p class="why"><b>Don’t confuse it with:</b> a neighbor. If the line turns around after the note, it isn’t passing.</p>',
           examples: [{ key: 'C', nct: 'PT' }],
         },
         {
           id: 'neighbor', title: 'Neighbor tone (n)',
-          html: '<p>Step away and <b>step back</b> to the same note (sol–<b>la</b>–sol, or sol–<b>fa</b>–sol). Upper and lower neighbors in a row, around one chord tone, are <b>double neighbors</b> (dn), also called changing tones.</p>',
+          html: '<p>Step away and <b>step back</b> to the same note (sol–<b>la</b>–sol, or sol–<b>fa</b>–sol). Upper and lower neighbors in a row, around one chord tone, are <b>double neighbors</b> (dn), also called changing tones.</p>' +
+            '<p class="why"><b>Hear it as:</b> a decoration of one note. Take the neighbor away and the line just repeats.</p>',
           examples: [{ key: 'C', nct: 'NT' }],
         },
         {
@@ -237,7 +286,8 @@
         },
         {
           id: 'appoggiatura', title: 'Appoggiatura (app)',
-          html: '<p><b>Leap in, step out</b> the other way. It is usually accented: a leap up to a dissonance that then steps down to the chord tone.</p>',
+          html: '<p><b>Leap in, step out</b> the other way. It is usually accented: a leap up to a dissonance that then steps down to the chord tone.</p>' +
+            '<p class="why"><b>Why it’s rarer:</b> the ear tends to hear a note you leap to as a chord tone. An appoggiatura works because it lands on the beat and leans clearly into its resolution.</p>',
           examples: [{ key: 'C', nct: 'APP' }],
         },
         {
@@ -273,7 +323,8 @@
           html: '<ol><li><b>Preparation</b>: a consonant chord tone in the first chord.</li>' +
             '<li><b>Suspension</b>: the same note, held or repeated into the next chord, where it is dissonant. It falls <b>on the beat</b>.</li>' +
             '<li><b>Resolution</b>: a step <b>down</b> to a chord tone, on a weaker part of the beat.</li></ol>' +
-            '<p>All three must be in the <b>same voice</b>. Only the middle note is a non-chord tone, so it is the one you circle (s).</p>',
+            '<p>All three must be in the <b>same voice</b>. Only the middle note is a non-chord tone, so it is the one you circle (s).</p>' +
+            '<p class="why"><b>Why it’s expressive:</b> the dissonance lands on the strong beat, and the ear waits for it to resolve. An anticipation is a note that comes early; a suspension is a chord tone that comes late.</p>',
           examples: [{ key: 'C', nct: 'SUS' }],
         },
         {
@@ -284,11 +335,13 @@
             '<tr><td>7–6</td><td>a 7th falls to a 6th (usually over a first-inversion chord)</td></tr>' +
             '<tr><td>9–8</td><td>a 9th falls to an octave (2–1 when it’s within the octave)</td></tr>' +
             '<tr><td>2–3</td><td>a suspension in the <b>bass</b>: the bass falls, so the interval above it grows from a 2nd to a 3rd</td></tr></table>' +
-            '<p>Because figures measure from the bass, a 4–3 can resolve to the chord’s third (root position) or to its fifth (first inversion).</p>',
+            '<p>Because figures measure from the bass, a 4–3 can resolve to the chord’s third (root position) or to its fifth (first inversion).</p>' +
+            '<p><b>Naming one:</b> count from the bass up to the suspended note, then to its resolution. Reduce compound intervals to within the octave (an 11th counts as a 4th), except the 9–8, which keeps its 9 so you can tell it from a 2–1.</p>' +
+            '<p class="why"><b>Why the 2–3 is always in the bass:</b> in every other type the upper voice falls and the interval shrinks (4 to 3, 7 to 6). When the bass falls, the interval above it grows, from a 2nd to a 3rd.</p>',
         },
         {
           id: 'doubling', title: 'Writing suspensions',
-          html: '<ul><li>Don’t double the <b>note of resolution</b> in another voice. It weakens the resolution, and on the beat it clashes with the suspension.</li>' +
+          html: '<ul><li>Don’t double the <b>note of resolution</b> in another voice. It weakens the resolution, and on the beat it clashes with the suspension. The exception is the 9–8, which by its nature resolves to the bass note’s octave.</li>' +
             '<li>Imagine the complete chord on the beat, even though one of its notes arrives late.</li>' +
             '<li>Suspension figures already show the inversion (7–6 means a 6 chord), so you don’t write a separate 6.</li></ul>',
         },
@@ -311,7 +364,12 @@
             '<tr><td>3rd</td><td>first inversion</td><td>6 5 3</td><td>6/5</td></tr>' +
             '<tr><td>5th</td><td>second inversion</td><td>6 4 3</td><td>4/3</td></tr>' +
             '<tr><td>7th</td><td>third inversion</td><td>6 4 2</td><td>4/2</td></tr></table>' +
-            '<p>Use “7” <b>only for root position</b>. An inverted seventh chord has no 7th above its bass.</p>',
+            '<p>Use “7” <b>only for root position</b>. An inverted seventh chord has no 7th above its bass.</p>' +
+            '<p><b>Naming one, step by step:</b></p>' +
+            '<ol><li>Rearrange the notes into a stack of 3rds. The bottom note of the stack is the <b>root</b>.</li>' +
+            '<li>See which chord member is in the bass: root (7), third (6/5), fifth (4/3) or seventh (4/2).</li>' +
+            '<li>Measure the 3rds of the stack to find the quality (below).</li></ol>' +
+            '<p class="why"><b>Tip:</b> in an inverted seventh chord, look for the 2nd between two notes. The upper note of that 2nd is the root, and the lower note is the 7th.</p>',
           examples: [{ key: 'C', chords: ['V7', 'I', 'V6/5', 'I', 'V4/3', 'I', 'V4/2', 'I6'], caption: 'V7 in each position, each resolving to I', beat: 0.75 }],
         },
         {
@@ -323,7 +381,12 @@
             '<tr><td>Minor 7th</td><td>minor–minor</td><td>m3 M3 m3</td><td>f7</td></tr>' +
             '<tr><td>Half-diminished 7th</td><td>diminished–minor</td><td>m3 m3 M3</td><td>fø7</td></tr>' +
             '<tr><td>Fully diminished 7th</td><td>diminished–diminished</td><td>m3 m3 m3</td><td>f°7</td></tr></table>' +
-            '<p>In a key: IM7 and IVM7 are major 7ths; V7 is the dominant 7th; ii7, iii7 and vi7 are minor 7ths; viiø7 in major is half-diminished; vii°7 in minor is fully diminished.</p>',
+            '<p><b>Letter-name symbols</b> (the workbook’s key): <b>GM7</b> major 7th, <b>G7</b> dominant 7th, <b>g7</b> minor 7th, <b>gø7</b> half-diminished, <b>g°7</b> fully diminished. Upper or lower case gives the triad (major, or minor/diminished); the sign after it gives the 7th.</p>' +
+            '<table class="learn-table"><tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr>' +
+            '<tr><td>Major</td><td>IM7</td><td>ii7</td><td>iii7</td><td>IVM7</td><td>V7</td><td>vi7</td><td>viiø7</td></tr>' +
+            '<tr><td>Minor</td><td>i7</td><td>iiø7</td><td>IIIM7</td><td>iv7</td><td>V7</td><td>VIM7</td><td>vii°7</td></tr></table>' +
+            '<p>Only one chord in each key is a dominant 7th: <b>V7</b>. In minor it needs the raised leading tone, and so does vii°7.</p>' +
+            '<p class="why"><b>Why spell by 3rds:</b> memorize which 3rds are major (four half steps) and minor (three), and you can build or name any chord without memorizing chords.</p>',
           examples: [{ key: 'C', labels: ['FM7', 'F7', 'f7', 'fø7', 'f°7'],
             voices: [['F2', 'A3', 'C4', 'E4'], ['F2', 'A3', 'C4', 'Eb4'], ['F2', 'Ab3', 'C4', 'Eb4'], ['F2', 'Ab3', 'Cb4', 'Eb4'], ['F2', 'Ab3', 'Cb4', 'Ebb4']],
             caption: 'The five qualities built on F', beat: 1.2 }],
@@ -347,21 +410,30 @@
             '<li><b>passing</b>: it steps in from above (sol–fa–mi);</li>' +
             '<li><b>neighbor</b>: it steps up from its resolution note and back down;</li>' +
             '<li><b>appoggiatura</b>: it is leapt to, then resolves down (the least smooth; use sparingly).</li></ul>',
-          examples: [{ key: 'C', chords: ['I', 'ii6/5', 'V', 'I'], caption: 'ii6/5’s 7th (do) is held from I, then steps down to ti' },
-            { key: 'C', chords: ['I', 'IV', 'V7', 'I'], caption: 'V7’s 7th (fa) falls to mi' }],
+          examples: [
+            { key: 'C', chords: ['I', 'ii6/5', 'V', 'I'], caption: 'Like a suspension: ii6/5’s 7th (do) is held from I, then steps down to ti' },
+            { key: 'C', chords: ['V', 'V7', 'I'], voices: [['G2', 'B3', 'D4', 'G4'], ['G2', 'B3', 'D4', 'F4'], ['C3', 'C4', 'C4', 'E4']], mark: [[1, 3]],
+              caption: 'Like a passing tone: sol–fa–mi in the soprano' },
+            { key: 'C', chords: ['I', 'V4/3', 'I'], voices: [['C3', 'G3', 'E4', 'C5'], ['D3', 'G3', 'F4', 'B4'], ['C3', 'G3', 'E4', 'C5']], mark: [[1, 2]],
+              caption: 'Like a neighbor: mi–fa–mi in the alto' },
+            { key: 'C', chords: ['I6', 'V4/3', 'I'], voices: [['E3', 'C4', 'G4', 'C5'], ['D3', 'B3', 'G4', 'F5'], ['C3', 'C4', 'G4', 'E5']], mark: [[1, 3]],
+              caption: 'Like an appoggiatura: the soprano leaps up to fa, then falls to mi' },
+          ],
         },
         {
           id: 'doubling', title: 'Leaving out the fifth',
           html: '<p>A seventh chord already has four notes, so normally nothing is doubled. But:</p>' +
             '<ul><li>In <b>dominant, major and minor 7ths</b> you may <b>leave out the fifth and double the root</b>. Their fifth is a perfect 5th, already strong in the root’s overtones, so you hardly miss it.</li>' +
             '<li><b>Half- and fully diminished 7ths</b> need their (diminished) fifth: keep all four notes.</li>' +
-            '<li>Never double the 7th or the leading tone.</li></ul>',
+            '<li>Never double the 7th or the leading tone.</li></ul>' +
+            '<p class="why"><b>Why the fifth can go:</b> a perfect 5th is already strong in the root’s overtones, so the chord sounds nearly the same without it. A diminished 5th is not; leave it out and the chord loses its identity.</p>',
         },
         {
           id: 'tritone', title: 'Resolving the tritone in V7',
           html: '<p>The 3rd and 7th of V7 (<b>ti</b> and <b>fa</b>) form a tritone, the chord’s engine. Resolve it according to its spelling:</p>' +
             '<ul><li>a <b>diminished 5th</b> (ti below fa) resolves <b>inward</b> to a 3rd: ti–do, fa–mi;</li>' +
             '<li>an <b>augmented 4th</b> (fa below ti) resolves <b>outward</b> to a 6th.</li></ul>' +
+            '<p class="why"><b>Why:</b> the tritone is what makes V7 restless. Each of its notes is a half step from a note of the tonic triad (ti–do, fa–mi), and moving both by that half step is what makes the resolution sound inevitable.</p>' +
             '<p>Root-position V7 to root-position I can’t resolve every tendency tone and keep complete chords, so one chord loses its fifth: either an incomplete V7 (root doubled) goes to a complete I, or a complete V7 goes to an incomplete I with a tripled root.</p>',
           examples: [
             { key: 'C', chords: ['V6/5', 'I'], voices: [['B2', 'G3', 'D4', 'F4'], ['C3', 'G3', 'C4', 'E4']], mark: [[0, 0], [0, 3], [1, 0], [1, 3]],
@@ -389,13 +461,24 @@
             '<tr><td>4</td><td>subdominant</td><td>IV</td><td>iv</td></tr>' +
             '<tr><td>5</td><td>dominant</td><td>V</td><td>V</td></tr>' +
             '<tr><td>6</td><td>submediant</td><td>vi</td><td>VI</td></tr>' +
-            '<tr><td>7</td><td>leading tone</td><td>vii°</td><td>vii°</td></tr></table>',
+            '<tr><td>7</td><td>leading tone</td><td>vii°</td><td>vii°</td></tr></table>' +
+            '<p class="why"><b>Why numerals:</b> a letter name (C6) says what a chord is. A numeral says what it does, and that stays the same in every key: V goes to I in C, in A♭ and in f♯ minor.</p>',
           examples: [{ key: 'G', chords: ['I', 'IV6', 'V', 'IV6', 'I', 'V', 'I'], caption: 'I–IV6–V–IV6–I–V–I' }],
         },
         {
           id: 'minor', title: 'Chords in minor',
           html: '<p>Minor borrows from two forms of the scale. The <b>dominant</b> and <b>leading-tone</b> chords use the raised 7th (the leading tone: <b>ti</b> with do-based minor, <b>si</b> with la-based), so V is major and vii° diminished. The <b>mediant</b> keeps the lowered 7th (the subtonic), so III is major.</p>',
           examples: [{ key: 'A minor', chords: ['I', 'III', 'VI', 'IV', 'vii°6', 'I', 'V', 'I'], caption: 'i–III–VI–iv–vii°6–i–V–i' }],
+        },
+        {
+          id: 'many-keys', title: 'One chord, many keys',
+          html: '<p>Every triad belongs to several keys, with a different numeral in each. In minor, use the usual qualities: <b>i, ii°, III, iv, V, VI, vii°</b>.</p>' +
+            '<table class="learn-table"><tr><th>Chord</th><th>Its keys and numerals</th></tr>' +
+            '<tr><td>d (D minor)</td><td>d: i · a: iv · C: ii · B♭: iii · F: vi</td></tr>' +
+            '<tr><td>F (F major)</td><td>F: I · C: IV · B♭: V · d: III · b♭: V · a: VI</td></tr>' +
+            '<tr><td>b° (B diminished)</td><td>C: vii° · a: ii° · c: vii°</td></tr></table>' +
+            '<p><b>Finding them:</b> a major triad can be I, IV or V in a major key, and III, V or VI in a minor key. A minor triad can be ii, iii or vi in major, and i or iv in minor. A diminished triad is vii° in major, or ii° or vii° in minor. For each slot, count down from the root to find the tonic.</p>' +
+            '<p class="why"><b>Why it matters:</b> this is how a chord can pivot from one key to another in a modulation, and how you work out the key of a passage from its chords.</p>',
         },
         {
           id: 'tendency', title: 'Stability and tendency',
@@ -421,7 +504,8 @@
             '<tr><td>down a 5th / up a 4th: the strongest</td><td>up a 5th / down a 4th</td></tr>' +
             '<tr><td>up a 2nd</td><td>down a 2nd</td></tr>' +
             '<tr><td>down a 3rd</td><td>up a 3rd</td></tr></table>' +
-            '<p>Retrogressive motion happens in real music, but it gives little sense of direction. Avoid it near the beginning and end of a phrase.</p>',
+            '<p>Retrogressive motion happens in real music, but it gives little sense of direction. Avoid it near the beginning and end of a phrase.</p>' +
+            '<p class="why"><b>Why down a 5th is strongest:</b> the root of the first chord becomes the fifth of the next, so the first chord sounds like the second one’s dominant. V–I is the model; every falling 5th echoes it.</p>',
           examples: [{ key: 'G', chords: ['I', 'IV', 'vii°6', 'iii', 'vi', 'ii', 'V', 'I'], caption: 'Every root falls a 5th: the circle of fifths', beat: 0.75 }],
         },
         {
@@ -442,12 +526,25 @@
       intro: 'A melody ends a phrase either <b>finally</b> (on do) or <b>non-finally</b> (anywhere else). The harmony under those last notes makes a <b>harmonic cadence</b>, named for the last two chords.',
       sections: [
         {
+          id: 'melodic', title: 'Final and non-final',
+          html: '<p>Sing the last two notes of a phrase’s melody. A <b>final</b> ending, such as re–do (2–1) or ti–do (7–1), sounds closed. A <b>non-final</b> ending, such as do–ti (8–7) or re–mi, leaves you waiting for more.</p>' +
+            '<p>The harmony underneath makes the ending stronger or weaker. Re–do over V–I, with the bass going sol–do, is as final as music gets: the melody and the bass resolve together.</p>',
+        },
+        {
           id: 'authentic', title: 'Authentic: PA and IA',
           html: '<p>Dominant to tonic. It is a <b>perfect authentic</b> cadence (PA) only when all three are true:</p>' +
             '<ol><li>the chords are V (or V7) and I, <b>both in root position</b> (bass sol–do);</li>' +
             '<li>the soprano ends on <b>do</b>;</li>' +
             '<li>it’s V, not vii°.</li></ol>' +
-            '<p>Anything else from dominant to tonic is an <b>imperfect authentic</b> cadence (IA): an inverted chord, vii° in place of V, or a soprano ending on mi or sol. In this app’s ear training an IA is V–I with the soprano on mi.</p>',
+            '<p>Anything else from dominant to tonic is an <b>imperfect authentic</b> cadence (IA): an inverted chord, vii° in place of V, or a soprano ending on mi or sol. In this app’s ear training an IA is V–I with the soprano on mi.</p>' +
+            '<table class="learn-table"><tr><th>Chords</th><th>Soprano</th><th>Cadence</th></tr>' +
+            '<tr><td>V – I</td><td>2–1 (re–do)</td><td>PA</td></tr>' +
+            '<tr><td>V – i</td><td>7–8 (ti–do)</td><td>PA</td></tr>' +
+            '<tr><td>V – I</td><td>5–3 (sol–mi)</td><td>IA: ends on mi</td></tr>' +
+            '<tr><td>V – I</td><td>2–3 (re–mi)</td><td>IA: ends on mi</td></tr>' +
+            '<tr><td>V6 – I</td><td>2–1</td><td>IA: V is inverted</td></tr>' +
+            '<tr><td>vii°6 – I</td><td>any</td><td>IA: leading-tone chord</td></tr></table>' +
+            '<p class="why"><b>Why the soprano matters:</b> the soprano is the line everyone hears. If it stops on mi or sol, the harmony has arrived home but the melody hasn’t.</p>',
           examples: [{ key: 'F', chords: ['I', 'IV', 'V', 'I'], end: 0, caption: 'PA: root position, soprano ends on do' },
             { key: 'F', chords: ['I', 'IV', 'V', 'I'], end: 2, caption: 'IA: the soprano ends on mi' }],
         },
@@ -471,6 +568,15 @@
           id: 'plagal', title: 'Plagal (Pl)',
           html: '<p><b>IV – I</b> (sometimes iv – i), the “Amen” at the end of a hymn. It’s rare, and it usually comes as a tag after an authentic cadence has already closed the piece.</p>',
           examples: [{ key: 'F', chords: ['I', 'V', 'I', 'IV', 'I'], caption: 'Authentic cadence, then the plagal “Amen”' }],
+        },
+        {
+          id: 'identify', title: 'Naming a cadence, step by step',
+          html: '<ol><li>Find the key, then put Roman numerals on the <b>last two chords</b>.</li>' +
+            '<li>Ends on <b>V</b>? It is a <b>half</b> cadence (H). If it is iv6–V in minor, it is a <b>Phrygian</b> half (Ph).</li>' +
+            '<li><b>V (or vii°) to I</b>? It is authentic. Both chords in root position, V not vii°, and the soprano on do: <b>PA</b>. Otherwise <b>IA</b>.</li>' +
+            '<li><b>V to vi</b> (VI in minor)? <b>Deceptive</b> (D).</li>' +
+            '<li><b>IV to I</b> (iv–i)? <b>Plagal</b> (Pl).</li></ol>' +
+            '<p>The workbook’s abbreviations: <b>PA, IA, H, Ph, D, Pl</b>. The app’s ear-training buttons say PAC, IAC, HC and so on; they mean the same cadences.</p>',
         },
         {
           id: 'partwriting', title: 'Partwriting at the cadence',
