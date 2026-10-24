@@ -411,13 +411,15 @@
             '<li><b>neighbor</b>: it steps up from its resolution note and back down;</li>' +
             '<li><b>appoggiatura</b>: it is leapt to, then resolves down (the least smooth; use sparingly).</li></ul>',
           examples: [
-            { key: 'C', chords: ['I', 'ii6/5', 'V', 'I'], caption: 'Like a suspension: ii6/5’s 7th (do) is held from I, then steps down to ti' },
+            // approach: the drill (exercises-book.js) reuses these four
+            { key: 'C', chords: ['I', 'ii6/5', 'V'], voices: [['C3', 'G3', 'E4', 'C5'], ['F3', 'A3', 'D4', 'C5'], ['G3', 'G3', 'D4', 'B4']], mark: [[1, 3]],
+              approach: 'Suspension', caption: 'Like a suspension: ii6/5’s 7th (do) is held from I, then steps down to ti' },
             { key: 'C', chords: ['V', 'V7', 'I'], voices: [['G2', 'B3', 'D4', 'G4'], ['G2', 'B3', 'D4', 'F4'], ['C3', 'C4', 'C4', 'E4']], mark: [[1, 3]],
-              caption: 'Like a passing tone: sol–fa–mi in the soprano' },
+              approach: 'Passing tone', caption: 'Like a passing tone: sol–fa–mi in the soprano' },
             { key: 'C', chords: ['I', 'V4/3', 'I'], voices: [['C3', 'G3', 'E4', 'C5'], ['D3', 'G3', 'F4', 'B4'], ['C3', 'G3', 'E4', 'C5']], mark: [[1, 2]],
-              caption: 'Like a neighbor: mi–fa–mi in the alto' },
+              approach: 'Neighbor tone', caption: 'Like a neighbor: mi–fa–mi in the alto' },
             { key: 'C', chords: ['I6', 'V4/3', 'I'], voices: [['E3', 'C4', 'G4', 'C5'], ['D3', 'B3', 'G4', 'F5'], ['C3', 'C4', 'G4', 'E5']], mark: [[1, 3]],
-              caption: 'Like an appoggiatura: the soprano leaps up to fa, then falls to mi' },
+              approach: 'Appoggiatura', caption: 'Like an appoggiatura: the soprano leaps up to fa, then falls to mi' },
           ],
         },
         {

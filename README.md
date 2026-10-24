@@ -15,7 +15,7 @@ There's no build step and there are no dependencies.
 
 ## The course
 
-The units follow the order of a fundamentals-to-harmony theory course (Michael F. Murray's *Essential Materials of Music Theory*), with Singinator's own musicianship units at the end.
+The units follow the order of a fundamentals-to-harmony theory course (Michael F. Murray's *Essential Materials of Music Theory*), with Singinator's own musicianship units at the end. On the home screen each unit names the Murray lesson(s) it covers, with text pages, and each lesson that mirrors a workbook set says which one (for example *Exercises III.1.3–4*).
 
 | # | Unit | Covers |
 | --- | --- | --- |
@@ -29,19 +29,19 @@ The units follow the order of a fundamentals-to-harmony theory course (Michael F
 | 6 | Minor | Natural, harmonic and melodic minor, minor key signatures |
 | 7 | C Clefs | Alto and tenor clef, key signatures in all four clefs |
 | 8 | First-Species Counterpoint | Find the broken rule (parallels, dissonance, hidden 5ths/8ves, bad leaps); sing one voice while the app sings the other |
-| 9 | Triads & Inversions | Triad qualities and inversions by ear and on the staff; sung as arpeggios |
+| 9 | Triads & Inversions | Triad qualities and inversions by ear and on the staff; letter symbols (F♯6, c6/4, g°); build a triad from its root, third or fifth; sung as arpeggios |
 | | **Four-Voice Writing** | |
-| 10 | Chorale Style | Sing the soprano, alto, tenor or bass of a progression; find errors in one chord (range, spacing, crossing, doubling incl. 6/4 and diminished triads) and between chords (awkward leaps, augmented intervals, parallels), like Exercises III.1.3 |
-| 11 | Connecting Chords I | Name the root relationship (5th, 3rd, 2nd); find errors in 4th/5th-related connections and with the leading tone |
+| 10 | Chorale Style | Sing the soprano, alto, tenor or bass of a progression; find errors in one chord (range, spacing, crossing, doubling incl. 6/4 and diminished triads) and between chords (awkward leaps, augmented intervals, parallels), like Exercises III.1.3; which triad a bass and figure (6, 6/4) give |
+| 11 | Connecting Chords I | Name the root relationship (5th, 3rd, 2nd); find errors in 4th/5th-related connections and with the leading tone; figured bass with ♯ |
 | 12 | Connecting Chords II | Find errors in 3rd- and 2nd-related connections, then any connection; sing any voice |
 | | **Non-Chord Tones & Seventh Chords** | |
 | 13 | Non-Chord Tones I | Passing, neighbor, anticipation, appoggiatura, escape tone: on the staff, by ear, sung over the chords |
 | 14 | Non-Chord Tones II | Suspensions (4–3, 7–6, 9–8) and retardations; any non-chord tone |
-| 15 | Seventh Chords | Five qualities by ear and on the staff, with inversions; sung as arpeggios |
+| 15 | Seventh Chords | Five qualities by ear and on the staff, with inversions; letter symbols (GM7, gø7, B♭4/3); build one from any member; sung as arpeggios |
 | | **Functional Harmony** | |
-| 16 | Sevenths in Four Voices | Find unresolved 7ths and leading tones in V7–I; sing a voice through V7 |
-| 17 | Harmonic Function & Roman Numerals | Roman numerals with figured bass; progressive vs. retrogressive root motion; label tonic, predominant and dominant on the staff and by ear |
-| 18 | Cadences | PAC, IAC, half, Phrygian half, plagal, deceptive by ear |
+| 16 | Sevenths in Four Voices | Find unresolved 7ths and leading tones in V7–I; sing a voice through V7; figured bass (7, 6/5, 4/3, 4/2); how a 7th is approached (suspension, passing, neighbor, appoggiatura) |
+| 17 | Harmonic Function & Roman Numerals | Roman numerals with figured bass; progressive vs. retrogressive root motion; label tonic, predominant and dominant on the staff and by ear; write the triad for a numeral or function name in a key; find the key where a chord has a given numeral |
+| 18 | Cadences | PAC, IAC, half, Phrygian half, plagal, deceptive by ear and from the score |
 | | **Harmonic Function** | |
 | 19 | Primary Triads & Sevenths | Partwriting review; I–IV–V dictation; V7, I7 and IV7 |
 | 20 | The Submediant & Mediant | Harmonic dictation adding vi and iii, inversions, minor |
@@ -138,5 +138,5 @@ Visual checks:
 | `js/learn.js` | The Learn pages and what each missed answer links to, as data |
 | `js/learn-view.js` | Draws a Learn page with playable examples |
 | `js/app.js` | Shared services: progress, settings, pitch meter and listener, microphone handling |
-| `js/exercises*.js` | Exercise engines: core, harmony, scales and modes, modulation, rhythm, dictation, two-part, writing (phrases, counterpoint errors, partwriting, non-chord tones) |
+| `js/exercises*.js` | Exercise engines: core, harmony, scales and modes, modulation, rhythm, dictation, two-part, writing (phrases, counterpoint errors, partwriting, non-chord tones), book (workbook-style drills: figured bass, chord symbols, building chords, numerals and keys, approaching 7ths, cadences from the score) |
 | `js/main.js` | Navigation, course map, settings, dev panel |

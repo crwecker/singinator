@@ -174,6 +174,8 @@
         { id: 'ch-sing-tri', title: 'Sing I, IV, V and vi', engine: 'singChord', keys: { mode: 'major', max: 3 }, clefs: ['treble', 'bass'], chords: ['I', 'IV', 'V', 'vi', 'ii'] },
         { id: 'ch-ear-inv', title: 'Hear triad inversions', engine: 'earChord', types: ['maj', 'min'], askInversion: true },
         { id: 'ch-read-inv', ex: 'II.3.1', title: 'Read triads with inversions', engine: 'readChord', types: ['maj', 'min', 'dim'], inversions: true, clefs: ['treble', 'bass'] },
+        { id: 'ch-sym-tri', ex: 'II.3.1', title: 'Name triads by letter: F♯6, c6/4, g°', engine: 'readSymbol', types: ['maj', 'min', 'dim', 'aug'], inversions: true, clefs: ['treble', 'bass', 'alto'], learn: 'chorale#symbols' },
+        { id: 'ch-build-tri', ex: 'II.3.3', title: 'Build a triad from its root, third or fifth', engine: 'buildChord', types: ['maj', 'min', 'dim', 'aug'], members: ['root', 'third', 'fifth'], learn: 'chorale#members' },
       ],
     },
     {
@@ -190,6 +192,7 @@
         { id: 'pw-spot-par', ex: 'III.1.3', title: 'Find the error: parallel 5ths and octaves', engine: 'spotError', keys: { mode: 'major', max: 3 }, rules: ['par5', 'par8'], pairs: PW_TRIADS, learn: 'chorale#motion' },
         { id: 'pw-sing-a', title: 'Sing the alto', engine: 'singVoice', keys: { mode: 'major', max: 3 }, voice: 'alto', chords: ['I', 'IV', 'V'], length: 4, learn: 'chorale#texture' },
         { id: 'pw-sing-t', title: 'Sing the tenor', engine: 'singVoice', keys: { mode: 'major', max: 3 }, voice: 'tenor', chords: ['I', 'IV', 'V'], length: 4, learn: 'chorale#texture' },
+        { id: 'fb-tri', ex: 'III.1.1', title: 'Figured bass: which triad? (6, 6/4)', engine: 'figuredBass', keys: { mode: 'any', max: 5 }, figures: ['', '6', '6/4'], learn: 'connecting-1#figured-bass' },
       ],
     },
     {
@@ -199,6 +202,7 @@
         { id: 'rr-read', title: 'Root relationships: 5th, 3rd or 2nd?', engine: 'rootMotion', ask: 'relation', keys: { mode: 'major', max: 3 }, chords: ['I', 'I6', 'ii', 'iii', 'IV', 'IV6', 'V', 'V6', 'vi'], learn: 'connecting-1#roots' },
         { id: 'pw-spot-45', title: 'Find the error: 4th- and 5th-related chords', engine: 'spotError', keys: { mode: 'major', max: 3 }, rules: ['range', 'spacing', 'noThird', 'par5', 'par8'], pairs: PW_FIFTHS, learn: 'connecting-1#common-tone' },
         { id: 'pw-spot-lt', title: 'Find the error: the leading tone', engine: 'spotError', keys: { mode: 'major', max: 4 }, rules: ['ltRes', 'ltDouble'], pairs: PW_DOMINANT, learn: 'chorale#doubling' },
+        { id: 'fb-sharp', ex: 'III.2.3–4', title: 'Figured bass with ♯: the leading tone in minor', engine: 'figuredBass', keys: { mode: 'any', max: 5 }, figures: ['', '6', '\u266F', '\u266F', '\u266F6'], learn: 'connecting-1#figured-bass' },
       ],
     },
     {
@@ -240,6 +244,8 @@
         { id: 'ch-ear-7', title: 'Hear seventh chords', engine: 'earChord', types: ['dom7', 'maj7', 'min7', 'hdim7', 'dim7'], learn: 'sevenths#qualities' },
         { id: 'ch-read-7', ex: 'IV.3.3–4', title: 'Read seventh chords', engine: 'readChord', types: ['dom7', 'maj7', 'min7', 'hdim7', 'dim7'], clefs: ['treble', 'bass'], learn: 'sevenths#qualities' },
         { id: 'ch-read-7-inv', ex: 'IV.3.1–2', title: 'Read sevenths with inversions', engine: 'readChord', types: ['dom7', 'min7', 'hdim7'], inversions: true, clefs: ['treble', 'bass'], learn: 'sevenths#inversions' },
+        { id: 'ch-sym-7', ex: 'IV.3.1–4', title: 'Name sevenths by letter: GM7, gø7, B♭4/3', engine: 'readSymbol', types: ['maj7', 'dom7', 'min7', 'hdim7', 'dim7'], inversions: true, clefs: ['treble', 'bass'], learn: 'sevenths#qualities' },
+        { id: 'ch-build-7', ex: 'IV.3.3–4', title: 'Build a seventh chord from any member', engine: 'buildChord', types: ['maj7', 'dom7', 'min7', 'hdim7', 'dim7'], members: ['root', 'third', 'fifth', 'seventh'], learn: 'sevenths#qualities' },
         { id: 'ch-sing-7', title: 'Sing seventh-chord arpeggios', engine: 'singChord', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'], chords: ['V7', 'ii7', 'IV7', 'vii7', 'I7'], learn: 'sevenths#qualities' },
       ],
     },
@@ -249,6 +255,8 @@
         { id: 'learn-sevenths-4v', title: 'Writing seventh chords in four voices', engine: 'learn', page: 'sevenths-4v' },
         { id: 'pw-spot-7', title: 'Find the error: resolving V7', engine: 'spotError', keys: { mode: 'major', max: 4 }, rules: ['sevRes', 'ltRes', 'par5', 'par8'], pairs: PW_SEVENTHS, learn: 'sevenths-4v#approach' },
         { id: 'pw-sing-7', title: 'Sing a voice through V7 to I', engine: 'singVoice', keys: { mode: 'major', max: 4 }, voice: 'any', chords: ['I', 'ii', 'ii6', 'IV', 'V7', 'V6/5'], length: 4, learn: 'sevenths-4v#tritone' },
+        { id: 'fb-7', ex: 'V.1.1–2', title: 'Figured bass: which seventh chord? (7, 6/5, 4/3, 4/2)', engine: 'figuredBass', keys: { mode: 'any', max: 5 }, figures: ['7', '6/5', '4/3', '4/2'], learn: 'sevenths#inversions' },
+        { id: 'sev-approach', ex: 'V.1.3–4', title: 'How is the 7th approached?', engine: 'sevenApproach', keys: { mode: 'major', max: 5 }, learn: 'sevenths-4v#approach' },
       ],
     },
     {
@@ -259,6 +267,9 @@
         { id: 'rn-read-inv', ex: 'V.2.3–4', title: 'Roman numerals with inversions', engine: 'readNumeral', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'], chords: ['I', 'I6', 'I6/4', 'ii', 'ii6', 'IV', 'IV6', 'V', 'V6', 'V6/4', 'vi', 'vii°6'], learn: 'function#numerals' },
         { id: 'rn-read-7', title: 'Roman numerals: V7 and its inversions', engine: 'readNumeral', keys: { mode: 'major', max: 4 }, clefs: ['treble', 'bass'], chords: ['V7', 'V6/5', 'V4/3', 'V4/2', 'ii7', 'ii6/5'], learn: 'sevenths#inversions' },
         { id: 'rn-read-min', title: 'Roman numerals in minor', engine: 'readNumeral', keys: { mode: 'minor', max: 4 }, clefs: ['treble', 'bass'], chords: ['I', 'ii°6', 'III', 'IV', 'V', 'V7', 'VI', 'vii°'], learn: 'function#minor' },
+        { id: 'nk-numeral', ex: 'V.2.1–2', title: 'Write the triad: E♭: V, f♯: ii°', engine: 'numeralKey', ask: 'numeral', keys: { mode: 'any', max: 5 }, learn: 'function#numerals' },
+        { id: 'nk-name', ex: 'V.2.1–2', title: 'Write the triad: the submediant in E', engine: 'numeralKey', ask: 'name', keys: { mode: 'any', max: 5 }, learn: 'function#numerals' },
+        { id: 'nk-key', ex: 'V.2.1–2', title: 'One chord, many keys: d is iv in…?', engine: 'numeralKey', ask: 'key', keys: { mode: 'any', max: 5 }, learn: 'function#many-keys' },
         { id: 'rm-motion', ex: 'V.2.3–4', title: 'Progressive or retrogressive?', engine: 'rootMotion', ask: 'motion', keys: { mode: 'major', max: 4 }, chords: ['I', 'ii', 'iii', 'IV', 'V', 'vi', 'vii°6'], learn: 'function#root-motion' },
         { id: 'fn-read', title: 'Tonic, predominant or dominant?', engine: 'readNumeral', askFunction: true, keys: { mode: 'major', max: 3 }, clefs: ['treble', 'bass'], chords: ['I', 'I6', 'ii', 'ii6', 'IV', 'IV6', 'V', 'V6', 'V7', 'vii°6'], learn: 'function#categories' },
         { id: 'fn-dict', title: 'Hear the functions: T, PD, D', engine: 'dictation', functions: true, keys: { mode: 'major', max: 3 }, chords: ['I', 'I6', 'ii', 'ii6', 'IV', 'V', 'V7', 'I6/4'], length: [4, 6], learn: 'function#categories' },
@@ -272,6 +283,7 @@
         { id: 'cad-ear-2', title: 'Perfect vs. imperfect authentic', engine: 'earCadence', keys: { mode: 'major', max: 4 }, cadences: ['PAC', 'IAC', 'HC', 'PC', 'DC'], learn: 'cadences#authentic' },
         { id: 'cad-ear-ph', title: 'Half or Phrygian half?', engine: 'earCadence', keys: { mode: 'minor', max: 4 }, cadences: ['HC', 'Ph', 'PAC', 'DC'], learn: 'cadences#phrygian' },
         { id: 'cad-ear-min', title: 'Cadences in minor', engine: 'earCadence', keys: { mode: 'minor', max: 4 }, cadences: ['PAC', 'IAC', 'HC', 'Ph', 'PC', 'DC'], learn: 'cadences' },
+        { id: 'cad-read', ex: 'V.3.1–2', title: 'Name the cadence from the score', engine: 'readCadence', keys: { mode: 'any', max: 4 }, cadences: ['PAC', 'IAC', 'HC', 'Ph', 'DC', 'PC'], learn: 'cadences#identify' },
       ],
     },
     {

@@ -254,6 +254,19 @@
     return (seventh ? SEVENTH_FIGURES : TRIAD_FIGURES)[inv || 0];
   }
 
+  // A chord by letter name, the way Murray's workbook writes it: case gives
+  // the triad (G major, g minor, g° diminished, G+ augmented), M / ø / °
+  // the seventh (GM7, G7, g7, gø7, g°7), and figures the inversion (F♯6,
+  // c6/4, E♭4/3; a 7 only in root position).
+  var SEVENTH_SIGN = { maj7: 'M', dom7: '', min7: '', hdim7: '\u00F8', dim7: '\u00B0' };
+  var TRIAD_SIGN = { maj: '', min: '', dim: '\u00B0', aug: '+' };
+  function letterSymbol(root, type, inv) {
+    var n = name(root);
+    if (CHORDS[type].ivs[0] === 'm3') n = n.charAt(0).toLowerCase() + n.slice(1);
+    if (type in TRIAD_SIGN) return n + TRIAD_SIGN[type] + TRIAD_FIGURES[inv || 0];
+    return n + SEVENTH_SIGN[type] + SEVENTH_FIGURES[inv || 0];
+  }
+
   var ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'];
 
   // Roman numeral text for a chord quality on a scale degree (0-6),
@@ -361,7 +374,7 @@
     doNote: doNote, syllable: syllable, staffPos: staffPos, clefRange: clefRange, mod: mod,
     invertInterval: invertInterval, simpleInterval: simpleInterval, MODES: MODES,
     CHORDS: CHORDS, chordTones: chordTones, chordVoicing: chordVoicing, chordType: chordType,
-    figure: figure, numeral: numeral, diatonicChord: diatonicChord, secondaryDominant: secondaryDominant,
+    figure: figure, letterSymbol: letterSymbol, numeral: numeral, diatonicChord: diatonicChord, secondaryDominant: secondaryDominant,
     SCALES: SCALES, scaleNotes: scaleNotes,
   };
 
